@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { useAppRouter } from "@/hooks/use-app-router";
 import { signOut } from "@/lib/auth/client";
 
 export function SignOutButton() {
-  const router = useRouter();
+  const router = useAppRouter();
   const [pending, setPending] = useState(false);
 
   async function handleSignOut() {

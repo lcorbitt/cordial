@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { FieldError } from "@/components/shared/field-error";
 import { PasswordInput } from "@/components/shared/password-input";
+import { useAppRouter } from "@/hooks/use-app-router";
 import {
   resetPasswordSchema,
   type ResetPasswordInput,
@@ -27,7 +27,7 @@ import { updatePassword } from "@/lib/auth/client";
  * has already established a recovery session via the auth callback.
  */
 export function ResetPasswordForm() {
-  const router = useRouter();
+  const router = useAppRouter();
   const {
     register,
     handleSubmit,

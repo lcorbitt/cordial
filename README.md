@@ -107,7 +107,7 @@ npm run dev:local   # Next.js + Edge Functions + Inngest (one terminal)
 ```
 
 `dev:local` starts Supabase if it is not already running, sets
-`INNGEST_EVENT_KEY=local` for background jobs, and opens:
+`INNGEST_DEV=1` and `INNGEST_EVENT_KEY=local` for background jobs, and opens:
 
 | Service | URL |
 | ------- | --- |
@@ -128,7 +128,7 @@ console logging or no-ops when keys are blank.
 | `NEXT_PUBLIC_SUPABASE_*`, `SUPABASE_SERVICE_ROLE_KEY` | **Yes** | App fails to start |
 | `UPSTASH_REDIS_*` | No | Rate limiting / cache disabled |
 | `RESEND_API_KEY` | No | Emails logged to console |
-| `INNGEST_*` | No | `dev:local` sets `INNGEST_EVENT_KEY=local` automatically |
+| `INNGEST_*` | No | `dev:local` sets `INNGEST_DEV=1` and `INNGEST_EVENT_KEY=local` automatically |
 | `POSTHOG_*`, `SENTRY_*` | No | Analytics / monitoring disabled |
 | `SUPABASE_AUTH_*` (OAuth) | No | Google / Microsoft login disabled |
 

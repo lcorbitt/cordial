@@ -1,11 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { useAppRouter } from "@/hooks/use-app-router";
 import { loginSchema, type LoginInput } from "@/lib/auth/schemas";
 import { sendMagicLink, signInWithPassword } from "@/lib/auth/client";
 
@@ -14,7 +14,7 @@ import { sendMagicLink, signInWithPassword } from "@/lib/auth/client";
  * toasts, and navigation. Auth itself runs through the centralized auth client.
  */
 export function useLoginForm() {
-  const router = useRouter();
+  const router = useAppRouter();
   const [magicLinkSent, setMagicLinkSent] = useState(false);
 
   const form = useForm<LoginInput>({

@@ -8,6 +8,7 @@ if ! supabase status >/dev/null 2>&1; then
   supabase start
 fi
 
+export INNGEST_DEV="${INNGEST_DEV:-1}"
 export INNGEST_EVENT_KEY="${INNGEST_EVENT_KEY:-local}"
 
 echo "Starting Next.js, Edge Functions, and Inngest…"
