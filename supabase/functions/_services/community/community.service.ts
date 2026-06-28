@@ -265,13 +265,22 @@ export async function acceptCommunityInvite(
 
   await markAccepted(serviceClient, invite.id, userId);
 
+  const memberProfile = await getProfileByOwnerId(serviceClient, userId);
+  const memberDisplayName =
+    memberProfile?.display_name?.trim() ||
+    userEmail?.split("@")[0] ||
+    "Someone";
+
   await publishEvent({
     name: "community/member-joined",
     data: {
       communityId: community.id,
       communitySlug: community.slug,
+      communityName: community.name,
       userId,
       inviteId: invite.id,
+      invitedByUserId: invite.invited_by,
+      memberDisplayName,
     },
   });
 

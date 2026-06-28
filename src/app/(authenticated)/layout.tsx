@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import { isSuperAdmin } from "@/server/loaders/access";
 import { requireSession } from "@/server/loaders/session";
+import { PrefetchBoundary } from "@/lib/query/prefetch-boundary";
+import { prefetchAuthenticatedShellQueries } from "@/server/prefetch/authenticated-shell";
 
 import { AppShell } from "./components/AppShell";
 
@@ -20,12 +22,14 @@ export default async function AuthenticatedLayout({
   const superAdmin = isSuperAdmin(session);
 
   return (
-    <AppShell
-      email={session.user.email ?? ""}
-      isAdmin={isAdmin}
-      isSuperAdmin={superAdmin}
-    >
-      {children}
-    </AppShell>
+    <PrefetchBoundary prefetch={prefetchAuthenticatedShellQueries}>
+      <AppShell
+        userId={session.user.id}
+        isAdmin={isAdmin}
+        isSuperAdmin={superAdmin}
+      >
+        {children}
+      </AppShell>
+    </PrefetchBoundary>
   );
 }

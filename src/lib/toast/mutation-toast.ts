@@ -6,6 +6,7 @@ export interface MutationToastMessages {
   loading: string;
   success: string;
   errorFallback: string;
+  resolveErrorMessage?: (error: unknown) => string | undefined;
 }
 
 /**
@@ -20,7 +21,9 @@ export async function runMutationWithToast<T>(
     .promise(mutation, {
       loading: messages.loading,
       success: messages.success,
-      error: (error) => getUserErrorMessage(error, messages.errorFallback),
+      error: (error) =>
+        messages.resolveErrorMessage?.(error) ??
+        getUserErrorMessage(error, messages.errorFallback),
     })
     .unwrap();
 }

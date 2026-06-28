@@ -4,7 +4,8 @@
     "zod": "npm:zod@3",
     "@services/": "./_services/",
     "@models/": "./_models/",
-    "@shared/": "./_wire/"
+    "@shared/": "./_shared/",
+    "@http/": "./_http/"
   },
   "lint": {
     "rules": {

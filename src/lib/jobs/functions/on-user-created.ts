@@ -1,10 +1,11 @@
-import { inngest, jobs } from "@/lib/providers/jobs/client";
+import { events, inngest } from "@/lib/providers/jobs/publisher";
 import type { UserCreatedData } from "@/lib/jobs/catalog";
+import { WELCOME_NOTIFICATION } from "@/lib/jobs/notifications/templates";
 
 /**
  * Reacts to a new user. The database trigger already creates the profile row
  * and assigns the default `member` role, so here we fan out side effects:
- * welcome email and an audit entry. Kept small and idempotent.
+ * welcome email, welcome notification, and an audit entry. Kept small and idempotent.
  */
 export const onUserCreated = inngest.createFunction(
   {
@@ -16,7 +17,7 @@ export const onUserCreated = inngest.createFunction(
     const data = event.data as UserCreatedData;
 
     await step.run("send-welcome-email", async () =>
-      jobs.emit({
+      events.publish({
         name: "email/send",
         data: {
           template: "notification",
@@ -29,8 +30,21 @@ export const onUserCreated = inngest.createFunction(
       }),
     );
 
+    await step.run("welcome-notification", async () =>
+      events.publish({
+        name: "notification/create",
+        data: {
+          userId: data.userId,
+          type: "system.welcome",
+          title: WELCOME_NOTIFICATION.title,
+          body: WELCOME_NOTIFICATION.body,
+          actionUrl: WELCOME_NOTIFICATION.actionUrl,
+        },
+      }),
+    );
+
     await step.run("audit", async () =>
-      jobs.emit({
+      events.publish({
         name: "audit/log",
         data: {
           actorId: data.userId,

@@ -1,4 +1,4 @@
-import { serveOptionalAuth } from "@shared/middleware/index.ts";
+import { serveOptionalAuth } from "@http/middleware/index.ts";
 import { handle } from "./handler.ts";
 
 serveOptionalAuth(handle, {

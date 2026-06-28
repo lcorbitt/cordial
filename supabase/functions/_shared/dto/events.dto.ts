@@ -27,6 +27,9 @@ export interface CommunityMemberJoinedEventData {
   communitySlug: string;
   userId: string;
   inviteId?: string;
+  invitedByUserId?: string;
+  memberDisplayName?: string;
+  communityName?: string;
 }
 
 /** Emitted after a community invite is created and should be emailed. */

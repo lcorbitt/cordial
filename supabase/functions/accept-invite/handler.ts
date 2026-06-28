@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-import type { HandlerContext } from "@shared/context.ts";
-import { apiResponse } from "@shared/response.ts";
+import type { HandlerContext } from "@http/context.ts";
+import { apiResponse } from "@http/response.ts";
 import { acceptCommunityInvite } from "@services/community/community.service.ts";
 import { mapCommunityServiceError } from "@services/community/handler-errors.ts";
 import { createServiceClient } from "@services/db.ts";

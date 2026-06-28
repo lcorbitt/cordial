@@ -1,5 +1,5 @@
-import type { HandlerContext } from "@shared/context.ts";
-import { apiResponse } from "@shared/response.ts";
+import type { HandlerContext } from "@http/context.ts";
+import { apiResponse } from "@http/response.ts";
 import type { FeatureFlagResponse } from "@shared/dto/feature-flag.dto.ts";
 import { evaluateFlagForUser } from "@services/feature-flag/feature-flag.service.ts";
 import { createServiceClient } from "@services/db.ts";

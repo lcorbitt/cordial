@@ -13,12 +13,31 @@ alwaysApply: false
   multi-step workflows, side effects. May serve multiple slugs.
 - `_models/<table>.ts` — ALL `.from("<table>")` for that table. No cross-table
   orchestration.
-- `_wire/dto/*.dto.ts` — pure wire types, shared with the frontend via
-  `@shared/dto/*`. Never duplicate wire types in frontend-only files.
-- `_wire/middleware/*` — the internal pipeline (auth, rate limit, access
+- `_http/middleware/*` — the internal pipeline (auth, rate limit, access
   control, ownership, CORS, security headers, logging, error boundary).
-- `_wire/middleware/presets.ts` — `servePublic`, `serveAuthenticated`,
+- `_http/middleware/presets.ts` — `servePublic`, `serveAuthenticated`,
   `serveWithAccessContext`, `serveWithPermission` — use these in `index.ts`.
+
+## `_shared/` vs `_http/` placement
+
+Cross-runtime code lives in [`_shared/`](_shared/) inside `supabase/functions/`
+and is imported via `@shared/*` from both runtimes (`deno.json` maps to
+`./_shared/`; Next.js `tsconfig.json` maps to `./supabase/functions/_shared/*`).
+Do not create a folder named `shared/` inside functions — the edge runtime
+blocks it. Do not import from paths outside `supabase/functions/`.
+
+| Location | Contains | Imported by |
+|----------|----------|-------------|
+| `_shared/dto/*.dto.ts` | API request/response types | Edge handlers/services **and** frontend services/hooks |
+| `_shared/<domain>/validation.ts`, `_shared/storage/avatar.ts`, etc. | Cross-runtime validation and policy. **No UI copy.** | Edge + frontend when both need identical logic |
+| `_shared/notification/types.ts` | Stable notification type IDs | Edge model/service + auth callback + jobs |
+| `_http/middleware/*`, `response.ts`, `context.ts` | Edge HTTP pipeline | Edge slugs/handlers only |
+| `src/lib/jobs/notifications/templates.ts`, `emails/*` | Server-generated user-visible content (jobs, no React owner) | Inngest / Edge only |
+| Feature `constants.ts` (e.g. `Profile/constants.ts`) | All UI labels, helpers, field errors | Frontend only |
+
+When a UI feature owns the message, the API returns `error.details.reason`
+(machine code), not duplicate English. The feature maps reason → copy in
+`utils.ts` (see `Profile/utils.ts`).
 
 ## DB clients
 

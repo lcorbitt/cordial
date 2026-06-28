@@ -1,11 +1,20 @@
 import { z } from "zod";
 
-import type { HandlerContext } from "@shared/context.ts";
-import { apiResponse } from "@shared/response.ts";
+import type { HandlerContext } from "@http/context.ts";
+import { apiResponse } from "@http/response.ts";
 import { updateProfile } from "@services/user/profile.service.ts";
+import { mapProfileServiceError } from "@services/user/handler-errors.ts";
+import { DISPLAY_NAME_MAX_LENGTH } from "@shared/profile/validation.ts";
 
 const bodySchema = z.object({
-  displayName: z.string().max(80).optional(),
+  displayName: z
+    .string()
+    .max(
+      DISPLAY_NAME_MAX_LENGTH,
+      `Please keep your name under ${DISPLAY_NAME_MAX_LENGTH} characters.`,
+    )
+    .transform((value) => value.trim())
+    .optional(),
   bio: z.string().max(500).optional(),
   avatarUrl: z.string().url().optional(),
 });
@@ -35,6 +44,16 @@ export async function handle(ctx: HandlerContext): Promise<Response> {
     });
   }
 
-  const profile = await updateProfile(ctx.userClient, ctx.user.id, parsed.data);
-  return apiResponse.ok(profile);
+  try {
+    const profile = await updateProfile(
+      ctx.userClient,
+      ctx.user.id,
+      parsed.data,
+    );
+    return apiResponse.ok(profile);
+  } catch (error) {
+    const mapped = mapProfileServiceError(error);
+    if (mapped) return mapped;
+    throw error;
+  }
 }

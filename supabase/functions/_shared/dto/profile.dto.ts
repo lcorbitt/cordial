@@ -7,6 +7,7 @@ export interface ProfileResponse {
   displayName: string | null;
   avatarUrl: string | null;
   bio: string | null;
+  updatedAt: string;
 }
 
 export interface UpdateProfileBody {

@@ -5,6 +5,7 @@ import { onCommunityCreated } from "./on-community-created";
 import { onCommunityMemberJoined } from "./on-community-member-joined";
 import { onCommunityInviteSent } from "./on-community-invite-sent";
 import { writeAuditLog } from "./write-audit-log";
+import { createNotification } from "./create-notification";
 import { indexSearchDocument } from "./index-search-document";
 import { invalidateCache } from "./invalidate-cache";
 import { trackAnalytics } from "./track-analytics";
@@ -20,6 +21,7 @@ export const functions = [
   onCommunityCreated,
   onCommunityMemberJoined,
   onCommunityInviteSent,
+  createNotification,
   writeAuditLog,
   indexSearchDocument,
   invalidateCache,

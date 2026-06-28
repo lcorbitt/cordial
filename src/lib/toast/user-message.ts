@@ -14,6 +14,9 @@ export function getUserErrorMessage(error: unknown, fallback: string): string {
   if (isAuthLikeError(error)) {
     return getAuthErrorMessage(error, fallback);
   }
+  if (error instanceof Error && error.name !== "Error" && error.message) {
+    return error.message;
+  }
   return fallback;
 }
 

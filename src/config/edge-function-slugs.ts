@@ -21,6 +21,9 @@ export const EDGE_FUNCTION_SLUGS = {
   listAdminCommunities: "list-admin-communities",
   sendCommunityInvite: "send-community-invite",
   acceptInvite: "accept-invite",
+  createAvatarUploadUrl: "create-avatar-upload-url",
+  listNotifications: "list-notifications",
+  markNotificationRead: "mark-notification-read",
 } as const;
 
 export type EdgeFunctionSlug =

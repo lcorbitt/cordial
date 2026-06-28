@@ -1,26 +1,29 @@
 "use client";
 
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { createClient } from "@/lib/supabase/client";
-import {
-  invalidateProfileQueries,
-  useProfileQuery,
-} from "@/hooks/queries/useProfile";
+import { useProfileQuery } from "@/hooks/queries/useProfile";
 import { useUpdateProfileMutation } from "@/hooks/mutations/useProfile";
+import { useAvatarUploadMutation } from "@/hooks/mutations/useAvatarUpload";
 import { openModal } from "@/lib/modal/open-modal";
 import { runMutationWithToast } from "@/lib/toast/mutation-toast";
+import { DISPLAY_NAME_MAX_LENGTH } from "@shared/profile/validation";
 
 import { PROFILE_COPY } from "./constants";
+import {
+  resolveProfileFieldError,
+  resolveProfileSaveErrorMessage,
+} from "./utils";
 
 const profileFormSchema = z.object({
   displayName: z
     .string()
-    .max(80, "Please keep your name under 80 characters.")
+    .max(
+      DISPLAY_NAME_MAX_LENGTH,
+      `Please keep your name under ${DISPLAY_NAME_MAX_LENGTH} characters.`,
+    )
     .optional(),
   bio: z
     .string()
@@ -31,14 +34,13 @@ const profileFormSchema = z.object({
 type ProfileFormInput = z.infer<typeof profileFormSchema>;
 
 /**
- * Colocated UI orchestration for the profile page. Owns the form, toasts, modals,
- * and the Realtime subscription. The subscription invalidates the profile query via
- * the helper from the query domain file — it never hand-edits the cache.
+ * Colocated UI orchestration for the profile page. Owns the form, toasts, and
+ * modals. Profile Realtime sync lives in the authenticated shell.
  */
 export function useProfile() {
-  const queryClient = useQueryClient();
   const profileQuery = useProfileQuery();
   const updateProfileMutation = useUpdateProfileMutation();
+  const avatarUploadMutation = useAvatarUploadMutation();
 
   const form = useForm<ProfileFormInput>({
     resolver: zodResolver(profileFormSchema),
@@ -48,44 +50,30 @@ export function useProfile() {
     },
   });
 
-  useEffect(() => {
-    const ownerId = profileQuery.data?.ownerId;
-    if (!ownerId) return;
-
-    const supabase = createClient();
-    const channel = supabase
-      .channel(`profile:${ownerId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "UPDATE",
-          schema: "public",
-          table: "profiles",
-          filter: `owner_id=eq.${ownerId}`,
-        },
-        () => {
-          invalidateProfileQueries(queryClient);
-        },
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [profileQuery.data?.ownerId, queryClient]);
-
   async function onSubmit(values: ProfileFormInput) {
-    await runMutationWithToast(
-      updateProfileMutation.mutateAsync({
-        displayName: values.displayName,
-        bio: values.bio,
-      }),
-      {
-        loading: PROFILE_COPY.toastSaving,
-        success: PROFILE_COPY.toastSaved,
-        errorFallback: PROFILE_COPY.toastError,
-      },
-    );
+    form.clearErrors("displayName");
+
+    try {
+      await runMutationWithToast(
+        updateProfileMutation.mutateAsync({
+          displayName: values.displayName?.trim(),
+          bio: values.bio,
+        }),
+        {
+          loading: PROFILE_COPY.toastSaving,
+          success: PROFILE_COPY.toastSaved,
+          errorFallback: PROFILE_COPY.toastError,
+          resolveErrorMessage: resolveProfileSaveErrorMessage,
+        },
+      );
+    } catch (error) {
+      const fieldError = resolveProfileFieldError(error);
+      if (fieldError) {
+        form.setError(fieldError.field, { message: fieldError.message });
+        return;
+      }
+      throw error;
+    }
   }
 
   function resetForm() {
@@ -112,12 +100,24 @@ export function useProfile() {
     });
   }
 
+  async function onAvatarSelected(file: File | null) {
+    if (!file) return;
+
+    await runMutationWithToast(avatarUploadMutation.mutateAsync(file), {
+      loading: PROFILE_COPY.avatarUploading,
+      success: PROFILE_COPY.toastAvatarSaved,
+      errorFallback: PROFILE_COPY.toastAvatarError,
+    });
+  }
+
   return {
     form,
     onSubmit: form.handleSubmit(onSubmit),
+    onAvatarSelected,
     resetForm,
     profileQuery,
     isSaving: updateProfileMutation.isPending,
+    isUploadingAvatar: avatarUploadMutation.isPending,
     isDirty: form.formState.isDirty,
   };
 }

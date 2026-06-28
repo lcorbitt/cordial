@@ -1,8 +1,11 @@
 "use client";
 
+import { useRef } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { UserAvatar } from "@/components/shared/UserAvatar";
 import {
   Card,
   CardContent,
@@ -17,8 +20,17 @@ import { PROFILE_COPY } from "./constants";
 import { useProfile } from "./useProfile";
 
 export function Profile() {
-  const { form, onSubmit, resetForm, profileQuery, isSaving, isDirty } =
-    useProfile();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const {
+    form,
+    onSubmit,
+    onAvatarSelected,
+    resetForm,
+    profileQuery,
+    isSaving,
+    isUploadingAvatar,
+    isDirty,
+  } = useProfile();
   const {
     register,
     formState: { errors },
@@ -32,6 +44,50 @@ export function Profile() {
         </h1>
         <p className="text-muted-foreground text-lg">{PROFILE_COPY.subtitle}</p>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{PROFILE_COPY.avatarTitle}</CardTitle>
+          <CardDescription>{PROFILE_COPY.avatarDescription}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {profileQuery.isPending ? (
+            <p className="text-muted-foreground">{PROFILE_COPY.loading}</p>
+          ) : profileQuery.isError ? null : (
+            <div className="flex flex-wrap items-center gap-4">
+              <UserAvatar
+                className="h-20 w-20"
+                fallbackClassName="text-xl"
+                linkToProfile={false}
+              />
+              <div className="flex flex-col gap-2">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="sr-only"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0] ?? null;
+                    void onAvatarSelected(file);
+                    event.target.value = "";
+                  }}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  disabled={isUploadingAvatar}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {isUploadingAvatar
+                    ? PROFILE_COPY.avatarUploading
+                    : PROFILE_COPY.avatarUpload}
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>
@@ -60,6 +116,9 @@ export function Profile() {
                   {PROFILE_COPY.displayNameLabel}
                 </Label>
                 <Input id="displayName" {...register("displayName")} />
+                <p className="text-muted-foreground text-sm">
+                  {PROFILE_COPY.displayNameHelper}
+                </p>
                 <FieldError message={errors.displayName?.message} />
               </div>
 

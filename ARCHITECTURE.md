@@ -335,7 +335,7 @@ flowchart TB
     SVC --> MDL[_models/<br/>table access]
     MDL --> DB[(Postgres)]
 
-    DTO[_wire/dto/<br/>shared contracts] -.-> HND & SVC
+    DTO[shared/dto/<br/>shared contracts] -.-> HND & SVC
 ```
 
 ### Directory map
@@ -354,11 +354,21 @@ supabase/functions/
 │   ├── user/
 │   ├── access-control/
 │   └── feature-flag/
-└── _wire/
-    ├── dto/                 shared wire types (@shared/dto/*)
-    ├── middleware/          pipeline, auth, rate limit, access control
-    ├── context.ts           HandlerContext type
-    └── response.ts          standardized JSON responses
+├── _http/                   Edge HTTP pipeline (@http/* — Deno only)
+│   ├── middleware/          pipeline, auth, rate limit, access control
+│   ├── context.ts           HandlerContext type
+│   └── response.ts          standardized JSON responses
+```
+
+Cross-runtime contracts and validation live in [`supabase/functions/_shared/`](supabase/functions/_shared/) (`@shared/*`):
+`_shared/dto/`, `_shared/profile/validation.ts`, `_shared/storage/avatar.ts`, etc. Both Next.js and Edge Functions import via the same `@shared/*` alias (tsconfig + deno.json).
+
+```
+supabase/functions/_shared/
+├── dto/                     API request/response types (@shared/dto/*)
+├── profile/validation.ts    cross-runtime profile validation
+├── storage/avatar.ts        avatar bucket, limits, path helpers
+└── notification/types.ts    notification type identifiers
 ```
 
 ### Middleware pipeline
@@ -382,7 +392,7 @@ flowchart LR
 **Example — `update-profile/index.ts`:**
 
 ```typescript
-import { serveAuthenticated } from "@shared/middleware/index.ts";
+import { serveAuthenticated } from "@http/middleware/index.ts";
 import { handle } from "./handler.ts";
 
 serveAuthenticated(handle, {
@@ -392,7 +402,7 @@ serveAuthenticated(handle, {
 });
 ```
 
-Presets live in `_wire/middleware/presets.ts`: `servePublic`, `serveOptionalAuth`,
+Presets live in `_http/middleware/presets.ts`: `servePublic`, `serveOptionalAuth`,
 `serveAuthenticated`, `serveWithAccessContext`, `serveWithPermission`.
 
 ### Handler responsibilities
@@ -996,7 +1006,7 @@ When adding a feature, work through these steps in order:
 ```mermaid
 flowchart TD
     A["1. Migration<br/>(if schema/RLS changes)"] --> B["2. _models/table.ts"]
-    B --> C["3. _wire/dto/feature.dto.ts"]
+    B --> C["3. _shared/dto/feature.dto.ts"]
     C --> D["4. _services/domain/service.ts"]
     D --> E["5. functions/slug/<br/>index.ts + handler.ts"]
     E --> F["6. Register in config.toml"]
@@ -1017,7 +1027,7 @@ Adding "create shipment":
 | Folder | `supabase/functions/create-shipment/` |
 | Service (backend) | `_services/shipment/shipment.service.ts` → `createShipment()` |
 | Model | `_models/shipments.ts` |
-| DTO | `_wire/dto/shipment.dto.ts` |
+| DTO | `supabase/functions/_shared/dto/shipment.dto.ts` |
 | Frontend service | `frontend/services/shipment.service.ts` → `createShipment()` |
 | Mutation hook | `hooks/mutations/useShipment.ts` → `useCreateShipmentMutation()` |
 | Query key | `["shipment", id]` |

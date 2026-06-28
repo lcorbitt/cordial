@@ -49,7 +49,7 @@ client hooks hydrate warm cache. Still Edge Functions — never PostgREST.
 
 1. Migration (if schema/RLS changes).
 2. `_models/<table>.ts` (if new table access).
-3. `_wire/dto/<feature>.dto.ts`.
+3. `supabase/functions/_shared/dto/<feature>.dto.ts`.
 4. `_services/<domain>/<domain>.service.ts`.
 5. `functions/<slug>/index.ts` + `handler.ts`; register in `config.toml`.
 6. Add slug to `src/config/edge-function-slugs.ts`.

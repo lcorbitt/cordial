@@ -24,7 +24,8 @@ export type IntegrationEvent =
   | { name: "audit/log"; data: AuditLogData }
   | { name: "search/index"; data: SearchIndexData }
   | { name: "cache/invalidate"; data: CacheInvalidateData }
-  | { name: "analytics/track"; data: AnalyticsTrackData };
+  | { name: "analytics/track"; data: AnalyticsTrackData }
+  | { name: "notification/create"; data: NotificationCreateData };
 
 /** Every event the platform can publish or consume. */
 export type AppEvent = DomainEvent | IntegrationEvent;
@@ -68,6 +69,15 @@ export interface AnalyticsTrackData {
   userId?: string | null;
   sessionId?: string | null;
   properties?: Record<string, unknown>;
+}
+
+export interface NotificationCreateData {
+  userId: string;
+  type: string;
+  title: string;
+  body: string;
+  actionUrl?: string | null;
+  metadata?: Record<string, unknown>;
 }
 
 export type { ProfileUpdatedEventData };

@@ -236,6 +236,29 @@ type SearchDocumentInsert = {
   updated_at?: string;
 };
 
+type NotificationRow = {
+  id: string;
+  user_id: string;
+  type: string;
+  title: string;
+  body: string;
+  action_url: string | null;
+  metadata: Json;
+  read_at: string | null;
+  created_at: string;
+};
+type NotificationInsert = {
+  id?: string;
+  user_id: string;
+  type: string;
+  title: string;
+  body: string;
+  action_url?: string | null;
+  metadata?: Json;
+  read_at?: string | null;
+  created_at?: string;
+};
+
 type TableDef<Row, Insert> = {
   Row: Row;
   Insert: Insert;
@@ -261,6 +284,7 @@ export type Database = {
       >;
       analytics_events: TableDef<AnalyticsEventRow, AnalyticsEventInsert>;
       search_documents: TableDef<SearchDocumentRow, SearchDocumentInsert>;
+      notifications: TableDef<NotificationRow, NotificationInsert>;
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

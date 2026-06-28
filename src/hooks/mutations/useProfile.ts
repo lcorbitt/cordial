@@ -1,7 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { updateProfile } from "@/frontend/services/profile.service";
-import { invalidateProfileQueries } from "@/hooks/queries/useProfile";
+import {
+  invalidateProfileQueries,
+  setProfileQueryData,
+} from "@/hooks/queries/useProfile";
 
 /**
  * Profile writes. Thin TanStack layer: the mutation function calls the service
@@ -13,6 +16,9 @@ export function useUpdateProfileMutation() {
 
   return useMutation({
     mutationFn: updateProfile,
-    onSuccess: () => invalidateProfileQueries(queryClient),
+    onSuccess: (profile) => {
+      setProfileQueryData(queryClient, profile);
+      void invalidateProfileQueries(queryClient);
+    },
   });
 }

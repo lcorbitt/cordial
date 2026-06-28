@@ -1,4 +1,4 @@
-import { apiResponse } from "@shared/response.ts";
+import { apiResponse } from "@http/response.ts";
 import {
   CommunityConflictError,
   CommunityNotFoundError,

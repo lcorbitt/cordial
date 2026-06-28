@@ -98,3 +98,12 @@ verify_jwt = false
 
 [functions.accept-invite]
 verify_jwt = false
+
+[functions.create-avatar-upload-url]
+verify_jwt = false
+
+[functions.list-notifications]
+verify_jwt = false
+
+[functions.mark-notification-read]
+verify_jwt = false

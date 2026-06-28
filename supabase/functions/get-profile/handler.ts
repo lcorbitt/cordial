@@ -1,5 +1,5 @@
-import type { HandlerContext } from "@shared/context.ts";
-import { apiResponse } from "@shared/response.ts";
+import type { HandlerContext } from "@http/context.ts";
+import { apiResponse } from "@http/response.ts";
 import { getProfile } from "@services/user/profile.service.ts";
 
 /**

@@ -206,7 +206,12 @@ supabase/
     <slug>/              index.ts (preset serve) + handler.ts (HTTP)
     _models/             one file per table — all .from() lives here
     _services/           business logic (domain use cases + pure evaluators)
-    _wire/               dto/ (shared contracts) + middleware/ (pipeline presets)
+    _shared/             cross-runtime contracts + validation (@shared/*)
+      dto/               API request/response types
+      profile/           validation.ts (display name rules)
+      storage/           avatar.ts (bucket, limits, paths)
+      notification/      types.ts (stable type IDs)
+    _http/               middleware/ (pipeline presets), response.ts, context.ts
   seed.sql               roles, permissions, flags, sample community, test users
   config.toml            per-function config
 

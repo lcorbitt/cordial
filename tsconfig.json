@@ -22,7 +22,7 @@
       "@/*": ["./src/*"],
       "@services/*": ["./supabase/functions/_services/*"],
       "@models/*": ["./supabase/functions/_models/*"],
-      "@shared/*": ["./supabase/functions/_wire/*"]
+      "@shared/*": ["./supabase/functions/_shared/*"]
     }
   },
   "include": [

@@ -1,4 +1,4 @@
-import { serveWithPermission } from "@shared/middleware/index.ts";
+import { serveWithPermission } from "@http/middleware/index.ts";
 import { handle } from "./handler.ts";
 
 serveWithPermission(

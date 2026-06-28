@@ -7,18 +7,29 @@ export interface EdgeFetchOptions<TBody> {
 }
 
 interface EdgeErrorBody {
-  error?: { code?: string; message?: string };
+  error?: {
+    code?: string;
+    message?: string;
+    details?: Record<string, unknown>;
+  };
 }
 
 export class EdgeFunctionError extends Error {
   readonly status: number;
   readonly code: string;
+  readonly details?: Record<string, unknown>;
 
-  constructor(status: number, code: string, message: string) {
+  constructor(
+    status: number,
+    code: string,
+    message: string,
+    details?: Record<string, unknown>,
+  ) {
     super(message);
     this.name = "EdgeFunctionError";
     this.status = status;
     this.code = code;
+    this.details = details;
   }
 }
 
@@ -70,6 +81,7 @@ export async function executeEdgeFunctionFetch<TResponse, TBody = unknown>(
       response.status,
       parsed.error?.code ?? "edge_error",
       parsed.error?.message ?? "Something went wrong. Please try again.",
+      parsed.error?.details,
     );
   }
 

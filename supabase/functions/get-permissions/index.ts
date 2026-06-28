@@ -1,4 +1,4 @@
-import { serveWithAccessContext } from "@shared/middleware/index.ts";
+import { serveWithAccessContext } from "@http/middleware/index.ts";
 import { handle } from "./handler.ts";
 
 serveWithAccessContext(handle, {
