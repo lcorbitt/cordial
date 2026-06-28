@@ -23,29 +23,32 @@ do not define layout or styling strings inline.
 
 ## Conventions
 
-Prefix by feature (`LOGIN_FORM_`, `ADMIN_SIDEBAR_`). One export per class string:
+**One feature per `constants.ts`.** The folder path is the namespace — do not
+repeat the feature name on exports. One export per class string, ending in
+`_CLASS`:
 
 ```ts
-export const ADMIN_SIDEBAR_ASIDE_CLASS =
+// AdminSidebar/constants.ts
+export const ASIDE_CLASS =
   "border-border bg-background sticky top-14 hidden w-56 shrink-0 flex-col border-r md:flex md:min-h-[calc(100dvh-3.5rem)]";
 
-export const ADMIN_SIDEBAR_NAV_LINK_CLASS =
+export const NAV_LINK_CLASS =
   "flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors";
 
-export const ADMIN_SIDEBAR_NAV_LINK_ACTIVE_CLASS =
+export const NAV_LINK_ACTIVE_CLASS =
   "bg-muted text-foreground font-semibold";
 
-export const ADMIN_SIDEBAR_NAV_LINK_INACTIVE_CLASS =
+export const NAV_LINK_INACTIVE_CLASS =
   "text-muted-foreground hover:bg-accent hover:text-foreground";
 ```
 
 ```tsx
 // index.tsx — cn() stays here; string literals do not
+import { NAV_LINK_CLASS, NAV_LINK_ACTIVE_CLASS, NAV_LINK_INACTIVE_CLASS } from "./constants";
+
 className={cn(
-  ADMIN_SIDEBAR_NAV_LINK_CLASS,
-  isActive
-    ? ADMIN_SIDEBAR_NAV_LINK_ACTIVE_CLASS
-    : ADMIN_SIDEBAR_NAV_LINK_INACTIVE_CLASS,
+  NAV_LINK_CLASS,
+  isActive ? NAV_LINK_ACTIVE_CLASS : NAV_LINK_INACTIVE_CLASS,
 )}
 ```
 
@@ -57,14 +60,16 @@ className={cn(
 - **Conditional styling** — separate exports per variant; keep `cn()` in the view.
 - **Dynamic fragments** — runtime-only parts (e.g. `next/font` CSS variables) may
   merge in the view; static tokens still go in `_CLASS` exports.
-- **Size variants** — flat per-size exports (`SPINNER_SM_CLASS`, `APP_MODAL_MD_CLASS`).
+- **Size variants** — flat per-size exports (`SM_CLASS`, `MD_CLASS`) in that
+  component's `constants.ts`.
 
 ## Anti-patterns
 
 | ❌ Avoid | ✅ Use |
 |----------|--------|
-| `className="flex flex-col gap-4"` | `className={LOGIN_FORM_CONTENT_CLASS}` |
-| `FEATURE_CLASSNAMES.page` object access | `FEATURE_PAGE_CLASS` flat export |
+| `className="flex flex-col gap-4"` | `className={CONTENT_CLASS}` |
+| `FEATURE_CLASSNAMES.page` object access | `PAGE_CLASS` flat export |
+| `ADMIN_SIDEBAR_ASIDE_CLASS` in colocated file | `ASIDE_CLASS` (folder is namespace) |
 | Variant logic inside one template string | Separate `_ACTIVE_CLASS` / `_INACTIVE_CLASS` |
 
 This rule guides agents; it does not lint or auto-fix existing files.

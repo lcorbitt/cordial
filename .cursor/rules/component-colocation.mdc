@@ -36,12 +36,14 @@ Examples: `LoginForm/useLoginForm.ts`, `Profile/useProfile.ts`,
   schemas, no toast/modal side effects. Import a colocated `use<Name>` hook and
   render.
 - **All user-facing strings in `constants.ts`** — flat exports with semantic suffixes
-  (`_LABEL`, `_TITLE`, `_BODY`, `_TOAST_*`). Import in both `index.tsx` and
-  `use<Name>.ts`. Exception: shared copy used across routes belongs in
+  (`_LABEL`, `_TITLE`, `_BODY`, `_TOAST_*`). No feature prefix on export names;
+  the folder path is the namespace. Import in both `index.tsx` and
+  `use<Name>.ts`. One feature per `constants.ts`; split files when concerns
+  differ. Exception: shared copy used across routes belongs in
   `components/shared/` with its own constants if needed.
 - **All Tailwind class strings in `constants.ts`** — flat exports ending in `_CLASS`.
-  **See `ui-classnames.mdc`**. No nested `FEATURE_COPY` or `FEATURE_CLASSNAMES`
-  objects. No inline layout or styling literals in view files.
+  **See `ui-classnames.mdc`**. No nested copy or class objects. No inline layout
+  or styling literals in view files.
 
 ## `page.tsx` vs component folder
 
@@ -66,10 +68,10 @@ export function AdminCommunities() {
 }
 
 // ✅ GOOD
-// constants.ts
-export const ADMIN_COMMUNITIES_TITLE = "Communities";
-export const ADMIN_COMMUNITIES_CREATE_SUBMIT_LABEL = "Create Community";
-export const ADMIN_COMMUNITIES_PAGE_CLASS = "flex flex-col gap-6";
+// AdminCommunities/constants.ts
+export const TITLE = "Communities";
+export const CREATE_SUBMIT_LABEL = "Create Community";
+export const PAGE_CLASS = "flex flex-col gap-6";
 
 // useAdminCommunities.ts — form, mutations, toasts, navigation
 // index.tsx — imports copy + hook; JSX only

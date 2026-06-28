@@ -13,14 +13,14 @@ import { FieldError } from "@/components/shared/field-error";
 import { PasswordInput } from "@/components/shared/password-input";
 
 import {
-  RESET_PASSWORD_FORM_CARD_CLASS,
-  RESET_PASSWORD_FORM_DESCRIPTION,
-  RESET_PASSWORD_FORM_FIELD_CLASS,
-  RESET_PASSWORD_FORM_FORM_CLASS,
-  RESET_PASSWORD_FORM_PASSWORD_LABEL,
-  RESET_PASSWORD_FORM_SUBMIT_LABEL,
-  RESET_PASSWORD_FORM_SUBMITTING_LABEL,
-  RESET_PASSWORD_FORM_TITLE,
+  CARD_CLASS,
+  DESCRIPTION,
+  FIELD_CLASS,
+  FORM_CLASS,
+  PASSWORD_LABEL,
+  SUBMIT_LABEL,
+  SUBMITTING_LABEL,
+  TITLE,
 } from "./constants";
 import { useResetPasswordForm } from "./useResetPasswordForm";
 
@@ -32,21 +32,15 @@ export function ResetPasswordForm() {
   } = form;
 
   return (
-    <Card className={RESET_PASSWORD_FORM_CARD_CLASS}>
+    <Card className={CARD_CLASS}>
       <CardHeader>
-        <CardTitle>{RESET_PASSWORD_FORM_TITLE}</CardTitle>
-        <CardDescription>{RESET_PASSWORD_FORM_DESCRIPTION}</CardDescription>
+        <CardTitle>{TITLE}</CardTitle>
+        <CardDescription>{DESCRIPTION}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form
-          onSubmit={onSubmit}
-          className={RESET_PASSWORD_FORM_FORM_CLASS}
-          noValidate
-        >
-          <div className={RESET_PASSWORD_FORM_FIELD_CLASS}>
-            <Label htmlFor="password">
-              {RESET_PASSWORD_FORM_PASSWORD_LABEL}
-            </Label>
+        <form onSubmit={onSubmit} className={FORM_CLASS} noValidate>
+          <div className={FIELD_CLASS}>
+            <Label htmlFor="password">{PASSWORD_LABEL}</Label>
             <PasswordInput
               id="password"
               autoComplete="new-password"
@@ -56,9 +50,7 @@ export function ResetPasswordForm() {
             <FieldError message={errors.password?.message} />
           </div>
           <Button type="submit" size="lg" disabled={isSubmitting}>
-            {isSubmitting
-              ? RESET_PASSWORD_FORM_SUBMITTING_LABEL
-              : RESET_PASSWORD_FORM_SUBMIT_LABEL}
+            {isSubmitting ? SUBMITTING_LABEL : SUBMIT_LABEL}
           </Button>
         </form>
       </CardContent>

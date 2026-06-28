@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Libre_Caslon_Text } from "next/font/google";
 
-import {
-  ROOT_LAYOUT_BODY_CLASS,
-  ROOT_LAYOUT_SKIP_LINK_CLASS,
-} from "@/app/constants";
+import { BODY_CLASS, SKIP_LINK_CLASS } from "@/app/root/constants";
 import { Providers } from "@/components/providers";
 import { Hosts } from "@/hosts";
 import "./globals.css";
@@ -33,9 +30,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${dmSans.variable} ${libreCaslon.variable} ${ROOT_LAYOUT_BODY_CLASS}`}
+        className={`${dmSans.variable} ${libreCaslon.variable} ${BODY_CLASS}`}
       >
-        <a href="#main-content" className={ROOT_LAYOUT_SKIP_LINK_CLASS}>
+        <a href="#main-content" className={SKIP_LINK_CLASS}>
           Skip to main content
         </a>
         <Providers>

@@ -7,15 +7,15 @@ import {
 } from "@/components/ui/card";
 
 import {
-  ADMIN_MODERATION_BODY,
-  ADMIN_MODERATION_BODY_CLASS,
-  ADMIN_MODERATION_CARD_DESCRIPTION,
-  ADMIN_MODERATION_CARD_TITLE,
-  ADMIN_MODERATION_PAGE_CLASS,
-  ADMIN_MODERATION_SUBTITLE,
-  ADMIN_MODERATION_SUBTITLE_CLASS,
-  ADMIN_MODERATION_TITLE,
-  ADMIN_MODERATION_TITLE_CLASS,
+  BODY,
+  BODY_CLASS,
+  CARD_DESCRIPTION,
+  CARD_TITLE,
+  PAGE_CLASS,
+  SUBTITLE,
+  SUBTITLE_CLASS,
+  TITLE,
+  TITLE_CLASS,
 } from "./constants";
 
 /**
@@ -24,23 +24,19 @@ import {
  */
 export default function AdminModerationPage() {
   return (
-    <div className={ADMIN_MODERATION_PAGE_CLASS}>
+    <div className={PAGE_CLASS}>
       <div>
-        <h1 className={ADMIN_MODERATION_TITLE_CLASS}>
-          {ADMIN_MODERATION_TITLE}
-        </h1>
-        <p className={ADMIN_MODERATION_SUBTITLE_CLASS}>
-          {ADMIN_MODERATION_SUBTITLE}
-        </p>
+        <h1 className={TITLE_CLASS}>{TITLE}</h1>
+        <p className={SUBTITLE_CLASS}>{SUBTITLE}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{ADMIN_MODERATION_CARD_TITLE}</CardTitle>
-          <CardDescription>{ADMIN_MODERATION_CARD_DESCRIPTION}</CardDescription>
+          <CardTitle>{CARD_TITLE}</CardTitle>
+          <CardDescription>{CARD_DESCRIPTION}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className={ADMIN_MODERATION_BODY_CLASS}>{ADMIN_MODERATION_BODY}</p>
+          <p className={BODY_CLASS}>{BODY}</p>
         </CardContent>
       </Card>
     </div>

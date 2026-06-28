@@ -7,15 +7,15 @@ import {
 } from "@/components/ui/card";
 
 import {
-  ADMIN_USERS_BODY,
-  ADMIN_USERS_BODY_CLASS,
-  ADMIN_USERS_CARD_DESCRIPTION,
-  ADMIN_USERS_CARD_TITLE,
-  ADMIN_USERS_PAGE_CLASS,
-  ADMIN_USERS_SUBTITLE,
-  ADMIN_USERS_SUBTITLE_CLASS,
-  ADMIN_USERS_TITLE,
-  ADMIN_USERS_TITLE_CLASS,
+  BODY,
+  BODY_CLASS,
+  CARD_DESCRIPTION,
+  CARD_TITLE,
+  PAGE_CLASS,
+  SUBTITLE,
+  SUBTITLE_CLASS,
+  TITLE,
+  TITLE_CLASS,
 } from "./constants";
 
 /**
@@ -24,19 +24,19 @@ import {
  */
 export default function AdminUsersPage() {
   return (
-    <div className={ADMIN_USERS_PAGE_CLASS}>
+    <div className={PAGE_CLASS}>
       <div>
-        <h1 className={ADMIN_USERS_TITLE_CLASS}>{ADMIN_USERS_TITLE}</h1>
-        <p className={ADMIN_USERS_SUBTITLE_CLASS}>{ADMIN_USERS_SUBTITLE}</p>
+        <h1 className={TITLE_CLASS}>{TITLE}</h1>
+        <p className={SUBTITLE_CLASS}>{SUBTITLE}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{ADMIN_USERS_CARD_TITLE}</CardTitle>
-          <CardDescription>{ADMIN_USERS_CARD_DESCRIPTION}</CardDescription>
+          <CardTitle>{CARD_TITLE}</CardTitle>
+          <CardDescription>{CARD_DESCRIPTION}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className={ADMIN_USERS_BODY_CLASS}>{ADMIN_USERS_BODY}</p>
+          <p className={BODY_CLASS}>{BODY}</p>
         </CardContent>
       </Card>
     </div>

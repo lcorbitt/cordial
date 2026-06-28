@@ -1,4 +1,4 @@
-import { FIELD_ERROR_MESSAGE_CLASS } from "./field-error/constants";
+import { MESSAGE_CLASS } from "./field-error/constants";
 
 /**
  * Inline form field error. Uses `role="alert"` so screen readers announce
@@ -7,7 +7,7 @@ import { FIELD_ERROR_MESSAGE_CLASS } from "./field-error/constants";
 export function FieldError({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <p role="alert" className={FIELD_ERROR_MESSAGE_CLASS}>
+    <p role="alert" className={MESSAGE_CLASS}>
       {message}
     </p>
   );

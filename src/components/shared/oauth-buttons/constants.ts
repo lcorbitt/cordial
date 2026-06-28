@@ -1,1 +1,1 @@
-export const OAUTH_BUTTONS_ROOT_CLASS = "flex flex-col gap-4";
+export const ROOT_CLASS = "flex flex-col gap-4";

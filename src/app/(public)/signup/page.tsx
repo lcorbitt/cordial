@@ -1,7 +1,7 @@
 import { redirectIfAuthenticated } from "@/server/loaders/session";
 import { sanitizeNextPath } from "@/lib/auth/next-path";
 
-import { AUTH_PAGE_CENTER_WRAPPER_CLASS } from "../constants";
+import { CENTER_WRAPPER_CLASS } from "../auth/constants";
 import { SignupForm } from "./components/SignupForm";
 
 interface SignupPageProps {
@@ -18,7 +18,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
   await redirectIfAuthenticated(nextPath ?? "/dashboard");
 
   return (
-    <div className={AUTH_PAGE_CENTER_WRAPPER_CLASS}>
+    <div className={CENTER_WRAPPER_CLASS}>
       <SignupForm nextPath={nextPath} />
     </div>
   );

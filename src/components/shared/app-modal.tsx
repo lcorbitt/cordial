@@ -14,9 +14,9 @@ import {
 import { cn } from "@/lib/utils";
 
 import {
-  APP_MODAL_LG_CLASS,
-  APP_MODAL_MD_CLASS,
-  APP_MODAL_SM_CLASS,
+  LG_CLASS,
+  MD_CLASS,
+  SM_CLASS,
   type AppModalSize,
 } from "./app-modal/constants";
 
@@ -40,12 +40,12 @@ export interface AppModalProps {
 function getAppModalSizeClass(size: AppModalSize): string {
   switch (size) {
     case "sm":
-      return APP_MODAL_SM_CLASS;
+      return SM_CLASS;
     case "lg":
-      return APP_MODAL_LG_CLASS;
+      return LG_CLASS;
     case "md":
     default:
-      return APP_MODAL_MD_CLASS;
+      return MD_CLASS;
   }
 }
 

@@ -11,10 +11,10 @@ import { EdgeFunctionError } from "@/lib/edge-function-fetch";
 import { runMutationWithToast } from "@/lib/toast/mutation-toast";
 
 import {
-  ACCEPT_INVITE_INVALID_LINK_BODY,
-  ACCEPT_INVITE_TOAST_ERROR,
-  ACCEPT_INVITE_TOAST_LOADING,
-  ACCEPT_INVITE_TOAST_SUCCESS,
+  INVALID_LINK_BODY,
+  TOAST_ERROR,
+  TOAST_LOADING,
+  TOAST_SUCCESS,
 } from "./constants";
 import type { AcceptInviteState } from "./types";
 
@@ -31,7 +31,7 @@ export function useAcceptInvite() {
     token ? "checking" : "error",
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(() =>
-    token ? null : ACCEPT_INVITE_INVALID_LINK_BODY,
+    token ? null : INVALID_LINK_BODY,
   );
 
   const returnPath = sanitizeNextPath(
@@ -64,9 +64,9 @@ export function useAcceptInvite() {
         const result = await runMutationWithToast(
           acceptInviteAsync({ token }),
           {
-            loading: ACCEPT_INVITE_TOAST_LOADING,
-            success: ACCEPT_INVITE_TOAST_SUCCESS,
-            errorFallback: ACCEPT_INVITE_TOAST_ERROR,
+            loading: TOAST_LOADING,
+            success: TOAST_SUCCESS,
+            errorFallback: TOAST_ERROR,
           },
         );
         router.push(`/communities/${result.communitySlug}`);
@@ -77,7 +77,7 @@ export function useAcceptInvite() {
         if (error instanceof EdgeFunctionError) {
           setErrorMessage(error.message);
         } else {
-          setErrorMessage(ACCEPT_INVITE_TOAST_ERROR);
+          setErrorMessage(TOAST_ERROR);
         }
       }
     }

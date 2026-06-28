@@ -7,9 +7,9 @@ import { useIntersectionReveal } from "@/hooks/use-intersection-reveal";
 import { cn } from "@/lib/utils";
 
 import {
-  REVEAL_HIDDEN_CLASS,
-  REVEAL_TRANSITION_ACTIVE_CLASS,
-  REVEAL_VISIBLE_CLASS,
+  HIDDEN_CLASS,
+  TRANSITION_ACTIVE_CLASS,
+  VISIBLE_CLASS,
 } from "./reveal/constants";
 
 export interface RevealProps {
@@ -89,9 +89,9 @@ export function Reveal({
         shouldMount &&
           !prefersReducedMotion &&
           canTransition &&
-          REVEAL_TRANSITION_ACTIVE_CLASS,
-        shouldMount && !prefersReducedMotion && !visible && REVEAL_HIDDEN_CLASS,
-        shouldMount && !prefersReducedMotion && visible && REVEAL_VISIBLE_CLASS,
+          TRANSITION_ACTIVE_CLASS,
+        shouldMount && !prefersReducedMotion && !visible && HIDDEN_CLASS,
+        shouldMount && !prefersReducedMotion && visible && VISIBLE_CLASS,
       )}
     >
       {shouldMount ? children : null}

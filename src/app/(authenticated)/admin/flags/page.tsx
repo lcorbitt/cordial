@@ -7,15 +7,15 @@ import {
 } from "@/components/ui/card";
 
 import {
-  ADMIN_FLAGS_BODY,
-  ADMIN_FLAGS_BODY_CLASS,
-  ADMIN_FLAGS_CARD_DESCRIPTION,
-  ADMIN_FLAGS_CARD_TITLE,
-  ADMIN_FLAGS_PAGE_CLASS,
-  ADMIN_FLAGS_SUBTITLE,
-  ADMIN_FLAGS_SUBTITLE_CLASS,
-  ADMIN_FLAGS_TITLE,
-  ADMIN_FLAGS_TITLE_CLASS,
+  BODY,
+  BODY_CLASS,
+  CARD_DESCRIPTION,
+  CARD_TITLE,
+  PAGE_CLASS,
+  SUBTITLE,
+  SUBTITLE_CLASS,
+  TITLE,
+  TITLE_CLASS,
 } from "./constants";
 
 /**
@@ -25,19 +25,19 @@ import {
  */
 export default function AdminFlagsPage() {
   return (
-    <div className={ADMIN_FLAGS_PAGE_CLASS}>
+    <div className={PAGE_CLASS}>
       <div>
-        <h1 className={ADMIN_FLAGS_TITLE_CLASS}>{ADMIN_FLAGS_TITLE}</h1>
-        <p className={ADMIN_FLAGS_SUBTITLE_CLASS}>{ADMIN_FLAGS_SUBTITLE}</p>
+        <h1 className={TITLE_CLASS}>{TITLE}</h1>
+        <p className={SUBTITLE_CLASS}>{SUBTITLE}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{ADMIN_FLAGS_CARD_TITLE}</CardTitle>
-          <CardDescription>{ADMIN_FLAGS_CARD_DESCRIPTION}</CardDescription>
+          <CardTitle>{CARD_TITLE}</CardTitle>
+          <CardDescription>{CARD_DESCRIPTION}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className={ADMIN_FLAGS_BODY_CLASS}>{ADMIN_FLAGS_BODY}</p>
+          <p className={BODY_CLASS}>{BODY}</p>
         </CardContent>
       </Card>
     </div>

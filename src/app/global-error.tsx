@@ -3,11 +3,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
-import {
-  GLOBAL_ERROR_BODY_CLASS,
-  GLOBAL_ERROR_DESCRIPTION,
-  GLOBAL_ERROR_TITLE,
-} from "@/app/constants";
+import { BODY_CLASS, DESCRIPTION, TITLE } from "@/app/global-error/constants";
 import { ErrorState } from "@/components/shared/error-state";
 
 /**
@@ -27,12 +23,8 @@ export default function GlobalError({
 
   return (
     <html lang="en">
-      <body className={GLOBAL_ERROR_BODY_CLASS}>
-        <ErrorState
-          title={GLOBAL_ERROR_TITLE}
-          description={GLOBAL_ERROR_DESCRIPTION}
-          onRetry={reset}
-        />
+      <body className={BODY_CLASS}>
+        <ErrorState title={TITLE} description={DESCRIPTION} onRetry={reset} />
       </body>
     </html>
   );

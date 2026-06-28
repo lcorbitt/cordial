@@ -5,7 +5,7 @@ import { AuthenticatedShellBody } from "../AuthenticatedShellBody";
 import { MemberTopNav } from "../MemberTopNav";
 import { ProfileRealtimeSync } from "../ProfileRealtimeSync";
 
-import { APP_SHELL_ROOT_CLASS } from "./constants";
+import { ROOT_CLASS } from "./constants";
 
 interface AppShellProps {
   userId: string;
@@ -25,7 +25,7 @@ export function AppShell({
   children,
 }: AppShellProps) {
   return (
-    <div className={APP_SHELL_ROOT_CLASS}>
+    <div className={ROOT_CLASS}>
       <ProfileRealtimeSync userId={userId} />
       <MemberTopNav
         userId={userId}

@@ -1,7 +1,7 @@
 import { redirectIfAuthenticated } from "@/server/loaders/session";
 import { sanitizeNextPath } from "@/lib/auth/next-path";
 
-import { AUTH_PAGE_CENTER_WRAPPER_CLASS } from "../constants";
+import { CENTER_WRAPPER_CLASS } from "../auth/constants";
 import { LoginForm } from "./components/LoginForm";
 
 interface LoginPageProps {
@@ -18,7 +18,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   await redirectIfAuthenticated(nextPath ?? "/dashboard");
 
   return (
-    <div className={AUTH_PAGE_CENTER_WRAPPER_CLASS}>
+    <div className={CENTER_WRAPPER_CLASS}>
       <LoginForm nextPath={nextPath} />
     </div>
   );

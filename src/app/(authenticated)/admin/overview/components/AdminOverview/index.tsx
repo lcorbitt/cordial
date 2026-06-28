@@ -12,37 +12,37 @@ import { Reveal } from "@/components/shared/reveal";
 import { useAdminOverviewQuery } from "@/hooks/queries/useAdminOverview";
 
 import {
-  ADMIN_OVERVIEW_ANALYTICS_DESCRIPTION,
-  ADMIN_OVERVIEW_ANALYTICS_TITLE,
-  ADMIN_OVERVIEW_AUDIT_DESCRIPTION,
-  ADMIN_OVERVIEW_AUDIT_TITLE,
-  ADMIN_OVERVIEW_BACK_TO_ADMIN_LABEL,
-  ADMIN_OVERVIEW_DETAIL_GRID_CLASS,
-  ADMIN_OVERVIEW_EMPTY_TEXT_CLASS,
-  ADMIN_OVERVIEW_ENTRY_ACTION_CLASS,
-  ADMIN_OVERVIEW_ENTRY_ITEM_CLASS,
-  ADMIN_OVERVIEW_ENTRY_LIST_CLASS,
-  ADMIN_OVERVIEW_ENTRY_META_CLASS,
-  ADMIN_OVERVIEW_ENTRY_TIMESTAMP_CLASS,
-  ADMIN_OVERVIEW_ERROR_DESCRIPTION,
-  ADMIN_OVERVIEW_ERROR_TITLE,
-  ADMIN_OVERVIEW_LOADING_BODY,
-  ADMIN_OVERVIEW_LOADING_TEXT_CLASS,
-  ADMIN_OVERVIEW_NO_ANALYTICS_BODY,
-  ADMIN_OVERVIEW_NO_AUDIT_BODY,
-  ADMIN_OVERVIEW_PAGE_CLASS,
-  ADMIN_OVERVIEW_PROFILES_DESCRIPTION,
-  ADMIN_OVERVIEW_PROFILES_TITLE,
-  ADMIN_OVERVIEW_RECENT_ANALYTICS_DESCRIPTION,
-  ADMIN_OVERVIEW_RECENT_ANALYTICS_TITLE,
-  ADMIN_OVERVIEW_RECENT_AUDIT_DESCRIPTION,
-  ADMIN_OVERVIEW_RECENT_AUDIT_TITLE,
-  ADMIN_OVERVIEW_STAT_VALUE_CLASS,
-  ADMIN_OVERVIEW_STATS_GRID_CLASS,
-  ADMIN_OVERVIEW_SUBTITLE,
-  ADMIN_OVERVIEW_SUBTITLE_CLASS,
-  ADMIN_OVERVIEW_TITLE,
-  ADMIN_OVERVIEW_TITLE_CLASS,
+  ANALYTICS_DESCRIPTION,
+  ANALYTICS_TITLE,
+  AUDIT_DESCRIPTION,
+  AUDIT_TITLE,
+  BACK_TO_ADMIN_LABEL,
+  DETAIL_GRID_CLASS,
+  EMPTY_TEXT_CLASS,
+  ENTRY_ACTION_CLASS,
+  ENTRY_ITEM_CLASS,
+  ENTRY_LIST_CLASS,
+  ENTRY_META_CLASS,
+  ENTRY_TIMESTAMP_CLASS,
+  ERROR_DESCRIPTION,
+  ERROR_TITLE,
+  LOADING_BODY,
+  LOADING_TEXT_CLASS,
+  NO_ANALYTICS_BODY,
+  NO_AUDIT_BODY,
+  PAGE_CLASS,
+  PROFILES_DESCRIPTION,
+  PROFILES_TITLE,
+  RECENT_ANALYTICS_DESCRIPTION,
+  RECENT_ANALYTICS_TITLE,
+  RECENT_AUDIT_DESCRIPTION,
+  RECENT_AUDIT_TITLE,
+  STAT_VALUE_CLASS,
+  STATS_GRID_CLASS,
+  SUBTITLE,
+  SUBTITLE_CLASS,
+  TITLE,
+  TITLE_CLASS,
 } from "./constants";
 
 function formatWhen(iso: string): string {
@@ -56,21 +56,17 @@ export function AdminOverview() {
   const overviewQuery = useAdminOverviewQuery();
 
   if (overviewQuery.isPending) {
-    return (
-      <p className={ADMIN_OVERVIEW_LOADING_TEXT_CLASS}>
-        {ADMIN_OVERVIEW_LOADING_BODY}
-      </p>
-    );
+    return <p className={LOADING_TEXT_CLASS}>{LOADING_BODY}</p>;
   }
 
   if (overviewQuery.isError || !overviewQuery.data) {
     return (
       <ErrorState
-        title={ADMIN_OVERVIEW_ERROR_TITLE}
-        description={ADMIN_OVERVIEW_ERROR_DESCRIPTION}
+        title={ERROR_TITLE}
+        description={ERROR_DESCRIPTION}
         onRetry={() => overviewQuery.refetch()}
         homeHref="/admin/flags"
-        homeLabel={ADMIN_OVERVIEW_BACK_TO_ADMIN_LABEL}
+        homeLabel={BACK_TO_ADMIN_LABEL}
       />
     );
   }
@@ -78,84 +74,61 @@ export function AdminOverview() {
   const data = overviewQuery.data;
 
   return (
-    <div className={ADMIN_OVERVIEW_PAGE_CLASS}>
+    <div className={PAGE_CLASS}>
       <div>
-        <h1 className={ADMIN_OVERVIEW_TITLE_CLASS}>{ADMIN_OVERVIEW_TITLE}</h1>
-        <p className={ADMIN_OVERVIEW_SUBTITLE_CLASS}>
-          {ADMIN_OVERVIEW_SUBTITLE}
-        </p>
+        <h1 className={TITLE_CLASS}>{TITLE}</h1>
+        <p className={SUBTITLE_CLASS}>{SUBTITLE}</p>
       </div>
 
-      <Reveal className={ADMIN_OVERVIEW_STATS_GRID_CLASS}>
+      <Reveal className={STATS_GRID_CLASS}>
         <Card>
           <CardHeader>
-            <CardTitle>{ADMIN_OVERVIEW_PROFILES_TITLE}</CardTitle>
-            <CardDescription>
-              {ADMIN_OVERVIEW_PROFILES_DESCRIPTION}
-            </CardDescription>
+            <CardTitle>{PROFILES_TITLE}</CardTitle>
+            <CardDescription>{PROFILES_DESCRIPTION}</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className={ADMIN_OVERVIEW_STAT_VALUE_CLASS}>
-              {data.totalProfiles}
-            </p>
+            <p className={STAT_VALUE_CLASS}>{data.totalProfiles}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>{ADMIN_OVERVIEW_AUDIT_TITLE}</CardTitle>
-            <CardDescription>
-              {ADMIN_OVERVIEW_AUDIT_DESCRIPTION}
-            </CardDescription>
+            <CardTitle>{AUDIT_TITLE}</CardTitle>
+            <CardDescription>{AUDIT_DESCRIPTION}</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className={ADMIN_OVERVIEW_STAT_VALUE_CLASS}>
-              {data.auditLogCount24h}
-            </p>
+            <p className={STAT_VALUE_CLASS}>{data.auditLogCount24h}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>{ADMIN_OVERVIEW_ANALYTICS_TITLE}</CardTitle>
-            <CardDescription>
-              {ADMIN_OVERVIEW_ANALYTICS_DESCRIPTION}
-            </CardDescription>
+            <CardTitle>{ANALYTICS_TITLE}</CardTitle>
+            <CardDescription>{ANALYTICS_DESCRIPTION}</CardDescription>
           </CardHeader>
           <CardContent>
-            <p className={ADMIN_OVERVIEW_STAT_VALUE_CLASS}>
-              {data.analyticsEventCount24h}
-            </p>
+            <p className={STAT_VALUE_CLASS}>{data.analyticsEventCount24h}</p>
           </CardContent>
         </Card>
       </Reveal>
 
-      <Reveal className={ADMIN_OVERVIEW_DETAIL_GRID_CLASS}>
+      <Reveal className={DETAIL_GRID_CLASS}>
         <Card>
           <CardHeader>
-            <CardTitle>{ADMIN_OVERVIEW_RECENT_AUDIT_TITLE}</CardTitle>
-            <CardDescription>
-              {ADMIN_OVERVIEW_RECENT_AUDIT_DESCRIPTION}
-            </CardDescription>
+            <CardTitle>{RECENT_AUDIT_TITLE}</CardTitle>
+            <CardDescription>{RECENT_AUDIT_DESCRIPTION}</CardDescription>
           </CardHeader>
           <CardContent>
             {data.recentAuditLogs.length === 0 ? (
-              <p className={ADMIN_OVERVIEW_EMPTY_TEXT_CLASS}>
-                {ADMIN_OVERVIEW_NO_AUDIT_BODY}
-              </p>
+              <p className={EMPTY_TEXT_CLASS}>{NO_AUDIT_BODY}</p>
             ) : (
-              <ul className={ADMIN_OVERVIEW_ENTRY_LIST_CLASS}>
+              <ul className={ENTRY_LIST_CLASS}>
                 {data.recentAuditLogs.map((entry) => (
-                  <li
-                    key={entry.id}
-                    className={ADMIN_OVERVIEW_ENTRY_ITEM_CLASS}
-                  >
-                    <p className={ADMIN_OVERVIEW_ENTRY_ACTION_CLASS}>
-                      {entry.action}
-                    </p>
-                    <p className={ADMIN_OVERVIEW_ENTRY_META_CLASS}>
+                  <li key={entry.id} className={ENTRY_ITEM_CLASS}>
+                    <p className={ENTRY_ACTION_CLASS}>{entry.action}</p>
+                    <p className={ENTRY_META_CLASS}>
                       {entry.resourceType}
                       {entry.resourceId ? ` · ${entry.resourceId}` : ""}
                     </p>
-                    <p className={ADMIN_OVERVIEW_ENTRY_TIMESTAMP_CLASS}>
+                    <p className={ENTRY_TIMESTAMP_CLASS}>
                       {formatWhen(entry.createdAt)}
                     </p>
                   </li>
@@ -167,33 +140,24 @@ export function AdminOverview() {
 
         <Card>
           <CardHeader>
-            <CardTitle>{ADMIN_OVERVIEW_RECENT_ANALYTICS_TITLE}</CardTitle>
-            <CardDescription>
-              {ADMIN_OVERVIEW_RECENT_ANALYTICS_DESCRIPTION}
-            </CardDescription>
+            <CardTitle>{RECENT_ANALYTICS_TITLE}</CardTitle>
+            <CardDescription>{RECENT_ANALYTICS_DESCRIPTION}</CardDescription>
           </CardHeader>
           <CardContent>
             {data.recentAnalyticsEvents.length === 0 ? (
-              <p className={ADMIN_OVERVIEW_EMPTY_TEXT_CLASS}>
-                {ADMIN_OVERVIEW_NO_ANALYTICS_BODY}
-              </p>
+              <p className={EMPTY_TEXT_CLASS}>{NO_ANALYTICS_BODY}</p>
             ) : (
-              <ul className={ADMIN_OVERVIEW_ENTRY_LIST_CLASS}>
+              <ul className={ENTRY_LIST_CLASS}>
                 {data.recentAnalyticsEvents.map((entry) => (
-                  <li
-                    key={entry.id}
-                    className={ADMIN_OVERVIEW_ENTRY_ITEM_CLASS}
-                  >
-                    <p className={ADMIN_OVERVIEW_ENTRY_ACTION_CLASS}>
-                      {entry.eventName}
-                    </p>
-                    <p className={ADMIN_OVERVIEW_ENTRY_META_CLASS}>
+                  <li key={entry.id} className={ENTRY_ITEM_CLASS}>
+                    <p className={ENTRY_ACTION_CLASS}>{entry.eventName}</p>
+                    <p className={ENTRY_META_CLASS}>
                       {entry.environment}
                       {entry.userId
                         ? ` · user ${entry.userId.slice(0, 8)}…`
                         : ""}
                     </p>
-                    <p className={ADMIN_OVERVIEW_ENTRY_TIMESTAMP_CLASS}>
+                    <p className={ENTRY_TIMESTAMP_CLASS}>
                       {formatWhen(entry.createdAt)}
                     </p>
                   </li>

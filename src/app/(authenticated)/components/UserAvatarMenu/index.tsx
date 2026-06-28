@@ -16,13 +16,13 @@ import { useAppRouter } from "@/hooks/use-app-router";
 import { signOut } from "@/lib/auth/client";
 
 import {
-  USER_AVATAR_MENU_DROPDOWN_CLASS,
-  USER_AVATAR_MENU_SETTINGS_LABEL,
-  USER_AVATAR_MENU_SIGN_OUT_ERROR_MESSAGE,
-  USER_AVATAR_MENU_SIGN_OUT_LABEL,
-  USER_AVATAR_MENU_SIGNING_OUT_LABEL,
-  USER_AVATAR_MENU_TRIGGER_CLASS,
-  USER_AVATAR_MENU_TRIGGER_LABEL,
+  DROPDOWN_CLASS,
+  SETTINGS_LABEL,
+  SIGN_OUT_ERROR_MESSAGE,
+  SIGN_OUT_LABEL,
+  SIGNING_OUT_LABEL,
+  TRIGGER_CLASS,
+  TRIGGER_LABEL,
 } from "./constants";
 
 export function UserAvatarMenu() {
@@ -36,7 +36,7 @@ export function UserAvatarMenu() {
       router.push("/login");
       router.refresh();
     } catch {
-      toast.error(USER_AVATAR_MENU_SIGN_OUT_ERROR_MESSAGE);
+      toast.error(SIGN_OUT_ERROR_MESSAGE);
       setSignOutPending(false);
     }
   }
@@ -46,18 +46,15 @@ export function UserAvatarMenu() {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className={USER_AVATAR_MENU_TRIGGER_CLASS}
-          aria-label={USER_AVATAR_MENU_TRIGGER_LABEL}
+          className={TRIGGER_CLASS}
+          aria-label={TRIGGER_LABEL}
         >
           <UserAvatar linkToProfile={false} />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className={USER_AVATAR_MENU_DROPDOWN_CLASS}
-      >
+      <DropdownMenuContent align="end" className={DROPDOWN_CLASS}>
         <DropdownMenuItem asChild>
-          <Link href="/settings">{USER_AVATAR_MENU_SETTINGS_LABEL}</Link>
+          <Link href="/settings">{SETTINGS_LABEL}</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -67,9 +64,7 @@ export function UserAvatarMenu() {
             void handleSignOut();
           }}
         >
-          {signOutPending
-            ? USER_AVATAR_MENU_SIGNING_OUT_LABEL
-            : USER_AVATAR_MENU_SIGN_OUT_LABEL}
+          {signOutPending ? SIGNING_OUT_LABEL : SIGN_OUT_LABEL}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

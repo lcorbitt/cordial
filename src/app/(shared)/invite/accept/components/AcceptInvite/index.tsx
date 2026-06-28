@@ -13,21 +13,21 @@ import {
 import { ErrorState } from "@/components/shared/error-state";
 
 import {
-  ACCEPT_INVITE_ACCEPTING_BODY,
-  ACCEPT_INVITE_AUTH_ACTIONS_CLASS,
-  ACCEPT_INVITE_AUTH_CARD_CLASS,
-  ACCEPT_INVITE_AUTH_DESCRIPTION,
-  ACCEPT_INVITE_AUTH_PAGE_CLASS,
-  ACCEPT_INVITE_AUTH_TITLE,
-  ACCEPT_INVITE_CHECKING_BODY,
-  ACCEPT_INVITE_ERROR_FALLBACK_BODY,
-  ACCEPT_INVITE_ERROR_PAGE_CLASS,
-  ACCEPT_INVITE_ERROR_TITLE,
-  ACCEPT_INVITE_GO_HOME_LABEL,
-  ACCEPT_INVITE_LOADING_PAGE_CLASS,
-  ACCEPT_INVITE_LOADING_TEXT_CLASS,
-  ACCEPT_INVITE_LOGIN_LABEL,
-  ACCEPT_INVITE_SIGNUP_LABEL,
+  ACCEPTING_BODY,
+  AUTH_ACTIONS_CLASS,
+  AUTH_CARD_CLASS,
+  AUTH_DESCRIPTION,
+  AUTH_PAGE_CLASS,
+  AUTH_TITLE,
+  CHECKING_BODY,
+  ERROR_FALLBACK_BODY,
+  ERROR_PAGE_CLASS,
+  ERROR_TITLE,
+  GO_HOME_LABEL,
+  LOADING_PAGE_CLASS,
+  LOADING_TEXT_CLASS,
+  LOGIN_LABEL,
+  SIGNUP_LABEL,
 } from "./constants";
 import { useAcceptInvite } from "./useAcceptInvite";
 
@@ -36,11 +36,9 @@ export function AcceptInvite() {
 
   if (state === "checking" || state === "accepting") {
     return (
-      <div className={ACCEPT_INVITE_LOADING_PAGE_CLASS}>
-        <p className={ACCEPT_INVITE_LOADING_TEXT_CLASS}>
-          {state === "checking"
-            ? ACCEPT_INVITE_CHECKING_BODY
-            : ACCEPT_INVITE_ACCEPTING_BODY}
+      <div className={LOADING_PAGE_CLASS}>
+        <p className={LOADING_TEXT_CLASS}>
+          {state === "checking" ? CHECKING_BODY : ACCEPTING_BODY}
         </p>
       </div>
     );
@@ -48,18 +46,18 @@ export function AcceptInvite() {
 
   if (state === "needs_auth") {
     return (
-      <div className={ACCEPT_INVITE_AUTH_PAGE_CLASS}>
-        <Card className={ACCEPT_INVITE_AUTH_CARD_CLASS}>
+      <div className={AUTH_PAGE_CLASS}>
+        <Card className={AUTH_CARD_CLASS}>
           <CardHeader>
-            <CardTitle>{ACCEPT_INVITE_AUTH_TITLE}</CardTitle>
-            <CardDescription>{ACCEPT_INVITE_AUTH_DESCRIPTION}</CardDescription>
+            <CardTitle>{AUTH_TITLE}</CardTitle>
+            <CardDescription>{AUTH_DESCRIPTION}</CardDescription>
           </CardHeader>
-          <CardContent className={ACCEPT_INVITE_AUTH_ACTIONS_CLASS}>
+          <CardContent className={AUTH_ACTIONS_CLASS}>
             <Button asChild size="lg">
-              <Link href={loginHref}>{ACCEPT_INVITE_LOGIN_LABEL}</Link>
+              <Link href={loginHref}>{LOGIN_LABEL}</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href={signupHref}>{ACCEPT_INVITE_SIGNUP_LABEL}</Link>
+              <Link href={signupHref}>{SIGNUP_LABEL}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -68,12 +66,12 @@ export function AcceptInvite() {
   }
 
   return (
-    <div className={ACCEPT_INVITE_ERROR_PAGE_CLASS}>
+    <div className={ERROR_PAGE_CLASS}>
       <ErrorState
-        title={ACCEPT_INVITE_ERROR_TITLE}
-        description={errorMessage ?? ACCEPT_INVITE_ERROR_FALLBACK_BODY}
+        title={ERROR_TITLE}
+        description={errorMessage ?? ERROR_FALLBACK_BODY}
         homeHref="/"
-        homeLabel={ACCEPT_INVITE_GO_HOME_LABEL}
+        homeLabel={GO_HOME_LABEL}
       />
     </div>
   );

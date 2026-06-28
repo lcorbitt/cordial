@@ -4,10 +4,10 @@ import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
 import {
-  ROUTE_ERROR_DESCRIPTION,
-  ROUTE_ERROR_GO_TO_DASHBOARD_LABEL,
-  ROUTE_ERROR_TITLE,
-} from "@/app/constants";
+  DESCRIPTION,
+  GO_TO_DASHBOARD_LABEL,
+  TITLE,
+} from "@/app/error/constants";
 import { ErrorState } from "@/components/shared/error-state";
 
 /**
@@ -27,11 +27,11 @@ export default function Error({
 
   return (
     <ErrorState
-      title={ROUTE_ERROR_TITLE}
-      description={ROUTE_ERROR_DESCRIPTION}
+      title={TITLE}
+      description={DESCRIPTION}
       onRetry={reset}
       homeHref="/dashboard"
-      homeLabel={ROUTE_ERROR_GO_TO_DASHBOARD_LABEL}
+      homeLabel={GO_TO_DASHBOARD_LABEL}
     />
   );
 }

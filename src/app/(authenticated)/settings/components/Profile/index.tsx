@@ -17,38 +17,38 @@ import { FieldError } from "@/components/shared/field-error";
 import { ErrorState } from "@/components/shared/error-state";
 
 import {
-  PROFILE_ACTIONS_CLASS,
-  PROFILE_AVATAR_ACTIONS_CLASS,
-  PROFILE_AVATAR_CLASS,
-  PROFILE_AVATAR_DESCRIPTION,
-  PROFILE_AVATAR_FALLBACK_CLASS,
-  PROFILE_AVATAR_ROW_CLASS,
-  PROFILE_AVATAR_TITLE,
-  PROFILE_AVATAR_UPLOAD_LABEL,
-  PROFILE_AVATAR_UPLOADING_LABEL,
-  PROFILE_BACK_TO_DASHBOARD_LABEL,
-  PROFILE_BIO_LABEL,
-  PROFILE_DETAILS_DESCRIPTION,
-  PROFILE_DETAILS_TITLE,
-  PROFILE_DISPLAY_NAME_HELPER,
-  PROFILE_DISPLAY_NAME_LABEL,
-  PROFILE_ERROR_DESCRIPTION,
-  PROFILE_ERROR_TITLE,
-  PROFILE_FIELD_CLASS,
-  PROFILE_FILE_INPUT_CLASS,
-  PROFILE_FORM_CLASS,
-  PROFILE_HELPER_TEXT_CLASS,
-  PROFILE_LOADING_BODY,
-  PROFILE_LOADING_TEXT_CLASS,
-  PROFILE_PAGE_CLASS,
-  PROFILE_RESET_LABEL,
-  PROFILE_SAVE_LABEL,
-  PROFILE_SAVING_LABEL,
-  PROFILE_SUBTITLE,
-  PROFILE_SUBTITLE_CLASS,
-  PROFILE_TEXTAREA_CLASS,
-  PROFILE_TITLE,
-  PROFILE_TITLE_CLASS,
+  ACTIONS_CLASS,
+  AVATAR_ACTIONS_CLASS,
+  AVATAR_CLASS,
+  AVATAR_DESCRIPTION,
+  AVATAR_FALLBACK_CLASS,
+  AVATAR_ROW_CLASS,
+  AVATAR_TITLE,
+  AVATAR_UPLOAD_LABEL,
+  AVATAR_UPLOADING_LABEL,
+  BACK_TO_DASHBOARD_LABEL,
+  BIO_LABEL,
+  DETAILS_DESCRIPTION,
+  DETAILS_TITLE,
+  DISPLAY_NAME_HELPER,
+  DISPLAY_NAME_LABEL,
+  ERROR_DESCRIPTION,
+  ERROR_TITLE,
+  FIELD_CLASS,
+  FILE_INPUT_CLASS,
+  FORM_CLASS,
+  HELPER_TEXT_CLASS,
+  LOADING_BODY,
+  LOADING_TEXT_CLASS,
+  PAGE_CLASS,
+  RESET_LABEL,
+  SAVE_LABEL,
+  SAVING_LABEL,
+  SUBTITLE,
+  SUBTITLE_CLASS,
+  TEXTAREA_CLASS,
+  TITLE,
+  TITLE_CLASS,
 } from "./constants";
 import { useProfile } from "./useProfile";
 
@@ -70,33 +70,33 @@ export function Profile() {
   } = form;
 
   return (
-    <div className={PROFILE_PAGE_CLASS}>
+    <div className={PAGE_CLASS}>
       <div>
-        <h1 className={PROFILE_TITLE_CLASS}>{PROFILE_TITLE}</h1>
-        <p className={PROFILE_SUBTITLE_CLASS}>{PROFILE_SUBTITLE}</p>
+        <h1 className={TITLE_CLASS}>{TITLE}</h1>
+        <p className={SUBTITLE_CLASS}>{SUBTITLE}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{PROFILE_AVATAR_TITLE}</CardTitle>
-          <CardDescription>{PROFILE_AVATAR_DESCRIPTION}</CardDescription>
+          <CardTitle>{AVATAR_TITLE}</CardTitle>
+          <CardDescription>{AVATAR_DESCRIPTION}</CardDescription>
         </CardHeader>
         <CardContent>
           {profileQuery.isPending ? (
-            <p className={PROFILE_LOADING_TEXT_CLASS}>{PROFILE_LOADING_BODY}</p>
+            <p className={LOADING_TEXT_CLASS}>{LOADING_BODY}</p>
           ) : profileQuery.isError ? null : (
-            <div className={PROFILE_AVATAR_ROW_CLASS}>
+            <div className={AVATAR_ROW_CLASS}>
               <UserAvatar
-                className={PROFILE_AVATAR_CLASS}
-                fallbackClassName={PROFILE_AVATAR_FALLBACK_CLASS}
+                className={AVATAR_CLASS}
+                fallbackClassName={AVATAR_FALLBACK_CLASS}
                 linkToProfile={false}
               />
-              <div className={PROFILE_AVATAR_ACTIONS_CLASS}>
+              <div className={AVATAR_ACTIONS_CLASS}>
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
-                  className={PROFILE_FILE_INPUT_CLASS}
+                  className={FILE_INPUT_CLASS}
                   onChange={(event) => {
                     const file = event.target.files?.[0] ?? null;
                     void onAvatarSelected(file);
@@ -111,8 +111,8 @@ export function Profile() {
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {isUploadingAvatar
-                    ? PROFILE_AVATAR_UPLOADING_LABEL
-                    : PROFILE_AVATAR_UPLOAD_LABEL}
+                    ? AVATAR_UPLOADING_LABEL
+                    : AVATAR_UPLOAD_LABEL}
                 </Button>
               </div>
             </div>
@@ -122,47 +122,43 @@ export function Profile() {
 
       <Card>
         <CardHeader>
-          <CardTitle>{PROFILE_DETAILS_TITLE}</CardTitle>
-          <CardDescription>{PROFILE_DETAILS_DESCRIPTION}</CardDescription>
+          <CardTitle>{DETAILS_TITLE}</CardTitle>
+          <CardDescription>{DETAILS_DESCRIPTION}</CardDescription>
         </CardHeader>
         <CardContent>
           {profileQuery.isPending ? (
-            <p className={PROFILE_LOADING_TEXT_CLASS}>{PROFILE_LOADING_BODY}</p>
+            <p className={LOADING_TEXT_CLASS}>{LOADING_BODY}</p>
           ) : profileQuery.isError ? (
             <ErrorState
-              title={PROFILE_ERROR_TITLE}
-              description={PROFILE_ERROR_DESCRIPTION}
+              title={ERROR_TITLE}
+              description={ERROR_DESCRIPTION}
               onRetry={() => profileQuery.refetch()}
               homeHref="/dashboard"
-              homeLabel={PROFILE_BACK_TO_DASHBOARD_LABEL}
+              homeLabel={BACK_TO_DASHBOARD_LABEL}
             />
           ) : (
-            <form onSubmit={onSubmit} className={PROFILE_FORM_CLASS} noValidate>
-              <div className={PROFILE_FIELD_CLASS}>
-                <Label htmlFor="displayName">
-                  {PROFILE_DISPLAY_NAME_LABEL}
-                </Label>
+            <form onSubmit={onSubmit} className={FORM_CLASS} noValidate>
+              <div className={FIELD_CLASS}>
+                <Label htmlFor="displayName">{DISPLAY_NAME_LABEL}</Label>
                 <Input id="displayName" {...register("displayName")} />
-                <p className={PROFILE_HELPER_TEXT_CLASS}>
-                  {PROFILE_DISPLAY_NAME_HELPER}
-                </p>
+                <p className={HELPER_TEXT_CLASS}>{DISPLAY_NAME_HELPER}</p>
                 <FieldError message={errors.displayName?.message} />
               </div>
 
-              <div className={PROFILE_FIELD_CLASS}>
-                <Label htmlFor="bio">{PROFILE_BIO_LABEL}</Label>
+              <div className={FIELD_CLASS}>
+                <Label htmlFor="bio">{BIO_LABEL}</Label>
                 <textarea
                   id="bio"
                   rows={4}
-                  className={PROFILE_TEXTAREA_CLASS}
+                  className={TEXTAREA_CLASS}
                   {...register("bio")}
                 />
                 <FieldError message={errors.bio?.message} />
               </div>
 
-              <div className={PROFILE_ACTIONS_CLASS}>
+              <div className={ACTIONS_CLASS}>
                 <Button type="submit" size="lg" disabled={isSaving || !isDirty}>
-                  {isSaving ? PROFILE_SAVING_LABEL : PROFILE_SAVE_LABEL}
+                  {isSaving ? SAVING_LABEL : SAVE_LABEL}
                 </Button>
                 <Button
                   type="button"
@@ -171,7 +167,7 @@ export function Profile() {
                   disabled={isSaving}
                   onClick={resetForm}
                 >
-                  {PROFILE_RESET_LABEL}
+                  {RESET_LABEL}
                 </Button>
               </div>
             </form>

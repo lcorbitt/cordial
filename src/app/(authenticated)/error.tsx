@@ -3,11 +3,7 @@
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
-import {
-  AUTHENTICATED_ROUTE_ERROR_BACK_TO_DASHBOARD_LABEL,
-  AUTHENTICATED_ROUTE_ERROR_DESCRIPTION,
-  AUTHENTICATED_ROUTE_ERROR_TITLE,
-} from "@/app/constants";
+import { BACK_TO_DASHBOARD_LABEL, DESCRIPTION, TITLE } from "./error/constants";
 import { ErrorState } from "@/components/shared/error-state";
 
 export default function AuthenticatedError({
@@ -23,11 +19,11 @@ export default function AuthenticatedError({
 
   return (
     <ErrorState
-      title={AUTHENTICATED_ROUTE_ERROR_TITLE}
-      description={AUTHENTICATED_ROUTE_ERROR_DESCRIPTION}
+      title={TITLE}
+      description={DESCRIPTION}
       onRetry={reset}
       homeHref="/dashboard"
-      homeLabel={AUTHENTICATED_ROUTE_ERROR_BACK_TO_DASHBOARD_LABEL}
+      homeLabel={BACK_TO_DASHBOARD_LABEL}
     />
   );
 }

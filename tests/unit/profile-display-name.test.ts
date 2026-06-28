@@ -10,7 +10,7 @@ import {
   resolveProfileFieldError,
   resolveProfileSaveErrorMessage,
 } from "@/app/(authenticated)/settings/components/Profile/utils";
-import { PROFILE_DISPLAY_NAME_TAKEN_BODY } from "@/app/(authenticated)/settings/components/Profile/constants";
+import { DISPLAY_NAME_TAKEN_BODY } from "@/app/(authenticated)/settings/components/Profile/constants";
 
 describe("profile validation", () => {
   it("normalizes display names by trimming whitespace", () => {
@@ -38,11 +38,9 @@ describe("resolveProfileFieldError", () => {
 
     expect(resolveProfileFieldError(error)).toEqual({
       field: "displayName",
-      message: PROFILE_DISPLAY_NAME_TAKEN_BODY,
+      message: DISPLAY_NAME_TAKEN_BODY,
     });
-    expect(resolveProfileSaveErrorMessage(error)).toBe(
-      PROFILE_DISPLAY_NAME_TAKEN_BODY,
-    );
+    expect(resolveProfileSaveErrorMessage(error)).toBe(DISPLAY_NAME_TAKEN_BODY);
   });
 
   it("returns null for unrelated errors", () => {

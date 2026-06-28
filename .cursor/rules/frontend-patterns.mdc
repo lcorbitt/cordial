@@ -17,8 +17,8 @@ alwaysApply: false
   **See `ui-copy-title-case.mdc`** for Title Case on buttons, links, and h1/h2.
   **See `ui-spacing.mdc`** for spacing on the 2px grid (even and half steps like
   `gap-2`, `p-4`, `space-y-1.5`; no odd integers like `gap-3`).
-  **See `ui-classnames.mdc`** for flat `_CLASS` Tailwind exports in `constants.ts`
-  (no inline literals in view files).
+  **See `ui-classnames.mdc`** for unprefixed flat `_CLASS` Tailwind exports in
+  colocated `constants.ts` (one feature per file; no inline literals in views).
   Cursor rules guide the agent; they do not lint or auto-fix existing files.
   Run a copy sweep when adding conventions, or add CI checks for enforcement.
 - `app/(group)/components/` — shell for that group only.

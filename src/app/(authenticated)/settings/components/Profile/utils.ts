@@ -4,7 +4,7 @@ import {
   PROFILE_CONFLICT_REASONS,
 } from "@shared/profile/validation";
 
-import { PROFILE_DISPLAY_NAME_TAKEN_BODY } from "./constants";
+import { DISPLAY_NAME_TAKEN_BODY } from "./constants";
 
 type ProfileFieldError = {
   field: "displayName";
@@ -29,7 +29,7 @@ export function resolveProfileFieldError(
   ) {
     return {
       field: "displayName",
-      message: PROFILE_DISPLAY_NAME_TAKEN_BODY,
+      message: DISPLAY_NAME_TAKEN_BODY,
     };
   }
 

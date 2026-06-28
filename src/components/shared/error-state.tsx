@@ -11,14 +11,14 @@ import {
 } from "@/components/ui/card";
 
 import {
-  ERROR_STATE_ACTIONS_CLASS,
-  ERROR_STATE_CARD_CLASS,
-  ERROR_STATE_CONTENT_CLASS,
-  ERROR_STATE_DESCRIPTION_CLASS,
-  ERROR_STATE_GO_HOME,
-  ERROR_STATE_ROOT_CLASS,
-  ERROR_STATE_TITLE_CLASS,
-  ERROR_STATE_TRY_AGAIN,
+  ACTIONS_CLASS,
+  CARD_CLASS,
+  CONTENT_CLASS,
+  DESCRIPTION_CLASS,
+  GO_HOME,
+  ROOT_CLASS,
+  TITLE_CLASS,
+  TRY_AGAIN,
 } from "./error-state/constants";
 
 interface ErrorStateProps {
@@ -39,24 +39,24 @@ export function ErrorState({
   description,
   onRetry,
   homeHref = "/",
-  homeLabel = ERROR_STATE_GO_HOME,
+  homeLabel = GO_HOME,
   children,
 }: ErrorStateProps) {
   return (
-    <div className={ERROR_STATE_ROOT_CLASS}>
-      <Card className={ERROR_STATE_CARD_CLASS}>
+    <div className={ROOT_CLASS}>
+      <Card className={CARD_CLASS}>
         <CardHeader>
-          <CardTitle className={ERROR_STATE_TITLE_CLASS}>{title}</CardTitle>
-          <CardDescription className={ERROR_STATE_DESCRIPTION_CLASS}>
+          <CardTitle className={TITLE_CLASS}>{title}</CardTitle>
+          <CardDescription className={DESCRIPTION_CLASS}>
             {description}
           </CardDescription>
         </CardHeader>
-        <CardContent className={ERROR_STATE_CONTENT_CLASS}>
+        <CardContent className={CONTENT_CLASS}>
           {children}
-          <div className={ERROR_STATE_ACTIONS_CLASS}>
+          <div className={ACTIONS_CLASS}>
             {onRetry ? (
               <Button type="button" onClick={onRetry}>
-                {ERROR_STATE_TRY_AGAIN}
+                {TRY_AGAIN}
               </Button>
             ) : null}
             <Button asChild variant="outline">

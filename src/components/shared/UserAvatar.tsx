@@ -7,10 +7,7 @@ import { useProfileQuery } from "@/hooks/queries/useProfile";
 import { resolveAvatarDisplayUrl } from "@/lib/profile/avatar-url";
 import { cn } from "@/lib/utils";
 
-import {
-  USER_AVATAR_CLASS,
-  USER_AVATAR_PROFILE_LINK_CLASS,
-} from "./UserAvatar/constants";
+import { CLASS, PROFILE_LINK_CLASS } from "./UserAvatar/constants";
 
 interface UserAvatarProps {
   className?: string;
@@ -44,7 +41,7 @@ export function UserAvatar({
   );
 
   const avatar = (
-    <Avatar className={cn(USER_AVATAR_CLASS, className)}>
+    <Avatar className={cn(CLASS, className)}>
       <AvatarImage src={src} alt="" />
       <AvatarFallback className={fallbackClassName}>
         {getFallbackInitial(displayName)}
@@ -57,7 +54,7 @@ export function UserAvatar({
   return (
     <Link
       href="/settings"
-      className={USER_AVATAR_PROFILE_LINK_CLASS}
+      className={PROFILE_LINK_CLASS}
       aria-label={label ?? "Settings"}
     >
       {avatar}

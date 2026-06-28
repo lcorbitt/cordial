@@ -9,20 +9,20 @@ import { cn } from "@/lib/utils";
 import { NotificationBell } from "../NotificationBell";
 import { UserAvatarMenu } from "../UserAvatarMenu";
 import {
-  MEMBER_TOP_NAV_ACTIONS_CLASS,
-  MEMBER_TOP_NAV_ADMIN_LABEL,
-  MEMBER_TOP_NAV_BRAND_CLASS,
-  MEMBER_TOP_NAV_BRAND_LABEL,
-  MEMBER_TOP_NAV_COMMUNITIES_LABEL,
-  MEMBER_TOP_NAV_DASHBOARD_LABEL,
-  MEMBER_TOP_NAV_HEADER_CLASS,
-  MEMBER_TOP_NAV_NAV_CLASS,
-  MEMBER_TOP_NAV_SEARCH_INPUT_CLASS,
-  MEMBER_TOP_NAV_SEARCH_PLACEHOLDER,
-  MEMBER_TOP_NAV_TAB_LINK_ACTIVE_CLASS,
-  MEMBER_TOP_NAV_TAB_LINK_CLASS,
-  MEMBER_TOP_NAV_TAB_LINK_INACTIVE_CLASS,
-  MEMBER_TOP_NAV_TABS_CLASS,
+  ACTIONS_CLASS,
+  ADMIN_LABEL,
+  BRAND_CLASS,
+  BRAND_LABEL,
+  COMMUNITIES_LABEL,
+  DASHBOARD_LABEL,
+  HEADER_CLASS,
+  NAV_CLASS,
+  SEARCH_INPUT_CLASS,
+  SEARCH_PLACEHOLDER,
+  TAB_LINK_ACTIVE_CLASS,
+  TAB_LINK_CLASS,
+  TAB_LINK_INACTIVE_CLASS,
+  TABS_CLASS,
 } from "./constants";
 
 interface MemberTopNavProps {
@@ -51,10 +51,8 @@ function NavTabLink({
       href={href}
       aria-current={isActive ? "page" : undefined}
       className={cn(
-        MEMBER_TOP_NAV_TAB_LINK_CLASS,
-        isActive
-          ? MEMBER_TOP_NAV_TAB_LINK_ACTIVE_CLASS
-          : MEMBER_TOP_NAV_TAB_LINK_INACTIVE_CLASS,
+        TAB_LINK_CLASS,
+        isActive ? TAB_LINK_ACTIVE_CLASS : TAB_LINK_INACTIVE_CLASS,
       )}
     >
       {label}
@@ -77,20 +75,20 @@ export function MemberTopNav({
       : [
           {
             href: "/dashboard",
-            label: MEMBER_TOP_NAV_DASHBOARD_LABEL,
+            label: DASHBOARD_LABEL,
             match: (path: string) => path === "/dashboard",
           },
         ]),
     {
       href: "/communities",
-      label: MEMBER_TOP_NAV_COMMUNITIES_LABEL,
+      label: COMMUNITIES_LABEL,
       match: (path: string) => path.startsWith("/communities"),
     },
     ...(isAdmin || isSuperAdmin
       ? [
           {
             href: adminHref,
-            label: MEMBER_TOP_NAV_ADMIN_LABEL,
+            label: ADMIN_LABEL,
             match: (path: string) => path.startsWith("/admin"),
           },
         ]
@@ -98,13 +96,13 @@ export function MemberTopNav({
   ];
 
   return (
-    <header className={MEMBER_TOP_NAV_HEADER_CLASS}>
-      <nav className={MEMBER_TOP_NAV_NAV_CLASS}>
-        <Link href={brandHref} className={MEMBER_TOP_NAV_BRAND_CLASS}>
-          {MEMBER_TOP_NAV_BRAND_LABEL}
+    <header className={HEADER_CLASS}>
+      <nav className={NAV_CLASS}>
+        <Link href={brandHref} className={BRAND_CLASS}>
+          {BRAND_LABEL}
         </Link>
 
-        <div className={MEMBER_TOP_NAV_TABS_CLASS}>
+        <div className={TABS_CLASS}>
           {tabs.map((tab) => (
             <NavTabLink
               key={tab.href}
@@ -114,12 +112,12 @@ export function MemberTopNav({
           ))}
         </div>
 
-        <div className={MEMBER_TOP_NAV_ACTIONS_CLASS}>
+        <div className={ACTIONS_CLASS}>
           <Input
             disabled
             aria-hidden
-            placeholder={MEMBER_TOP_NAV_SEARCH_PLACEHOLDER}
-            className={MEMBER_TOP_NAV_SEARCH_INPUT_CLASS}
+            placeholder={SEARCH_PLACEHOLDER}
+            className={SEARCH_INPUT_CLASS}
           />
           <NotificationBell userId={userId} />
           <UserAvatarMenu />

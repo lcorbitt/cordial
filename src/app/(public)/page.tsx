@@ -4,15 +4,15 @@ import { Reveal } from "@/components/shared/reveal";
 import { Button } from "@/components/ui/button";
 
 import {
-  LANDING_PAGE_ACTIONS_CLASS,
-  LANDING_PAGE_CREATE_ACCOUNT_LABEL,
-  LANDING_PAGE_DESCRIPTION,
-  LANDING_PAGE_DESCRIPTION_CLASS,
-  LANDING_PAGE_LOGIN_LABEL,
-  LANDING_PAGE_SECTION_CLASS,
-  LANDING_PAGE_TITLE,
-  LANDING_PAGE_TITLE_CLASS,
-} from "./constants";
+  ACTIONS_CLASS,
+  CREATE_ACCOUNT_LABEL,
+  DESCRIPTION,
+  DESCRIPTION_CLASS,
+  LOGIN_LABEL,
+  SECTION_CLASS,
+  TITLE,
+  TITLE_CLASS,
+} from "./landing/constants";
 
 /**
  * Marketing landing page. Thin by design — real marketing content arrives in a
@@ -20,17 +20,15 @@ import {
  */
 export default function LandingPage() {
   return (
-    <Reveal immediate as="section" className={LANDING_PAGE_SECTION_CLASS}>
-      <h1 className={LANDING_PAGE_TITLE_CLASS}>{LANDING_PAGE_TITLE}</h1>
-      <p className={LANDING_PAGE_DESCRIPTION_CLASS}>
-        {LANDING_PAGE_DESCRIPTION}
-      </p>
-      <div className={LANDING_PAGE_ACTIONS_CLASS}>
+    <Reveal immediate as="section" className={SECTION_CLASS}>
+      <h1 className={TITLE_CLASS}>{TITLE}</h1>
+      <p className={DESCRIPTION_CLASS}>{DESCRIPTION}</p>
+      <div className={ACTIONS_CLASS}>
         <Button asChild size="lg">
-          <Link href="/signup">{LANDING_PAGE_CREATE_ACCOUNT_LABEL}</Link>
+          <Link href="/signup">{CREATE_ACCOUNT_LABEL}</Link>
         </Button>
         <Button asChild variant="outline" size="lg">
-          <Link href="/login">{LANDING_PAGE_LOGIN_LABEL}</Link>
+          <Link href="/login">{LOGIN_LABEL}</Link>
         </Button>
       </div>
     </Reveal>

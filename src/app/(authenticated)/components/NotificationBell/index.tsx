@@ -23,28 +23,28 @@ import { useMarkNotificationReadMutation } from "@/hooks/mutations/useNotificati
 import { cn } from "@/lib/utils";
 
 import {
-  NOTIFICATION_BELL_ACTION_LINK_CLASS,
-  NOTIFICATION_BELL_BADGE_CLASS,
-  NOTIFICATION_BELL_DROPDOWN_CLASS,
-  NOTIFICATION_BELL_EMPTY_MESSAGE,
-  NOTIFICATION_BELL_ERROR_MESSAGE,
-  NOTIFICATION_BELL_ICON_CLASS,
-  NOTIFICATION_BELL_ITEM_BODY_CLASS,
-  NOTIFICATION_BELL_ITEM_CLASS,
-  NOTIFICATION_BELL_ITEM_HEADER_CLASS,
-  NOTIFICATION_BELL_ITEM_TITLE_CLASS,
-  NOTIFICATION_BELL_ITEM_TITLE_READ_CLASS,
-  NOTIFICATION_BELL_ITEM_TITLE_UNREAD_CLASS,
-  NOTIFICATION_BELL_LABEL,
-  NOTIFICATION_BELL_LABEL_CLASS,
-  NOTIFICATION_BELL_LOADING_MESSAGE,
-  NOTIFICATION_BELL_MARK_ALL_READ_BUTTON_CLASS,
-  NOTIFICATION_BELL_MARK_ALL_READ_LABEL,
-  NOTIFICATION_BELL_MARK_READ_BUTTON_CLASS,
-  NOTIFICATION_BELL_MARK_READ_LABEL,
-  NOTIFICATION_BELL_STATUS_MESSAGE_CLASS,
-  NOTIFICATION_BELL_TITLE,
-  NOTIFICATION_BELL_TRIGGER_CLASS,
+  ACTION_LINK_CLASS,
+  BADGE_CLASS,
+  DROPDOWN_CLASS,
+  EMPTY_MESSAGE,
+  ERROR_MESSAGE,
+  ICON_CLASS,
+  ITEM_BODY_CLASS,
+  ITEM_CLASS,
+  ITEM_HEADER_CLASS,
+  ITEM_TITLE_CLASS,
+  ITEM_TITLE_READ_CLASS,
+  ITEM_TITLE_UNREAD_CLASS,
+  LABEL,
+  LABEL_CLASS,
+  LOADING_MESSAGE,
+  MARK_ALL_READ_BUTTON_CLASS,
+  MARK_ALL_READ_LABEL,
+  MARK_READ_BUTTON_CLASS,
+  MARK_READ_LABEL,
+  STATUS_MESSAGE_CLASS,
+  TITLE,
+  TRIGGER_CLASS,
 } from "./constants";
 
 interface NotificationBellProps {
@@ -100,61 +100,52 @@ export function NotificationBell({ userId }: NotificationBellProps) {
         <Button
           variant="ghost"
           size="icon"
-          className={NOTIFICATION_BELL_TRIGGER_CLASS}
-          aria-label={NOTIFICATION_BELL_LABEL}
+          className={TRIGGER_CLASS}
+          aria-label={LABEL}
         >
-          <Bell className={NOTIFICATION_BELL_ICON_CLASS} />
+          <Bell className={ICON_CLASS} />
           {unreadCount > 0 ? (
-            <span className={NOTIFICATION_BELL_BADGE_CLASS}>
+            <span className={BADGE_CLASS}>
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           ) : null}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className={NOTIFICATION_BELL_DROPDOWN_CLASS}
-      >
-        <DropdownMenuLabel className={NOTIFICATION_BELL_LABEL_CLASS}>
-          <span>{NOTIFICATION_BELL_TITLE}</span>
+      <DropdownMenuContent align="end" className={DROPDOWN_CLASS}>
+        <DropdownMenuLabel className={LABEL_CLASS}>
+          <span>{TITLE}</span>
           {unreadCount > 0 ? (
             <button
               type="button"
-              className={NOTIFICATION_BELL_MARK_ALL_READ_BUTTON_CLASS}
+              className={MARK_ALL_READ_BUTTON_CLASS}
               disabled={markReadMutation.isPending}
               onClick={() => void handleMarkAllRead()}
             >
-              {NOTIFICATION_BELL_MARK_ALL_READ_LABEL}
+              {MARK_ALL_READ_LABEL}
             </button>
           ) : null}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {notificationsQuery.isPending ? (
-          <p className={NOTIFICATION_BELL_STATUS_MESSAGE_CLASS}>
-            {NOTIFICATION_BELL_LOADING_MESSAGE}
-          </p>
+          <p className={STATUS_MESSAGE_CLASS}>{LOADING_MESSAGE}</p>
         ) : notificationsQuery.isError ? (
-          <p className={NOTIFICATION_BELL_STATUS_MESSAGE_CLASS}>
-            {NOTIFICATION_BELL_ERROR_MESSAGE}
-          </p>
+          <p className={STATUS_MESSAGE_CLASS}>{ERROR_MESSAGE}</p>
         ) : items.length === 0 ? (
-          <p className={NOTIFICATION_BELL_STATUS_MESSAGE_CLASS}>
-            {NOTIFICATION_BELL_EMPTY_MESSAGE}
-          </p>
+          <p className={STATUS_MESSAGE_CLASS}>{EMPTY_MESSAGE}</p>
         ) : (
           items.map((item) => (
             <DropdownMenuItem
               key={item.id}
-              className={NOTIFICATION_BELL_ITEM_CLASS}
+              className={ITEM_CLASS}
               onSelect={(event) => event.preventDefault()}
             >
-              <div className={NOTIFICATION_BELL_ITEM_HEADER_CLASS}>
+              <div className={ITEM_HEADER_CLASS}>
                 <p
                   className={cn(
-                    NOTIFICATION_BELL_ITEM_TITLE_CLASS,
+                    ITEM_TITLE_CLASS,
                     item.readAt
-                      ? NOTIFICATION_BELL_ITEM_TITLE_READ_CLASS
-                      : NOTIFICATION_BELL_ITEM_TITLE_UNREAD_CLASS,
+                      ? ITEM_TITLE_READ_CLASS
+                      : ITEM_TITLE_UNREAD_CLASS,
                   )}
                 >
                   {item.title}
@@ -162,19 +153,19 @@ export function NotificationBell({ userId }: NotificationBellProps) {
                 {!item.readAt ? (
                   <button
                     type="button"
-                    className={NOTIFICATION_BELL_MARK_READ_BUTTON_CLASS}
+                    className={MARK_READ_BUTTON_CLASS}
                     disabled={markReadMutation.isPending}
                     onClick={() => void handleMarkOneRead(item.id)}
                   >
-                    {NOTIFICATION_BELL_MARK_READ_LABEL}
+                    {MARK_READ_LABEL}
                   </button>
                 ) : null}
               </div>
-              <p className={NOTIFICATION_BELL_ITEM_BODY_CLASS}>{item.body}</p>
+              <p className={ITEM_BODY_CLASS}>{item.body}</p>
               {item.actionUrl ? (
                 <Link
                   href={item.actionUrl}
-                  className={NOTIFICATION_BELL_ACTION_LINK_CLASS}
+                  className={ACTION_LINK_CLASS}
                   onClick={() => {
                     if (!item.readAt) void handleMarkOneRead(item.id);
                   }}

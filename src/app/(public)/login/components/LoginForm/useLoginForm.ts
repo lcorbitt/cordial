@@ -12,10 +12,10 @@ import { sendMagicLink, signInWithPassword } from "@/lib/auth/client";
 import { showUserError } from "@/lib/toast/user-message";
 
 import {
-  LOGIN_FORM_TOAST_ERROR,
-  LOGIN_FORM_TOAST_MAGIC_ERROR,
-  LOGIN_FORM_TOAST_MAGIC_SENT,
-  LOGIN_FORM_TOAST_WELCOME,
+  TOAST_ERROR,
+  TOAST_MAGIC_ERROR,
+  TOAST_MAGIC_SENT,
+  TOAST_WELCOME,
 } from "./constants";
 import type { UseLoginFormOptions } from "./types";
 
@@ -36,11 +36,11 @@ export function useLoginForm({ nextPath = null }: UseLoginFormOptions = {}) {
   async function onSubmit(values: LoginInput) {
     try {
       await signInWithPassword(values.email, values.password);
-      toast.success(LOGIN_FORM_TOAST_WELCOME);
+      toast.success(TOAST_WELCOME);
       router.push(destination);
       router.refresh();
     } catch (error) {
-      showUserError(error, LOGIN_FORM_TOAST_ERROR);
+      showUserError(error, TOAST_ERROR);
     }
   }
 
@@ -52,9 +52,9 @@ export function useLoginForm({ nextPath = null }: UseLoginFormOptions = {}) {
     try {
       await sendMagicLink(email, destination);
       setMagicLinkSent(true);
-      toast.success(LOGIN_FORM_TOAST_MAGIC_SENT);
+      toast.success(TOAST_MAGIC_SENT);
     } catch (error) {
-      showUserError(error, LOGIN_FORM_TOAST_MAGIC_ERROR);
+      showUserError(error, TOAST_MAGIC_ERROR);
     }
   }
 

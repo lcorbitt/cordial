@@ -7,10 +7,10 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 import {
-  PASSWORD_INPUT_PADDING_CLASS,
-  PASSWORD_INPUT_ROOT_CLASS,
-  PASSWORD_INPUT_TOGGLE_BUTTON_CLASS,
-  PASSWORD_INPUT_TOGGLE_ICON_CLASS,
+  PADDING_CLASS,
+  ROOT_CLASS,
+  TOGGLE_BUTTON_CLASS,
+  TOGGLE_ICON_CLASS,
 } from "./password-input/constants";
 
 /**
@@ -24,23 +24,23 @@ const PasswordInput = React.forwardRef<
   const [visible, setVisible] = React.useState(false);
 
   return (
-    <div className={PASSWORD_INPUT_ROOT_CLASS}>
+    <div className={ROOT_CLASS}>
       <Input
         ref={ref}
         type={visible ? "text" : "password"}
-        className={cn(PASSWORD_INPUT_PADDING_CLASS, className)}
+        className={cn(PADDING_CLASS, className)}
         {...props}
       />
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
         aria-label={visible ? "Hide password" : "Show password"}
-        className={PASSWORD_INPUT_TOGGLE_BUTTON_CLASS}
+        className={TOGGLE_BUTTON_CLASS}
       >
         {visible ? (
-          <EyeOff className={PASSWORD_INPUT_TOGGLE_ICON_CLASS} />
+          <EyeOff className={TOGGLE_ICON_CLASS} />
         ) : (
-          <Eye className={PASSWORD_INPUT_TOGGLE_ICON_CLASS} />
+          <Eye className={TOGGLE_ICON_CLASS} />
         )}
       </button>
     </div>

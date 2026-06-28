@@ -7,15 +7,15 @@ import {
 } from "@/components/ui/card";
 
 import {
-  ADMIN_SETTINGS_BODY,
-  ADMIN_SETTINGS_BODY_CLASS,
-  ADMIN_SETTINGS_CARD_DESCRIPTION,
-  ADMIN_SETTINGS_CARD_TITLE,
-  ADMIN_SETTINGS_PAGE_CLASS,
-  ADMIN_SETTINGS_SUBTITLE,
-  ADMIN_SETTINGS_SUBTITLE_CLASS,
-  ADMIN_SETTINGS_TITLE,
-  ADMIN_SETTINGS_TITLE_CLASS,
+  BODY,
+  BODY_CLASS,
+  CARD_DESCRIPTION,
+  CARD_TITLE,
+  PAGE_CLASS,
+  SUBTITLE,
+  SUBTITLE_CLASS,
+  TITLE,
+  TITLE_CLASS,
 } from "./constants";
 
 /**
@@ -24,21 +24,19 @@ import {
  */
 export default function AdminSettingsPage() {
   return (
-    <div className={ADMIN_SETTINGS_PAGE_CLASS}>
+    <div className={PAGE_CLASS}>
       <div>
-        <h1 className={ADMIN_SETTINGS_TITLE_CLASS}>{ADMIN_SETTINGS_TITLE}</h1>
-        <p className={ADMIN_SETTINGS_SUBTITLE_CLASS}>
-          {ADMIN_SETTINGS_SUBTITLE}
-        </p>
+        <h1 className={TITLE_CLASS}>{TITLE}</h1>
+        <p className={SUBTITLE_CLASS}>{SUBTITLE}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>{ADMIN_SETTINGS_CARD_TITLE}</CardTitle>
-          <CardDescription>{ADMIN_SETTINGS_CARD_DESCRIPTION}</CardDescription>
+          <CardTitle>{CARD_TITLE}</CardTitle>
+          <CardDescription>{CARD_DESCRIPTION}</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className={ADMIN_SETTINGS_BODY_CLASS}>{ADMIN_SETTINGS_BODY}</p>
+          <p className={BODY_CLASS}>{BODY}</p>
         </CardContent>
       </Card>
     </div>

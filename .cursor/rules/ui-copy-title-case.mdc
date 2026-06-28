@@ -39,15 +39,17 @@ first or last word (`Sign Up`, `Log In`, `Forgot Password?`, `Back to Dashboard`
 | Forums, discussions — member content | Forums and member content arrive later. |
 
 ```tsx
-// constants.ts
-export const LOGIN_FORM_TITLE = "Log In";
-export const LOGIN_FORM_SUBMIT_LABEL = "Log In";
-export const LOGIN_FORM_SIGNUP_LINK_LABEL = "Sign Up";
-export const LOGIN_FORM_MAGIC_LINK_LABEL = "Email Me a Sign-In Link";
+// LoginForm/constants.ts
+export const TITLE = "Log In";
+export const SUBMIT_LABEL = "Log In";
+export const SIGNUP_LINK_LABEL = "Sign Up";
+export const MAGIC_LINK_LABEL = "Email Me a Sign-In Link";
 
 // index.tsx
-<CardTitle>{LOGIN_FORM_TITLE}</CardTitle>
-<Button type="submit">{LOGIN_FORM_SUBMIT_LABEL}</Button>
+import { TITLE, SUBMIT_LABEL } from "./constants";
+
+<CardTitle>{TITLE}</CardTitle>
+<Button type="submit">{SUBMIT_LABEL}</Button>
 ```
 
 When adding or editing UI copy, fix nearby violations in the same file or

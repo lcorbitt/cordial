@@ -1,26 +1,26 @@
 import Link from "next/link";
 
 import {
-  NOT_FOUND_DESCRIPTION,
-  NOT_FOUND_GO_TO_DASHBOARD_LABEL,
-  NOT_FOUND_GO_TO_HOME_LABEL,
-  NOT_FOUND_PAGE_CLASS,
-  NOT_FOUND_TITLE,
-} from "@/app/constants";
+  DESCRIPTION,
+  GO_TO_DASHBOARD_LABEL,
+  GO_TO_HOME_LABEL,
+  PAGE_CLASS,
+  TITLE,
+} from "@/app/not-found/constants";
 import { ErrorState } from "@/components/shared/error-state";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <div className={NOT_FOUND_PAGE_CLASS}>
+    <div className={PAGE_CLASS}>
       <ErrorState
-        title={NOT_FOUND_TITLE}
-        description={NOT_FOUND_DESCRIPTION}
+        title={TITLE}
+        description={DESCRIPTION}
         homeHref="/"
-        homeLabel={NOT_FOUND_GO_TO_HOME_LABEL}
+        homeLabel={GO_TO_HOME_LABEL}
       >
         <Button asChild variant="secondary">
-          <Link href="/dashboard">{NOT_FOUND_GO_TO_DASHBOARD_LABEL}</Link>
+          <Link href="/dashboard">{GO_TO_DASHBOARD_LABEL}</Link>
         </Button>
       </ErrorState>
     </div>

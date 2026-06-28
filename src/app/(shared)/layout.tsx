@@ -2,11 +2,11 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import {
-  SHARED_SHELL_BRAND_CLASS,
-  SHARED_SHELL_HEADER_CLASS,
-  SHARED_SHELL_HEADER_INNER_CLASS,
-  SHARED_SHELL_MAIN_CLASS,
-  SHARED_SHELL_ROOT_CLASS,
+  BRAND_CLASS,
+  HEADER_CLASS,
+  HEADER_INNER_CLASS,
+  MAIN_CLASS,
+  ROOT_CLASS,
 } from "./constants";
 
 /**
@@ -15,15 +15,15 @@ import {
  */
 export default function SharedLayout({ children }: { children: ReactNode }) {
   return (
-    <div className={SHARED_SHELL_ROOT_CLASS}>
-      <header className={SHARED_SHELL_HEADER_CLASS}>
-        <div className={SHARED_SHELL_HEADER_INNER_CLASS}>
-          <Link href="/" className={SHARED_SHELL_BRAND_CLASS}>
+    <div className={ROOT_CLASS}>
+      <header className={HEADER_CLASS}>
+        <div className={HEADER_INNER_CLASS}>
+          <Link href="/" className={BRAND_CLASS}>
             GoverNerds
           </Link>
         </div>
       </header>
-      <main id="main-content" className={SHARED_SHELL_MAIN_CLASS}>
+      <main id="main-content" className={MAIN_CLASS}>
         {children}
       </main>
     </div>

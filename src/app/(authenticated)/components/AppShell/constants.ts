@@ -1,1 +1,1 @@
-export const APP_SHELL_ROOT_CLASS = "flex min-h-dvh flex-col";
+export const ROOT_CLASS = "flex min-h-dvh flex-col";

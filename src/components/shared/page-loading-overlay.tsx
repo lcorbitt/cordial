@@ -6,14 +6,14 @@ import { Spinner } from "@/components/shared/spinner";
 import { cn } from "@/lib/utils";
 
 import {
-  PAGE_LOADING_OVERLAY_CLASS,
-  PAGE_LOADING_OVERLAY_HIDDEN_CLASS,
-  PAGE_LOADING_OVERLAY_PROGRESS_BAR_CLASS,
-  PAGE_LOADING_OVERLAY_PROGRESS_BAR_FILL_CLASS,
-  PAGE_LOADING_OVERLAY_PROGRESS_BAR_HIDDEN_CLASS,
-  PAGE_LOADING_OVERLAY_PROGRESS_BAR_VISIBLE_CLASS,
-  PAGE_LOADING_OVERLAY_SR_ONLY_CLASS,
-  PAGE_LOADING_OVERLAY_VISIBLE_CLASS,
+  CLASS,
+  HIDDEN_CLASS,
+  PROGRESS_BAR_CLASS,
+  PROGRESS_BAR_FILL_CLASS,
+  PROGRESS_BAR_HIDDEN_CLASS,
+  PROGRESS_BAR_VISIBLE_CLASS,
+  SR_ONLY_CLASS,
+  VISIBLE_CLASS,
 } from "./page-loading-overlay/constants";
 
 interface PageLoadingOverlayProps {
@@ -81,28 +81,21 @@ export function PageLoadingOverlay({
       <div
         aria-hidden
         className={cn(
-          PAGE_LOADING_OVERLAY_PROGRESS_BAR_CLASS,
-          visible
-            ? PAGE_LOADING_OVERLAY_PROGRESS_BAR_VISIBLE_CLASS
-            : PAGE_LOADING_OVERLAY_PROGRESS_BAR_HIDDEN_CLASS,
+          PROGRESS_BAR_CLASS,
+          visible ? PROGRESS_BAR_VISIBLE_CLASS : PROGRESS_BAR_HIDDEN_CLASS,
         )}
       >
-        <div className={PAGE_LOADING_OVERLAY_PROGRESS_BAR_FILL_CLASS} />
+        <div className={PROGRESS_BAR_FILL_CLASS} />
       </div>
 
       <div
         role="status"
         aria-live="polite"
         aria-label="Loading page"
-        className={cn(
-          PAGE_LOADING_OVERLAY_CLASS,
-          visible
-            ? PAGE_LOADING_OVERLAY_VISIBLE_CLASS
-            : PAGE_LOADING_OVERLAY_HIDDEN_CLASS,
-        )}
+        className={cn(CLASS, visible ? VISIBLE_CLASS : HIDDEN_CLASS)}
       >
         <Spinner size="md" />
-        <span className={PAGE_LOADING_OVERLAY_SR_ONLY_CLASS}>Loading page</span>
+        <span className={SR_ONLY_CLASS}>Loading page</span>
       </div>
     </>
   );
