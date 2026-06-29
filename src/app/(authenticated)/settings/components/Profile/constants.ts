@@ -2,8 +2,6 @@ export const TITLE = "Settings";
 export const SUBTITLE =
   "Update your profile and how you appear across GoverNerds.";
 export const DETAILS_TITLE = "Details";
-export const DETAILS_DESCRIPTION =
-  "Changes update live across your open sessions (Realtime example).";
 export const LOADING_BODY = "Loading your profile…";
 export const ERROR_TITLE = "We Could Not Load Your Profile";
 export const ERROR_DESCRIPTION =

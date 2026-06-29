@@ -28,7 +28,6 @@ import {
   AVATAR_UPLOADING_LABEL,
   BACK_TO_DASHBOARD_LABEL,
   BIO_LABEL,
-  DETAILS_DESCRIPTION,
   DETAILS_TITLE,
   DISPLAY_NAME_HELPER,
   DISPLAY_NAME_LABEL,
@@ -123,7 +122,6 @@ export function Profile() {
       <Card>
         <CardHeader>
           <CardTitle>{DETAILS_TITLE}</CardTitle>
-          <CardDescription>{DETAILS_DESCRIPTION}</CardDescription>
         </CardHeader>
         <CardContent>
           {profileQuery.isPending ? (
