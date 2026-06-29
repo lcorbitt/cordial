@@ -18,7 +18,10 @@ import {
   PROFILE_CONFLICT_FIELDS,
   PROFILE_CONFLICT_REASONS,
 } from "@shared/profile/validation.ts";
-import { isValidAvatarUrlForUser } from "@shared/storage/avatar.ts";
+import {
+  isValidAvatarUrlForUser,
+  resolveSupabaseUrlCandidates,
+} from "@shared/storage/avatar.ts";
 
 export class ProfileValidationError extends Error {
   constructor(message: string) {
@@ -97,13 +100,12 @@ export async function updateProfile(
 
   if (body.bio !== undefined) patch.bio = body.bio;
   if (body.avatarUrl !== undefined) {
-    const supabaseUrl =
-      Deno.env.get("SUPABASE_URL") ??
-      Deno.env.get("NEXT_PUBLIC_SUPABASE_URL") ??
-      "";
+    const supabaseUrls = resolveSupabaseUrlCandidates((key) =>
+      Deno.env.get(key),
+    );
     if (
-      !supabaseUrl ||
-      !isValidAvatarUrlForUser(body.avatarUrl, supabaseUrl, userId)
+      supabaseUrls.length === 0 ||
+      !isValidAvatarUrlForUser(body.avatarUrl, supabaseUrls, userId)
     ) {
       throw new ProfileValidationError(
         "Please upload your photo using the profile uploader.",

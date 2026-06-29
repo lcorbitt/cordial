@@ -11,12 +11,11 @@ import { NotificationBell } from "../NotificationBell";
 import { ProfileMenu } from "../ProfileMenu";
 import {
   ACTIONS_CLASS,
-  ADMIN_LABEL,
-  COMMUNITIES_LABEL,
   DASHBOARD_LABEL,
   HEADER_CLASS,
   NAV_CLASS,
   NAV_FULL_WIDTH_CLASS,
+  NAV_SPACER_CLASS,
   SEARCH_INPUT_CLASS,
   SEARCH_PLACEHOLDER,
   TAB_LINK_ACTIVE_CLASS,
@@ -68,48 +67,35 @@ export function MemberTopNav({
   layout = "default",
 }: MemberTopNavProps) {
   const pathname = usePathname();
-  const adminHref = isSuperAdmin ? "/admin/overview" : "/admin/communities";
 
-  const tabs: NavTabConfig[] = [
-    ...(isSuperAdmin
-      ? []
-      : [
-          {
-            href: "/dashboard",
-            label: DASHBOARD_LABEL,
-            match: (path: string) => path === "/dashboard",
-          },
-        ]),
-    {
-      href: "/communities",
-      label: COMMUNITIES_LABEL,
-      match: (path: string) => path.startsWith("/communities"),
-    },
-    ...(isAdmin || isSuperAdmin
-      ? [
-          {
-            href: adminHref,
-            label: ADMIN_LABEL,
-            match: (path: string) => path.startsWith("/admin"),
-          },
-        ]
-      : []),
-  ];
+  const tabs: NavTabConfig[] = isSuperAdmin
+    ? []
+    : [
+        {
+          href: "/dashboard",
+          label: DASHBOARD_LABEL,
+          match: (path: string) => path === "/dashboard",
+        },
+      ];
 
   return (
     <header className={HEADER_CLASS}>
       <nav className={layout === "admin" ? NAV_FULL_WIDTH_CLASS : NAV_CLASS}>
         <CommunityPicker isSuperAdmin={isSuperAdmin} />
 
-        <div className={TABS_CLASS}>
-          {tabs.map((tab) => (
-            <NavTabLink
-              key={tab.href}
-              {...tab}
-              isActive={tab.match(pathname)}
-            />
-          ))}
-        </div>
+        {tabs.length > 0 ? (
+          <div className={TABS_CLASS}>
+            {tabs.map((tab) => (
+              <NavTabLink
+                key={tab.href}
+                {...tab}
+                isActive={tab.match(pathname)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className={NAV_SPACER_CLASS} />
+        )}
 
         <div className={ACTIONS_CLASS}>
           <Input

@@ -7,6 +7,7 @@ import {
   StorageValidationError,
 } from "@services/storage/storage.service.ts";
 import { createServiceClient } from "@services/db.ts";
+import { resolveBrowserSupabaseUrl } from "@shared/storage/avatar.ts";
 
 const bodySchema = z.object({
   contentType: z.enum(["image/jpeg", "image/png", "image/webp"]),
@@ -35,10 +36,7 @@ export async function handle(ctx: HandlerContext): Promise<Response> {
     });
   }
 
-  const supabaseUrl =
-    Deno.env.get("SUPABASE_URL") ??
-    Deno.env.get("NEXT_PUBLIC_SUPABASE_URL") ??
-    "";
+  const supabaseUrl = resolveBrowserSupabaseUrl((key) => Deno.env.get(key));
 
   if (!supabaseUrl) {
     throw new Error("Supabase URL is not configured.");

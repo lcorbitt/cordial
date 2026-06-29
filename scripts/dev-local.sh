@@ -19,5 +19,5 @@ echo ""
 
 exec concurrently -n next,functions,inngest -c blue,magenta,yellow \
   "next dev" \
-  "supabase functions serve" \
+  "supabase functions serve --env-file .env.local" \
   "npx --yes inngest-cli@latest dev -u http://localhost:3000/api/inngest"

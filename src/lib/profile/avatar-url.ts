@@ -1,3 +1,5 @@
+import { normalizeAvatarStorageUrl } from "@shared/storage/avatar";
+
 /**
  * Builds a display URL for profile avatars. Storage paths are stable per user,
  * so we append the profile `updatedAt` timestamp to bust browser caches after
@@ -8,8 +10,13 @@ export function resolveAvatarDisplayUrl(
   updatedAt: string | null | undefined,
 ): string | undefined {
   if (!avatarUrl) return undefined;
-  if (!updatedAt) return avatarUrl;
 
-  const separator = avatarUrl.includes("?") ? "&" : "?";
-  return `${avatarUrl}${separator}v=${encodeURIComponent(updatedAt)}`;
+  const publicSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const normalized = publicSupabaseUrl
+    ? normalizeAvatarStorageUrl(avatarUrl, publicSupabaseUrl)
+    : avatarUrl;
+  if (!updatedAt) return normalized;
+
+  const separator = normalized.includes("?") ? "&" : "?";
+  return `${normalized}${separator}v=${encodeURIComponent(updatedAt)}`;
 }

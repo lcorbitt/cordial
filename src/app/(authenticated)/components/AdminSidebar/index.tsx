@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Settings,
   Shield,
+  UserRound,
   Users,
   UsersRound,
 } from "lucide-react";
@@ -24,6 +25,7 @@ import {
   FOOTER_CLASS,
   HEADER_CLASS,
   MANAGE_COMMUNITIES_LABEL,
+  MEMBERS_LABEL,
   MOBILE_NAV_CLASS,
   MOBILE_SECTION_DIVIDER_CLASS,
   MOBILE_TAB_ACTIVE_CLASS,
@@ -65,6 +67,11 @@ const SUPER_ADMIN_NAV_ITEMS: AdminNavItem[] = [
     icon: LayoutDashboard,
   },
   {
+    href: "/admin/users",
+    label: USERS_LABEL,
+    icon: Users,
+  },
+  {
     href: "/admin/settings",
     label: PLATFORM_SETTINGS_LABEL,
     icon: Settings,
@@ -78,14 +85,14 @@ const PLATFORM_ADMIN_NAV_ITEMS: AdminNavItem[] = [
     icon: UsersRound,
   },
   {
+    href: "/admin/members",
+    label: MEMBERS_LABEL,
+    icon: UserRound,
+  },
+  {
     href: "/admin/flags",
     label: FEATURE_FLAGS_LABEL,
     icon: Flag,
-  },
-  {
-    href: "/admin/users",
-    label: USERS_LABEL,
-    icon: Users,
   },
   {
     href: "/admin/moderation",

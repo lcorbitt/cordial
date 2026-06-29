@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:local": "bash scripts/dev-local.sh",
-    "dev:all": "concurrently -n next,functions \"next dev\" \"supabase functions serve\"",
+    "dev:all": "concurrently -n next,functions \"next dev\" \"supabase functions serve --env-file .env.local\"",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

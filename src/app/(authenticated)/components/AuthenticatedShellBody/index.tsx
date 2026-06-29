@@ -29,7 +29,7 @@ export function AuthenticatedShellBody({
 }: AuthenticatedShellBodyProps) {
   const pathname = usePathname();
   const isAdminRoute = pathname.startsWith("/admin");
-  const showAdminSidebar = isSuperAdmin || (isAdminRoute && isAdmin);
+  const showAdminSidebar = isAdmin;
   const mainClass = isAdminRoute ? ADMIN_MAIN_CLASS : DEFAULT_MAIN_CLASS;
 
   const topNav = (

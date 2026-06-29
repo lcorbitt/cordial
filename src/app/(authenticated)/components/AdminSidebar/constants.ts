@@ -6,6 +6,7 @@ export const BACK_TO_COMMUNITIES_LABEL = "Back to Communities";
 export const OVERVIEW_LABEL = "Overview";
 export const MANAGE_COMMUNITIES_LABEL = "Communities";
 export const FEATURE_FLAGS_LABEL = "Feature Flags";
+export const MEMBERS_LABEL = "Members";
 export const USERS_LABEL = "Users";
 export const MODERATION_LABEL = "Moderation";
 export const PLATFORM_SETTINGS_LABEL = "Platform Settings";
