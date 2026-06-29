@@ -1,7 +1,7 @@
-export const TITLE = "Platform Overview";
+export const TITLE = "Dashboard";
 export const SUBTITLE =
   "Analytics and audit activity for super administrators.";
-export const LOADING_BODY = "Loading platform overview…";
+export const LOADING_BODY = "Loading dashboard…";
 export const ERROR_TITLE = "We Could Not Load the Overview";
 export const ERROR_DESCRIPTION =
   "Please confirm your local stack is running, then try again.";
