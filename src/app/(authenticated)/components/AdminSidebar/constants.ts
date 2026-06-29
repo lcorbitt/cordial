@@ -4,6 +4,7 @@ export const ADMIN_SECTION_LABEL = "Admin";
 export const BACK_TO_DASHBOARD_LABEL = "Back to Dashboard";
 export const BACK_TO_COMMUNITIES_LABEL = "Back to Communities";
 export const OVERVIEW_LABEL = "Overview";
+export const AUDIT_LOGS_LABEL = "Audit Logs";
 export const MANAGE_COMMUNITIES_LABEL = "Communities";
 export const FEATURE_FLAGS_LABEL = "Feature Flags";
 export const MEMBERS_LABEL = "Members";

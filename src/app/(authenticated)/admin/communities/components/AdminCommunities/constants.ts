@@ -10,18 +10,6 @@ export const CREATING_LABEL = "Creating…";
 export const LIST_CARD_TITLE = "All Communities";
 export const LIST_CARD_DESCRIPTION =
   "Send email invitations to add members to each community.";
-export const LIST_LOADING_BODY = "Loading communities…";
-export const LIST_ERROR_TITLE = "We Could Not Load Communities";
-export const LIST_ERROR_DESCRIPTION =
-  "Please check that your local stack is running, then try again.";
-export const BACK_TO_DASHBOARD_LABEL = "Back to Dashboard";
-export const LIST_EMPTY_BODY =
-  "No communities yet. Create one above to get started.";
-export const VIEW_HOME_LABEL = "View Home";
-export const INVITE_LABEL = "Invite by Email";
-export const INVITE_PLACEHOLDER = "member@example.com";
-export const SEND_INVITE_LABEL = "Send Invite";
-export const SENDING_INVITE_LABEL = "Sending…";
 export const TOAST_CREATE_LOADING = "Creating community…";
 export const TOAST_CREATE_SUCCESS = "Community created.";
 export const TOAST_CREATE_ERROR =
@@ -44,13 +32,3 @@ export const TITLE_CLASS = "text-3xl font-bold tracking-tight";
 export const SUBTITLE_CLASS = "text-muted-foreground text-lg";
 export const FORM_CLASS = "flex max-w-md flex-col gap-4";
 export const FIELD_CLASS = "flex flex-col gap-2";
-export const LOADING_TEXT_CLASS = "text-muted-foreground";
-export const EMPTY_TEXT_CLASS = "text-muted-foreground";
-export const LIST_CLASS = "flex flex-col gap-6";
-export const LIST_ITEM_CLASS = "border-b pb-6 last:border-b-0 last:pb-0";
-export const LIST_ITEM_HEADER_CLASS =
-  "mb-4 flex flex-wrap items-center justify-between gap-2";
-export const COMMUNITY_NAME_CLASS = "text-lg font-semibold";
-export const COMMUNITY_SLUG_CLASS = "text-muted-foreground text-sm";
-export const INVITE_ROW_CLASS = "flex flex-col gap-2 sm:flex-row sm:items-end";
-export const INVITE_FIELD_CLASS = "flex flex-1 flex-col gap-2";

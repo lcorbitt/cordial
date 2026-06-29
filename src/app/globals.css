@@ -103,6 +103,7 @@
   --color-brand-ochre: var(--brand-ochre);
   --color-brand-slate: var(--brand-slate);
   --color-brand-cream: var(--brand-cream);
+  --color-primary-orange: #ff4e00;
   --ease-interactive: ease-in-out;
   --duration-interactive: 300ms;
 }

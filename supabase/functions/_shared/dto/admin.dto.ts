@@ -1,3 +1,5 @@
+import type { PaginatedListResponse } from "./pagination.dto.ts";
+
 export interface AdminAuditLogEntry {
   id: string;
   actorId: string | null;
@@ -6,6 +8,8 @@ export interface AdminAuditLogEntry {
   resourceId: string | null;
   createdAt: string;
 }
+
+export type ListAuditLogsResponse = PaginatedListResponse<AdminAuditLogEntry>;
 
 export interface AdminAnalyticsEventEntry {
   id: string;

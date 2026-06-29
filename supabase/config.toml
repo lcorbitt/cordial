@@ -81,6 +81,9 @@ verify_jwt = false
 [functions.get-admin-overview]
 verify_jwt = false
 
+[functions.list-audit-logs]
+verify_jwt = false
+
 [functions.list-communities]
 verify_jwt = false
 

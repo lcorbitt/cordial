@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   Flag,
   LayoutDashboard,
+  ScrollText,
   Settings,
   Shield,
   UserRound,
@@ -17,6 +18,7 @@ import { cn } from "@/lib/utils";
 
 import {
   ADMIN_SECTION_LABEL,
+  AUDIT_LOGS_LABEL,
   ASIDE_CLASS,
   BACK_LINK_CLASS,
   BACK_TO_COMMUNITIES_LABEL,
@@ -65,6 +67,11 @@ const SUPER_ADMIN_NAV_ITEMS: AdminNavItem[] = [
     href: "/admin/overview",
     label: OVERVIEW_LABEL,
     icon: LayoutDashboard,
+  },
+  {
+    href: "/admin/audit",
+    label: AUDIT_LOGS_LABEL,
+    icon: ScrollText,
   },
   {
     href: "/admin/users",
