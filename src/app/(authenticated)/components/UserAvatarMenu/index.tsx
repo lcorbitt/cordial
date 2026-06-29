@@ -17,6 +17,7 @@ import { signOut } from "@/lib/auth/client";
 
 import {
   DROPDOWN_CLASS,
+  ITEM_CLASS,
   SETTINGS_LABEL,
   SIGN_OUT_ERROR_MESSAGE,
   SIGN_OUT_LABEL,
@@ -53,11 +54,12 @@ export function UserAvatarMenu() {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className={DROPDOWN_CLASS}>
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem asChild className={ITEM_CLASS}>
           <Link href="/settings">{SETTINGS_LABEL}</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
+          className={ITEM_CLASS}
           disabled={signOutPending}
           onSelect={(event) => {
             event.preventDefault();
