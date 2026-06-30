@@ -14,7 +14,7 @@ export const THEAD_CLASS = "border-b border-zinc-200 dark:border-zinc-700";
 export const TH_CLASS =
   "px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400";
 export const SORT_BUTTON_CLASS =
-  "inline-flex items-center gap-2 text-left transition-colors hover:text-zinc-800 dark:hover:text-zinc-200";
+  "inline-flex items-center gap-2 text-left uppercase transition-colors hover:text-zinc-800 dark:hover:text-zinc-200";
 export const SORT_ICON_CLASS = "h-3.5 w-3.5 shrink-0";
 export const TBODY_CLASS = "divide-y divide-zinc-200 dark:divide-zinc-700";
 export const TR_CLASS = "group transition-interactive";
@@ -41,7 +41,7 @@ export const DATA_TABLE_SEARCH_ICON_CLASS =
 
 export const DATA_TABLE_FILTER_FIELD_CLASS = "flex flex-col gap-2";
 export const DATA_TABLE_FILTER_LABEL_CLASS =
-  "text-xs font-medium text-zinc-500 dark:text-zinc-400";
+  "text-xs font-medium uppercase tracking-wide text-zinc-500 dark:text-zinc-400";
 export const DATA_TABLE_FILTER_SELECT_CLASS =
   "border-input bg-background ring-offset-background focus-visible:ring-ring h-8 min-w-[8rem] rounded-md border px-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50";
 

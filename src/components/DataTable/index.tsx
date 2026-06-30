@@ -24,6 +24,7 @@ import {
   TR_INTERACTIVE_CLASS,
 } from "./constants";
 import type { DataTableColumn, SortDirection } from "./types";
+import { formatDataTableHeaderLabel } from "./utils";
 
 export type {
   DataTableColumn,
@@ -96,7 +97,7 @@ export function DataTable<T>({
                       className={SORT_BUTTON_CLASS}
                       onClick={() => onSortChange?.(column.id)}
                     >
-                      {column.header}
+                      {formatDataTableHeaderLabel(column.header)}
                       {isActive ? (
                         sortDirection === "asc" ? (
                           <ArrowUp className={SORT_ICON_CLASS} aria-hidden />
@@ -106,7 +107,7 @@ export function DataTable<T>({
                       ) : null}
                     </button>
                   ) : (
-                    column.header
+                    formatDataTableHeaderLabel(column.header)
                   )}
                 </th>
               );

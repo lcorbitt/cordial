@@ -1,4 +1,10 @@
+import type { ReactNode } from "react";
+
 import type { DataTableColumn } from "./types";
+
+export function formatDataTableHeaderLabel(header: ReactNode): ReactNode {
+  return typeof header === "string" ? header.toUpperCase() : header;
+}
 
 const CSV_EMPTY_VALUE = "—";
 
@@ -23,15 +29,11 @@ export function resolveDataTableExportHeader<T>(
     return null;
   }
 
-  if (column.exportHeader) {
-    return column.exportHeader;
-  }
+  const resolved =
+    column.exportHeader ??
+    (typeof column.header === "string" ? column.header : column.id);
 
-  if (typeof column.header === "string") {
-    return column.header;
-  }
-
-  return column.id;
+  return resolved.toUpperCase();
 }
 
 export function buildDataTableCsv<T>(

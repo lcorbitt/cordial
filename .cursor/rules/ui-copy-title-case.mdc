@@ -23,6 +23,10 @@ first or last word (`Sign Up`, `Log In`, `Forgot Password?`, `Back to Dashboard`
   error messages). Use a comma, period, colon, or rephrase instead. Hyphens
   (`-`) are fine for compound words and kebab-case slugs shown as labels.
 - Acronyms stay as-is (`OAuth`, `API`). Product name: `GoverNerds`.
+- **DataTable column headers and toolbar filter labels** display as **ALL CAPS**.
+  `DataTable` normalizes casing at render and in CSV export. Store readable
+  Title Case in `COLUMN_*_HEADER` and filter label constants if you prefer;
+  do not hand-uppercase per page.
 
 ## Examples
 

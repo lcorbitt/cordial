@@ -32,7 +32,7 @@ describe("resolveDataTableExportHeader", () => {
       cell: (row) => row.name,
     };
 
-    expect(resolveDataTableExportHeader(column)).toBe("Full Name");
+    expect(resolveDataTableExportHeader(column)).toBe("FULL NAME");
   });
 
   it("falls back to string header then id", () => {
@@ -49,8 +49,8 @@ describe("resolveDataTableExportHeader", () => {
       cell: (row) => row.name,
     };
 
-    expect(resolveDataTableExportHeader(withHeader)).toBe("Name");
-    expect(resolveDataTableExportHeader(withIdOnly)).toBe("name");
+    expect(resolveDataTableExportHeader(withHeader)).toBe("NAME");
+    expect(resolveDataTableExportHeader(withIdOnly)).toBe("NAME");
   });
 });
 
@@ -80,12 +80,12 @@ describe("buildDataTableCsv", () => {
       { name: "Acme, Inc.", note: 'Said "hello"' },
     ]);
 
-    expect(csv).toBe('Name,Note\r\n"Acme, Inc.","Said ""hello"""');
+    expect(csv).toBe('NAME,NOTE\r\n"Acme, Inc.","Said ""hello"""');
   });
 
   it("uses em dash for empty values and skips display-only columns", () => {
     const csv = buildDataTableCsv(columns, [{ name: "Acme", note: null }]);
 
-    expect(csv).toBe("Name,Note\r\nAcme,—");
+    expect(csv).toBe("NAME,NOTE\r\nAcme,—");
   });
 });
