@@ -1,6 +1,11 @@
 "use client";
 
-import { DataTable, DataTableExportButton } from "@/components/DataTable";
+import {
+  DataTable,
+  DataTableExportButton,
+  DataTableSearchInput,
+  DataTableToolbar,
+} from "@/components/DataTable";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { TablePagination } from "@/components/TablePagination";
 
@@ -8,11 +13,13 @@ import {
   BACK_TO_DASHBOARD_LABEL,
   CARD_CONTENT_CLASS,
   EMPTY_MESSAGE,
+  FILTERED_EMPTY_MESSAGE,
   LIST_ERROR_DESCRIPTION,
   LIST_ERROR_TITLE,
   LIST_LOADING_BODY,
   LOADING_TEXT_CLASS,
-  TOOLBAR_CLASS,
+  SEARCH_ARIA_LABEL,
+  SEARCH_PLACEHOLDER,
 } from "./constants";
 import { useAdminCommunitiesTable } from "./useAdminCommunitiesTable";
 import type { useAdminCommunities } from "../AdminCommunities/useAdminCommunities";
@@ -43,10 +50,13 @@ export function AdminCommunitiesTable({
     pageSize,
     sortColumn,
     sortDirection,
+    search,
+    hasActiveFilters,
     tableExport,
     setPage,
     setPageSize,
     handleSortChange,
+    handleSearchChange,
   } = useAdminCommunitiesTable({
     inviteEmails,
     setInviteEmails,
@@ -73,13 +83,24 @@ export function AdminCommunitiesTable({
 
   return (
     <div className={CARD_CONTENT_CLASS}>
-      <div className={TOOLBAR_CLASS}>
-        <DataTableExportButton
-          columns={columns}
-          exportConfig={tableExport}
-          disabled={totalCount === 0 || fetching}
-        />
-      </div>
+      <DataTableToolbar
+        filters={
+          <DataTableSearchInput
+            value={search}
+            onChange={handleSearchChange}
+            placeholder={SEARCH_PLACEHOLDER}
+            ariaLabel={SEARCH_ARIA_LABEL}
+            disabled={fetching}
+          />
+        }
+        actions={
+          <DataTableExportButton
+            columns={columns}
+            exportConfig={tableExport}
+            disabled={totalCount === 0 || fetching}
+          />
+        }
+      />
       <DataTable
         columns={columns}
         rows={rows}
@@ -88,7 +109,7 @@ export function AdminCommunitiesTable({
         sortColumn={sortColumn}
         sortDirection={sortDirection}
         onSortChange={handleSortChange}
-        emptyMessage={EMPTY_MESSAGE}
+        emptyMessage={hasActiveFilters ? FILTERED_EMPTY_MESSAGE : EMPTY_MESSAGE}
       />
       <TablePagination
         page={page}

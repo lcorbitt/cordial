@@ -5,6 +5,16 @@ export interface AdminCommunitiesQueryParams {
   pageSize: number;
   sortColumn: string;
   sortDirection: "asc" | "desc";
+  search: string;
+}
+
+export interface AdminCommunityMembersQueryParams {
+  page: number;
+  pageSize: number;
+  sortColumn: string;
+  sortDirection: "asc" | "desc";
+  search: string;
+  communityId: string;
 }
 
 export const communityQueryKeys = {
@@ -12,4 +22,6 @@ export const communityQueryKeys = {
   detail: (slug: string) => [...communityQueryKeyRoot, "detail", slug] as const,
   adminList: (params: AdminCommunitiesQueryParams) =>
     [...communityQueryKeyRoot, "admin", "list", params] as const,
+  adminMembersList: (params: AdminCommunityMembersQueryParams) =>
+    [...communityQueryKeyRoot, "admin", "members", params] as const,
 };

@@ -7,8 +7,12 @@ import type {
   DataTableExportConfig,
 } from "@/components/DataTable";
 import { listAuditLogsForExport } from "@/frontend/services/admin.service";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useAuditLogsQuery } from "@/hooks/queries/useAuditLogs";
-import type { AdminAuditLogEntry } from "@shared/dto/admin.dto";
+import type {
+  AdminAuditLogEntry,
+  AuditLogDateRange,
+} from "@shared/dto/admin.dto";
 import type { SortDirection } from "@shared/dto/pagination.dto";
 
 import {
@@ -42,13 +46,32 @@ export function useAdminAuditLogs() {
   const [sortColumn, setSortColumn] =
     useState<AuditLogSortColumn>("created_at");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+  const [search, setSearch] = useState("");
+  const [action, setAction] = useState("");
+  const [resourceType, setResourceType] = useState("");
+  const [dateRange, setDateRange] = useState<AuditLogDateRange>("all");
+
+  const debouncedSearch = useDebouncedValue(search);
 
   const auditLogsQuery = useAuditLogsQuery({
     page,
     pageSize,
     sortColumn,
     sortDirection,
+    search: debouncedSearch,
+    action,
+    resourceType,
+    dateRange,
   });
+
+  const hasActiveFilters = useMemo(
+    () =>
+      debouncedSearch.length > 0 ||
+      action.length > 0 ||
+      resourceType.length > 0 ||
+      dateRange !== "all",
+    [action, dateRange, debouncedSearch, resourceType],
+  );
 
   const handleSortChange = useCallback(
     (columnId: string) => {
@@ -63,6 +86,26 @@ export function useAdminAuditLogs() {
     },
     [sortColumn],
   );
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+    setPage(1);
+  }, []);
+
+  const handleActionChange = useCallback((value: string) => {
+    setAction(value);
+    setPage(1);
+  }, []);
+
+  const handleResourceTypeChange = useCallback((value: string) => {
+    setResourceType(value);
+    setPage(1);
+  }, []);
+
+  const handleDateRangeChange = useCallback((value: AuditLogDateRange) => {
+    setDateRange(value);
+    setPage(1);
+  }, []);
 
   const columns = useMemo<DataTableColumn<AdminAuditLogEntry>[]>(
     () => [
@@ -139,8 +182,20 @@ export function useAdminAuditLogs() {
     return listAuditLogsForExport({
       sortColumn,
       sortDirection,
+      search: debouncedSearch || undefined,
+      action: action || undefined,
+      resourceType: resourceType || undefined,
+      dateRange,
     });
-  }, [auditLogsQuery.data?.total, sortColumn, sortDirection]);
+  }, [
+    action,
+    auditLogsQuery.data?.total,
+    dateRange,
+    debouncedSearch,
+    resourceType,
+    sortColumn,
+    sortDirection,
+  ]);
 
   const tableExport = useMemo<DataTableExportConfig<AdminAuditLogEntry>>(
     () => ({
@@ -166,9 +221,18 @@ export function useAdminAuditLogs() {
     pageSize,
     sortColumn,
     sortDirection,
+    search,
+    action,
+    resourceType,
+    dateRange,
+    hasActiveFilters,
     tableExport,
     setPage,
     setPageSize,
     handleSortChange,
+    handleSearchChange,
+    handleActionChange,
+    handleResourceTypeChange,
+    handleDateRangeChange,
   };
 }

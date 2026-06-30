@@ -5,7 +5,7 @@ import {
   listCommunitiesForExportAdmin,
 } from "@services/community/community.service.ts";
 import { createServiceClient } from "@services/db.ts";
-import type { PaginatedListQuery } from "@shared/dto/pagination.dto.ts";
+import type { AdminCommunityListQuery } from "@shared/dto/community.dto.ts";
 
 function parsePositiveInt(value: string | null, fallback: number): number {
   if (!value) return fallback;
@@ -15,15 +15,18 @@ function parsePositiveInt(value: string | null, fallback: number): number {
 
 function parseQuery(
   url: string | undefined,
-): PaginatedListQuery & { exportAll?: boolean } {
+): AdminCommunityListQuery & { exportAll?: boolean } {
   const params = url ? new URL(url).searchParams : new URLSearchParams();
 
   const sortDirection = params.get("sortDirection");
+  const search = params.get("search")?.trim();
+
   return {
     page: parsePositiveInt(params.get("page"), 1),
     pageSize: parsePositiveInt(params.get("pageSize"), 20),
     sortColumn: params.get("sortColumn") ?? "name",
     sortDirection: sortDirection === "desc" ? "desc" : "asc",
+    search: search || undefined,
     exportAll: params.get("export") === "true",
   };
 }
@@ -44,6 +47,7 @@ export async function handle(ctx: HandlerContext): Promise<Response> {
     const items = await listCommunitiesForExportAdmin(serviceClient, {
       sortColumn: query.sortColumn,
       sortDirection: query.sortDirection,
+      search: query.search,
     });
     return apiResponse.ok({
       items,

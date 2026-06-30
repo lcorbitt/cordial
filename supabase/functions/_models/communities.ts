@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+import { normalizeSearchTerm } from "@shared/db/ilike.ts";
 import type { SortDirection } from "@shared/dto/pagination.dto.ts";
 
 /**
@@ -24,6 +25,24 @@ export interface CommunityListQuery {
   pageSize: number;
   sortColumn: CommunitySortColumn;
   sortDirection: SortDirection;
+  search?: string;
+}
+
+export interface CommunityListFilters {
+  search?: string;
+}
+
+function applyCommunityListFilters<
+  T extends {
+    or: (filters: string) => T;
+  },
+>(query: T, filters: CommunityListFilters): T {
+  const search = normalizeSearchTerm(filters.search);
+  if (!search) {
+    return query;
+  }
+
+  return query.or(`name.ilike.%${search}%,slug.ilike.%${search}%`);
 }
 
 function resolveSortColumn(raw: string): CommunitySortColumn {
@@ -79,10 +98,14 @@ export async function listCommunitiesPaginated(
   const from = (query.page - 1) * query.pageSize;
   const to = from + query.pageSize - 1;
 
-  const { data, error, count } = await client
+  let listQuery = client
     .from("communities")
     .select(SUMMARY_COLUMNS, { count: "exact" })
-    .is("deleted_at", null)
+    .is("deleted_at", null);
+
+  listQuery = applyCommunityListFilters(listQuery, query);
+
+  const { data, error, count } = await listQuery
     .order(sortColumn, { ascending })
     .range(from, to);
 
@@ -96,16 +119,20 @@ export async function listCommunitiesPaginated(
 
 export async function listCommunitiesForExport(
   client: SupabaseClient,
-  query: Pick<CommunityListQuery, "sortColumn" | "sortDirection">,
+  query: Pick<CommunityListQuery, "sortColumn" | "sortDirection"> &
+    CommunityListFilters,
 ): Promise<Pick<CommunityRow, "id" | "name" | "slug">[]> {
   const sortColumn = resolveSortColumn(query.sortColumn);
   const ascending = query.sortDirection === "asc";
 
-  const { data, error } = await client
+  let listQuery = client
     .from("communities")
     .select(SUMMARY_COLUMNS)
-    .is("deleted_at", null)
-    .order(sortColumn, { ascending });
+    .is("deleted_at", null);
+
+  listQuery = applyCommunityListFilters(listQuery, query);
+
+  const { data, error } = await listQuery.order(sortColumn, { ascending });
 
   if (error) throw new Error(error.message);
   return (data ?? []) as Pick<CommunityRow, "id" | "name" | "slug">[];

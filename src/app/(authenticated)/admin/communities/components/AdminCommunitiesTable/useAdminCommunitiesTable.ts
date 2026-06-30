@@ -16,6 +16,7 @@ import type {
   SortDirection,
 } from "@/components/DataTable";
 import { listAdminCommunitiesForExport } from "@/frontend/services/community.service";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useAdminCommunitiesQuery } from "@/hooks/queries/useCommunity";
 import type { CommunitySummary } from "@shared/dto/community.dto";
 
@@ -70,13 +71,19 @@ export function useAdminCommunitiesTable({
   const [pageSize, setPageSize] = useState(20);
   const [sortColumn, setSortColumn] = useState<CommunitySortColumn>("name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const [search, setSearch] = useState("");
+
+  const debouncedSearch = useDebouncedValue(search);
 
   const adminQuery = useAdminCommunitiesQuery({
     page,
     pageSize,
     sortColumn,
     sortDirection,
+    search: debouncedSearch,
   });
+
+  const hasActiveFilters = debouncedSearch.length > 0;
 
   const handleSortChange = useCallback(
     (columnId: string) => {
@@ -91,6 +98,11 @@ export function useAdminCommunitiesTable({
     },
     [sortColumn],
   );
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearch(value);
+    setPage(1);
+  }, []);
 
   const columns = useMemo<DataTableColumn<CommunitySummary>[]>(
     () => [
@@ -204,8 +216,9 @@ export function useAdminCommunitiesTable({
     return listAdminCommunitiesForExport({
       sortColumn,
       sortDirection,
+      search: debouncedSearch || undefined,
     });
-  }, [adminQuery.data?.total, sortColumn, sortDirection]);
+  }, [adminQuery.data?.total, debouncedSearch, sortColumn, sortDirection]);
 
   const tableExport = useMemo<DataTableExportConfig<CommunitySummary>>(
     () => ({
@@ -231,9 +244,12 @@ export function useAdminCommunitiesTable({
     pageSize,
     sortColumn,
     sortDirection,
+    search,
+    hasActiveFilters,
     tableExport,
     setPage,
     setPageSize,
     handleSortChange,
+    handleSearchChange,
   };
 }

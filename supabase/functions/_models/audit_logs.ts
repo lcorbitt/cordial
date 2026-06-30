@@ -1,5 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
+import {
+  auditLogDateRangeCutoff,
+  normalizeAuditLogAction,
+  normalizeAuditLogDateRange,
+  normalizeAuditLogResourceType,
+} from "@shared/admin/audit-log-catalog.ts";
+import type { AuditLogDateRange } from "@shared/dto/admin.dto.ts";
+import { normalizeSearchTerm } from "@shared/db/ilike.ts";
 import type { SortDirection } from "@shared/dto/pagination.dto.ts";
 
 /**
@@ -31,6 +39,53 @@ export interface AuditLogListQuery {
   pageSize: number;
   sortColumn: AuditLogSortColumn;
   sortDirection: SortDirection;
+  search?: string;
+  action?: string;
+  resourceType?: string;
+  dateRange?: AuditLogDateRange;
+}
+
+export interface AuditLogListFilters {
+  search?: string;
+  action?: string;
+  resourceType?: string;
+  dateRange?: AuditLogDateRange;
+}
+
+function applyAuditLogListFilters<
+  T extends {
+    eq: (column: string, value: string) => T;
+    gte: (column: string, value: string) => T;
+    or: (filters: string) => T;
+  },
+>(query: T, filters: AuditLogListFilters): T {
+  let next = query;
+
+  const action = normalizeAuditLogAction(filters.action);
+  if (action) {
+    next = next.eq("action", action);
+  }
+
+  const resourceType = normalizeAuditLogResourceType(filters.resourceType);
+  if (resourceType) {
+    next = next.eq("resource_type", resourceType);
+  }
+
+  const cutoff = auditLogDateRangeCutoff(
+    normalizeAuditLogDateRange(filters.dateRange),
+  );
+  if (cutoff) {
+    next = next.gte("created_at", cutoff);
+  }
+
+  const search = normalizeSearchTerm(filters.search);
+  if (search) {
+    next = next.or(
+      `action.ilike.%${search}%,resource_type.ilike.%${search}%,resource_id.ilike.%${search}%,actor_id.ilike.%${search}%`,
+    );
+  }
+
+  return next;
 }
 
 function resolveSortColumn(raw: string): AuditLogSortColumn {
@@ -94,9 +149,13 @@ export async function listAuditLogsPaginated(
   const from = (query.page - 1) * query.pageSize;
   const to = from + query.pageSize - 1;
 
-  const { data, error, count } = await client
+  let listQuery = client
     .from("audit_logs")
-    .select(AUDIT_LOG_COLUMNS, { count: "exact" })
+    .select(AUDIT_LOG_COLUMNS, { count: "exact" });
+
+  listQuery = applyAuditLogListFilters(listQuery, query);
+
+  const { data, error, count } = await listQuery
     .order(sortColumn, { ascending })
     .range(from, to);
 
@@ -110,15 +169,16 @@ export async function listAuditLogsPaginated(
 
 export async function listAuditLogsForExport(
   client: SupabaseClient,
-  query: Pick<AuditLogListQuery, "sortColumn" | "sortDirection">,
+  query: Pick<AuditLogListQuery, "sortColumn" | "sortDirection"> &
+    AuditLogListFilters,
 ): Promise<AuditLogRow[]> {
   const sortColumn = resolveSortColumn(query.sortColumn);
   const ascending = query.sortDirection === "asc";
 
-  const { data, error } = await client
-    .from("audit_logs")
-    .select(AUDIT_LOG_COLUMNS)
-    .order(sortColumn, { ascending });
+  let listQuery = client.from("audit_logs").select(AUDIT_LOG_COLUMNS);
+  listQuery = applyAuditLogListFilters(listQuery, query);
+
+  const { data, error } = await listQuery.order(sortColumn, { ascending });
 
   if (error) throw new Error(error.message);
   return (data ?? []) as AuditLogRow[];

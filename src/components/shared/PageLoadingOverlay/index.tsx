@@ -24,9 +24,9 @@ interface PageLoadingOverlayProps {
 }
 
 /**
- * Full-viewport navigation loading UI: thin top progress bar plus a blurred
- * scrim with a centered spinner. Fixed positioning covers the shell even when
- * mounted inside a nested layout segment.
+ * Main-scoped navigation loading UI: thin top progress bar plus a blurred
+ * scrim with a centered spinner. Absolute positioning fills `#main-content`
+ * without covering navbars or sidebars.
  */
 export function PageLoadingOverlay({
   active,

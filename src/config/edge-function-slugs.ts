@@ -21,6 +21,8 @@ export const EDGE_FUNCTION_SLUGS = {
   createCommunity: "create-community",
   updateCommunity: "update-community",
   listAdminCommunities: "list-admin-communities",
+  listAdminCommunityMembers: "list-admin-community-members",
+  listAdminUsers: "list-admin-users",
   sendCommunityInvite: "send-community-invite",
   acceptInvite: "accept-invite",
   createAvatarUploadUrl: "create-avatar-upload-url",

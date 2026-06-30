@@ -32,6 +32,7 @@ export function useCommunityPicker({
       pageSize: 100,
       sortColumn: "name",
       sortDirection: "asc",
+      search: "",
     },
     { enabled: isSuperAdmin },
   );

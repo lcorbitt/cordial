@@ -99,6 +99,12 @@ verify_jwt = false
 [functions.list-admin-communities]
 verify_jwt = false
 
+[functions.list-admin-community-members]
+verify_jwt = false
+
+[functions.list-admin-users]
+verify_jwt = false
+
 [functions.send-community-invite]
 verify_jwt = false
 

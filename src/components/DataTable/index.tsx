@@ -30,6 +30,13 @@ export type {
   SortDirection,
 } from "./types";
 export { DataTableExportButton } from "./DataTableExportButton";
+export { DataTableToolbar } from "./DataTableToolbar";
+export { DataTableSearchInput } from "./DataTableSearchInput";
+export {
+  DataTableFilterSelect,
+  type DataTableFilterOption,
+} from "./DataTableFilterSelect";
+export { DataTableDateRangeSelect } from "./DataTableDateRangeSelect";
 
 type DataTableProps<T> = {
   columns: DataTableColumn<T>[];

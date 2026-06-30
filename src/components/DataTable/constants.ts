@@ -28,3 +28,33 @@ export const LOADING_CELL_CLASS =
   "px-4 py-8 text-center text-zinc-500 dark:text-zinc-400";
 export const EMPTY_CELL_CLASS =
   "px-4 py-8 text-center text-zinc-500 dark:text-zinc-400";
+
+export const DATA_TABLE_TOOLBAR_CLASS =
+  "flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200 px-4 py-2 dark:border-zinc-700";
+export const DATA_TABLE_TOOLBAR_FILTERS_CLASS =
+  "flex min-w-0 flex-1 flex-wrap items-end gap-2";
+export const DATA_TABLE_TOOLBAR_ACTIONS_CLASS =
+  "flex shrink-0 flex-wrap items-center gap-2";
+
+export const DATA_TABLE_SEARCH_WRAPPER_CLASS = "relative min-w-[12rem] flex-1";
+export const DATA_TABLE_SEARCH_INPUT_CLASS = "h-8 pl-8 text-sm";
+export const DATA_TABLE_SEARCH_ICON_CLASS =
+  "pointer-events-none absolute top-1/2 left-2 h-4 w-4 -translate-y-1/2 text-zinc-400";
+
+export const DATA_TABLE_FILTER_FIELD_CLASS = "flex flex-col gap-2";
+export const DATA_TABLE_FILTER_LABEL_CLASS =
+  "text-xs font-medium text-zinc-500 dark:text-zinc-400";
+export const DATA_TABLE_FILTER_SELECT_CLASS =
+  "border-input bg-background ring-offset-background focus-visible:ring-ring h-8 min-w-[8rem] rounded-md border px-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50";
+
+export const DATA_TABLE_FILTER_ALL_VALUE = "";
+export const DATA_TABLE_FILTER_ALL_LABEL = "All";
+
+export const DATA_TABLE_DATE_RANGE_SELECT_ID = "data-table-date-range";
+
+export const DATA_TABLE_DATE_RANGE_OPTIONS = [
+  { value: "all", label: "All Time" },
+  { value: "7d", label: "Last 7 Days" },
+  { value: "30d", label: "Last 30 Days" },
+  { value: "90d", label: "Last 90 Days" },
+] as const;

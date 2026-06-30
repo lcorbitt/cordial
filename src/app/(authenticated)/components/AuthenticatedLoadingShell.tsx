@@ -11,7 +11,7 @@ interface AuthenticatedLoadingShellProps {
 
 /**
  * Client shell for authenticated routes: link-click detection and the loading
- * overlay host. Co-located with AppShell so loading covers header + main.
+ * overlay host. Loading UI is scoped to `#main-content` only.
  */
 export function AuthenticatedLoadingShell({
   children,

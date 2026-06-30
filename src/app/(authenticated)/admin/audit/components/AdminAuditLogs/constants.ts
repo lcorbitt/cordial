@@ -1,11 +1,52 @@
+import {
+  AUDIT_LOG_ACTIONS,
+  AUDIT_LOG_RESOURCE_TYPES,
+} from "@shared/admin/audit-log-catalog";
+import type { DataTableFilterOption } from "@/components/DataTable";
+
 export const TITLE = "Audit Logs";
 export const SUBTITLE =
   "Review platform activity recorded for security and compliance.";
 export const TABLE_CARD_TITLE = "Recent Activity";
 export const TABLE_CARD_DESCRIPTION =
-  "Sort columns or export matching rows to CSV.";
+  "Search, filter, sort columns, or export matching rows to CSV.";
 export const EMPTY_MESSAGE = "No audit logs yet.";
+export const FILTERED_EMPTY_MESSAGE = "No audit logs match your filters.";
 export const BACK_TO_ADMIN_LABEL = "Back to Admin";
+
+export const SEARCH_PLACEHOLDER = "Search audit logs…";
+export const SEARCH_ARIA_LABEL = "Search Audit Logs";
+export const ACTION_FILTER_LABEL = "Action";
+export const RESOURCE_FILTER_LABEL = "Resource Type";
+export const DATE_RANGE_FILTER_LABEL = "Date Range";
+
+export const ACTION_FILTER_ID = "audit-log-action-filter";
+export const RESOURCE_FILTER_ID = "audit-log-resource-filter";
+
+const ACTION_FILTER_LABELS: Record<string, string> = {
+  "community.created": "Community Created",
+  "community.member_joined": "Community Member Joined",
+  "profile.updated": "Profile Updated",
+  "user.created": "User Created",
+};
+
+const RESOURCE_FILTER_LABELS: Record<string, string> = {
+  community: "Community",
+  profile: "Profile",
+  user: "User",
+};
+
+export const ACTION_FILTER_OPTIONS: DataTableFilterOption[] =
+  AUDIT_LOG_ACTIONS.map((action) => ({
+    value: action,
+    label: ACTION_FILTER_LABELS[action] ?? action,
+  }));
+
+export const RESOURCE_FILTER_OPTIONS: DataTableFilterOption[] =
+  AUDIT_LOG_RESOURCE_TYPES.map((resourceType) => ({
+    value: resourceType,
+    label: RESOURCE_FILTER_LABELS[resourceType] ?? resourceType,
+  }));
 
 export const ERROR_TITLE = "Could Not Load Audit Logs";
 export const ERROR_DESCRIPTION =
@@ -26,8 +67,6 @@ export const PAGE_CLASS = "flex flex-col gap-6";
 export const TITLE_CLASS = "text-3xl font-serif font-bold";
 export const SUBTITLE_CLASS = "text-muted-foreground mt-2 text-base";
 export const CARD_CLASS = "overflow-hidden";
-export const TOOLBAR_CLASS =
-  "flex flex-wrap items-center justify-end gap-2 border-b border-zinc-200 px-4 py-2 dark:border-zinc-700";
 export const LOADING_TEXT_CLASS = "text-muted-foreground text-base";
 export const EMPTY_TEXT_CLASS = "text-muted-foreground text-base";
 export const CELL_PRIMARY_CLASS = "font-medium";
