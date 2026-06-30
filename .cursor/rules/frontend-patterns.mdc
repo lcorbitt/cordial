@@ -30,6 +30,13 @@ alwaysApply: false
   from the `.keys.ts` file.
 - `hooks/mutations/use<Domain>.ts` — writes + cache updates. Imports keys from
   the query file; never defines keys.
+- `hooks/useRealtimeChannel.ts` — Realtime transport only (status, reconnect,
+  cleanup). **See `realtime-patterns.mdc`** for protocol and merge rules.
+- `lib/query/realtime-merge.ts` — pure id-indexed merge helpers for Realtime
+  cache updates. Used from `hooks/queries/use<Domain>.ts`.
+- `app/(authenticated)/components/*RealtimeSync.tsx` — wire Realtime transport
+  to domain merge helpers. Shell-level sync (profile) or feature-level sync
+  (notifications). Not in fat `index.tsx`.
 - `frontend/services/<domain>.service.ts` — `edgeFunctionFetch` + slug only. No
   React, no TanStack.
 - `server/loaders/*` — SSR session/role bootstrap (auth exception).

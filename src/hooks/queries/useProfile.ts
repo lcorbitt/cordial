@@ -2,6 +2,7 @@ import { useQuery, type QueryClient } from "@tanstack/react-query";
 
 import { getProfile } from "@/frontend/services/profile.service";
 import type { ProfileResponse } from "@shared/dto/profile.dto";
+import { patchSingleton } from "@/lib/query/realtime-merge";
 import {
   profileQueryKeyRoot,
   profileQueryKeys,
@@ -46,15 +47,15 @@ export function patchProfileQueryDataFromRealtimeRow(
   const previous = queryClient.getQueryData<ProfileResponse>(
     profileQueryKeys.me(),
   );
-  if (!previous) return false;
-
-  setProfileQueryData(queryClient, {
-    ...previous,
+  const patched = patchSingleton(previous, {
     ...(row.display_name !== undefined && { displayName: row.display_name }),
     ...(row.avatar_url !== undefined && { avatarUrl: row.avatar_url }),
     ...(row.bio !== undefined && { bio: row.bio }),
     ...(row.updated_at !== undefined && { updatedAt: row.updated_at }),
   });
+  if (!patched) return false;
+
+  setProfileQueryData(queryClient, patched);
   return true;
 }
 

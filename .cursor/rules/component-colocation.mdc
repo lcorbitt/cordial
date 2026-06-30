@@ -31,10 +31,14 @@ Examples: `LoginForm/useLoginForm.ts`, `Profile/useProfile.ts`,
 - **No nested `hooks/`** (or `lib/`, `helpers/`) inside a component folder.
   Domain hooks live in `src/hooks/queries/` and `src/hooks/mutations/`; feature
   orchestration lives in `use<Name>.ts` beside `index.tsx`.
-- **`index.tsx` is UI only** — no `fetch`, no Supabase client, no
-  `edgeFunctionFetch`, no TanStack `useMutation`/`useQuery` setup, no Zod
-  schemas, no toast/modal side effects. Import a colocated `use<Name>` hook and
-  render.
+- **`index.tsx` is UI only** — no `fetch`, no Supabase client, no Realtime
+  subscriptions, no `edgeFunctionFetch`, no TanStack `useMutation`/`useQuery`
+  setup, no Zod schemas, no toast/modal side effects. Import a colocated
+  `use<Name>` hook and render.
+- **Realtime sync** — use a sibling `*RealtimeSync.tsx` in the shell or feature
+  folder (see `ProfileRealtimeSync`, `NotificationRealtimeSync`). Wire through
+  `useRealtimeChannel`; merge logic stays in `hooks/queries/use<Domain>.ts`.
+  **See `realtime-patterns.mdc`.**
 - **All user-facing strings in `constants.ts`** — flat exports with semantic suffixes
   (`_LABEL`, `_TITLE`, `_BODY`, `_TOAST_*`). No feature prefix on export names;
   the folder path is the namespace. Import in both `index.tsx` and

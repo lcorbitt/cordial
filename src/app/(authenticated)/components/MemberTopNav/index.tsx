@@ -25,7 +25,6 @@ import {
 } from "./constants";
 
 interface MemberTopNavProps {
-  userId: string;
   isAdmin: boolean;
   isSuperAdmin: boolean;
   layout?: "default" | "admin";
@@ -61,7 +60,6 @@ function NavTabLink({
 }
 
 export function MemberTopNav({
-  userId,
   isAdmin,
   isSuperAdmin,
   layout = "default",
@@ -104,7 +102,7 @@ export function MemberTopNav({
             placeholder={SEARCH_PLACEHOLDER}
             className={SEARCH_INPUT_CLASS}
           />
-          <NotificationBell userId={userId} />
+          <NotificationBell />
           <ProfileMenu isAdmin={isAdmin} isSuperAdmin={isSuperAdmin} />
         </div>
       </nav>

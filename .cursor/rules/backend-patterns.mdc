@@ -1,0 +1,27 @@
+---
+description: Backend rule index — Edge Functions, migrations, Realtime, providers
+globs: supabase/**/*.{ts,sql,toml},src/lib/jobs/**/*.ts,src/lib/providers/**/*.ts
+alwaysApply: false
+---
+
+# Backend patterns (index)
+
+**Mental model:** Edge Functions write · Postgres is truth · Realtime notifies ·
+TanStack Query holds client state.
+
+Use the scoped rules below for layer placement. Do not duplicate their content
+here.
+
+| Rule | Scope |
+|------|--------|
+| [`edge-functions.mdc`](edge-functions.mdc) | Handler → service → model, middleware presets, `_shared/` vs `_http/` placement, DB clients |
+| [`database-migrations.mdc`](database-migrations.mdc) | Migration naming, rollback pairing, RPC signature changes, Realtime publication checklist |
+| [`realtime-patterns.mdc`](realtime-patterns.mdc) | Supabase Realtime + TanStack Query sync (cross-cutting: DB publication, Edge writes, client transport) |
+| [`providers.mdc`](providers.mdc) | Swappable third-party adapters (email, storage, jobs, Redis) and Inngest job handlers |
+
+## Quick placement
+
+- **HTTP / domain logic** → `edge-functions.mdc`
+- **Schema, RLS, Realtime publication** → `database-migrations.mdc` + `realtime-patterns.mdc`
+- **Client cache sync after Postgres changes** → `realtime-patterns.mdc` (frontend hooks referenced there)
+- **Async side effects, external APIs** → `providers.mdc`

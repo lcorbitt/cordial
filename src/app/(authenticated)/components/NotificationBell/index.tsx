@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
-import { useQueryClient } from "@tanstack/react-query";
 import { Bell } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -14,11 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { createClient } from "@/lib/supabase/client";
-import {
-  invalidateNotificationQueries,
-  useNotificationsQuery,
-} from "@/hooks/queries/useNotifications";
+import { useNotificationsQuery } from "@/hooks/queries/useNotifications";
 import { useMarkNotificationReadMutation } from "@/hooks/mutations/useNotification";
 import { cn } from "@/lib/utils";
 
@@ -47,40 +41,13 @@ import {
   TRIGGER_CLASS,
 } from "./constants";
 
-interface NotificationBellProps {
-  userId: string;
-}
-
 /**
- * In-app notification bell with unread badge, dropdown list, and Realtime refresh.
+ * In-app notification bell with unread badge and dropdown list. Realtime sync
+ * lives in NotificationRealtimeSync (AppShell).
  */
-export function NotificationBell({ userId }: NotificationBellProps) {
-  const queryClient = useQueryClient();
+export function NotificationBell() {
   const notificationsQuery = useNotificationsQuery();
   const markReadMutation = useMarkNotificationReadMutation();
-
-  useEffect(() => {
-    const supabase = createClient();
-    const channel = supabase
-      .channel(`notifications:${userId}`)
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "notifications",
-          filter: `user_id=eq.${userId}`,
-        },
-        () => {
-          invalidateNotificationQueries(queryClient);
-        },
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [queryClient, userId]);
 
   const unreadCount = notificationsQuery.data?.unreadCount ?? 0;
   const items = notificationsQuery.data?.items ?? [];

@@ -44,3 +44,9 @@ When a UI feature owns the message, the API returns `error.details.reason`
 - User client (anon key + caller JWT) → RLS applies. Default for user data.
 - Service client (service role) → bypasses RLS. ONLY after an explicit
   authorization check in code.
+
+## Realtime
+
+All domain mutations go through Edge Functions → Postgres. Supabase Realtime
+notifies the browser; it is **read-side cache sync only**, not a second write
+API. Client subscription and TanStack merge conventions: **`realtime-patterns.mdc`**.

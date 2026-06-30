@@ -1,0 +1,151 @@
+---
+description: Supabase Realtime transport, TanStack merge, and subscription conventions
+globs: src/hooks/useRealtimeChannel.ts,src/hooks/**/*realtime*,src/lib/query/realtime*.ts,src/app/**/*RealtimeSync*.tsx,supabase/migrations/**/*.sql
+alwaysApply: false
+---
+
+# Realtime patterns (Supabase + TanStack Query)
+
+GoverNerds uses **Supabase Realtime** (managed WebSocket) for client cache sync.
+Do **not** build a raw `WebSocket` client, custom SUBSCRIBE frames, or hand-rolled
+exponential backoff. Transport reconnect is Supabase-managed.
+
+**See also:** [`backend-patterns.mdc`](backend-patterns.mdc) (index),
+[`frontend-patterns.mdc`](frontend-patterns.mdc) (hook placement),
+[`database-migrations.mdc`](database-migrations.mdc) (publication migrations).
+
+## Mental model
+
+1. **REST baseline** — Edge Function prefetch/query seeds TanStack Query.
+2. **Realtime incremental** — Postgres WAL events patch or invalidate the cache.
+3. **Postgres is truth** — never treat Realtime as the full source of truth.
+
+```mermaid
+flowchart LR
+    EF[Edge Function write] --> PG[(Postgres)]
+    PG --> RT[Supabase Realtime]
+    RT --> Sync["*RealtimeSync.tsx"]
+    Sync --> TQ[TanStack Query cache]
+    EF2[Edge Function read] --> TQ
+```
+
+## Four layers
+
+### 1. Transport — `useRealtimeChannel`
+
+Location: [`src/hooks/useRealtimeChannel.ts`](../../src/hooks/useRealtimeChannel.ts)
+
+- Browser Supabase client only ([`src/lib/supabase/client.ts`](../../src/lib/supabase/client.ts): auth, Realtime, Storage upload exception).
+- Explicit status: `'connecting' | 'subscribed' | 'error' | 'closed'`.
+- Cleanup on unmount: `removeChannel`, clear timers.
+- Manual `reconnect()` for UX retry; auto-reconnect is Supabase-managed.
+- Returns `{ status, reconnect }` only — **no domain state, no UI logic**.
+
+```tsx
+const { status, reconnect } = useRealtimeChannel(
+  `profile:${userId}`,
+  (channel) =>
+    channel.on("postgres_changes", { event: "UPDATE", ... }, handler),
+  [userId],
+);
+```
+
+### 2. Protocol — per feature
+
+- Default: **`postgres_changes`** for durable data (`INSERT` | `UPDATE` | `DELETE`).
+- **Filter = subscription scope** — persists across reconnect (e.g. `user_id=eq.{id}`,
+  `community_id=eq.{id}`). RLS is defense in depth.
+- **Broadcast / Presence** — ephemeral UX only (typing, presence). Never source of truth.
+- Typed payloads: `<Domain>RealtimeRow` in `hooks/queries/use<Domain>.ts` (snake_case
+  from Postgres; map to camelCase DTO in merge helpers).
+- Handle events exhaustively by Postgres `event` type. No `any`.
+
+Wire protocol in `*RealtimeSync.tsx` (shell or feature folder), not in `index.tsx`.
+
+### 3. State — TanStack Query merge helpers
+
+Location: [`src/lib/query/realtime-merge.ts`](../../src/lib/query/realtime-merge.ts)
+
+- **Lists:** id-indexed upsert/remove (`Map` by `id`). Safe for duplicates and reorder.
+- **Singletons:** field-level patch (profile).
+- **Race policy:** merge helpers work when cache is empty where possible; fallback
+  to `invalidateQueries` when patch cannot apply.
+- Merge functions live in `hooks/queries/use<Domain>.ts`, not in transport hook.
+
+#### Mutation vs Realtime policy
+
+| Feature shape | After mutation | Realtime role |
+|---------------|----------------|---------------|
+| **Singleton form** (profile) | `setQueryData` from mutation response OK | Cross-tab / other-session sync |
+| **Collaborative list** (forum, DMs) | Disable while pending; no manual list patch | Realtime or invalidate drives UI |
+
+### 4. UX
+
+- Surface `status` on long-lived surfaces (forum, DMs) when useful.
+- Degraded-state copy in feature `constants.ts` (Title Case titles, sentence case body).
+
+## File placement
+
+| Piece | Location |
+|-------|----------|
+| Transport hook | `src/hooks/useRealtimeChannel.ts` |
+| Pure merge utils | `src/lib/query/realtime-merge.ts` |
+| Row types + merge/invalidate | `hooks/queries/use<Domain>.ts` |
+| Subscription wiring | `*RealtimeSync.tsx` in `(authenticated)/components/` shell or feature folder |
+| UI | `index.tsx` reads TanStack cache only |
+
+## Database checklist (new realtime table)
+
+In migration + paired rollback ([`database-migrations.mdc`](database-migrations.mdc)):
+
+1. RLS policies before exposing data.
+2. `alter publication supabase_realtime add table public.<table>;`
+3. When RLS filters need old row on UPDATE/DELETE:
+   `alter table public.<table> replica identity full;`
+4. Rollback: `alter publication supabase_realtime drop table if exists public.<table>;`
+
+Edge Functions own writes; Realtime is read-side notification only
+([`edge-functions.mdc`](edge-functions.mdc)).
+
+## Worked examples
+
+### Profile (singleton patch)
+
+- Sync: [`ProfileRealtimeSync.tsx`](../../src/app/(authenticated)/components/ProfileRealtimeSync.tsx)
+- Merge: `patchProfileQueryDataFromRealtimeRow` in [`useProfile.ts`](../../src/hooks/queries/useProfile.ts)
+- Mutation may `setQueryData` for instant form feedback; Realtime syncs other tabs.
+
+### Notifications (invalidate + refetch)
+
+- Sync: [`NotificationRealtimeSync.tsx`](../../src/app/(authenticated)/components/NotificationRealtimeSync.tsx)
+- On any change: `invalidateNotificationQueries`. Fine at low volume.
+- Upgrade to id-based patch when list churn grows (unread count + row insert).
+
+### Forum comments (template — not built yet)
+
+```tsx
+// hooks/queries/useComments.ts
+export function applyCommentRealtimeEvent(
+  queryClient: QueryClient,
+  threadId: string,
+  event: "INSERT" | "UPDATE" | "DELETE",
+  row: CommentRealtimeRow,
+): void {
+  queryClient.setQueryData(commentsQueryKeys.list(threadId), (prev) => {
+    if (!prev) return prev;
+    const item = mapCommentRow(row);
+    if (event === "DELETE") return { ...prev, items: removeById(prev.items, row.id) };
+    return { ...prev, items: upsertById(prev.items, item) };
+  });
+}
+```
+
+Collaborative lists: mutation does **not** patch the list; wait for Realtime.
+
+## Anti-patterns
+
+- Realtime subscription inline in `index.tsx` — use `*RealtimeSync.tsx` + `useRealtimeChannel`.
+- `.from("table")` in frontend for domain reads (hard rule).
+- Raw `WebSocket` or custom SUBSCRIBE protocol.
+- Optimistic list edits plus Realtime patch (double-update drift).
+- Domain merge logic inside `useRealtimeChannel`.

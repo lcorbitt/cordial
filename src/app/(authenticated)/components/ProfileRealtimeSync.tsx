@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { createClient } from "@/lib/supabase/client";
 import {
   invalidateProfileQueries,
   patchProfileQueryDataFromRealtimeRow,
   type ProfileRealtimeRow,
 } from "@/hooks/queries/useProfile";
+import { useRealtimeChannel } from "@/hooks/useRealtimeChannel";
 
 interface ProfileRealtimeSyncProps {
   userId: string;
@@ -22,11 +21,10 @@ interface ProfileRealtimeSyncProps {
 export function ProfileRealtimeSync({ userId }: ProfileRealtimeSyncProps) {
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const supabase = createClient();
-    const channel = supabase
-      .channel(`profile:${userId}`)
-      .on(
+  useRealtimeChannel(
+    `profile:${userId}`,
+    (channel) =>
+      channel.on(
         "postgres_changes",
         {
           event: "UPDATE",
@@ -43,13 +41,9 @@ export function ProfileRealtimeSync({ userId }: ProfileRealtimeSyncProps) {
             void invalidateProfileQueries(queryClient);
           }
         },
-      )
-      .subscribe();
-
-    return () => {
-      void supabase.removeChannel(channel);
-    };
-  }, [queryClient, userId]);
+      ),
+    [queryClient, userId],
+  );
 
   return null;
 }

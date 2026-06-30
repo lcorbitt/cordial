@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { AuthenticatedLoadingShell } from "../AuthenticatedLoadingShell";
 import { AuthenticatedShellBody } from "../AuthenticatedShellBody";
+import { NotificationRealtimeSync } from "../NotificationRealtimeSync";
 import { ProfileRealtimeSync } from "../ProfileRealtimeSync";
 
 interface AppShellProps {
@@ -24,11 +25,8 @@ export function AppShell({
   return (
     <>
       <ProfileRealtimeSync userId={userId} />
-      <AuthenticatedShellBody
-        userId={userId}
-        isAdmin={isAdmin}
-        isSuperAdmin={isSuperAdmin}
-      >
+      <NotificationRealtimeSync userId={userId} />
+      <AuthenticatedShellBody isAdmin={isAdmin} isSuperAdmin={isSuperAdmin}>
         <AuthenticatedLoadingShell>{children}</AuthenticatedLoadingShell>
       </AuthenticatedShellBody>
     </>

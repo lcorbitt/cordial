@@ -15,14 +15,12 @@ import {
 } from "./constants";
 
 interface AuthenticatedShellBodyProps {
-  userId: string;
   isAdmin: boolean;
   isSuperAdmin: boolean;
   children: ReactNode;
 }
 
 export function AuthenticatedShellBody({
-  userId,
   isAdmin,
   isSuperAdmin,
   children,
@@ -34,7 +32,6 @@ export function AuthenticatedShellBody({
 
   const topNav = (
     <MemberTopNav
-      userId={userId}
       isAdmin={isAdmin}
       isSuperAdmin={isSuperAdmin}
       layout={showAdminSidebar ? "admin" : "default"}

@@ -11,3 +11,14 @@ alwaysApply: false
 the same timestamp prefix. Apply rollbacks locally via `npm run db:rollback`.
 Production rollbacks are a deliberate ops action. Changing an RPC signature:
 drop (exact old sig) → create → re-grant.
+
+## Realtime publication checklist
+
+When a table needs client Realtime sync (**see `realtime-patterns.mdc`**):
+
+1. RLS policies must exist before exposing the table.
+2. Up migration: `alter publication supabase_realtime add table public.<table>;`
+3. When RLS filters need the old row on UPDATE/DELETE:
+   `alter table public.<table> replica identity full;`
+4. Rollback: `alter publication supabase_realtime drop table if exists public.<table>;`
+   (and revert replica identity if changed).

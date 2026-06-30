@@ -129,6 +129,31 @@ flowchart TB
 | **SSR auth bootstrap** | Layout needs session/roles | `server/loaders` → Supabase server client → Postgres (auth exception only) |
 | **SSR page prefetch** | Feature page needs initial domain data | `page.tsx` → `server/prefetch` → `edgeFunctionFetchServer` → Edge Function → `PrefetchBoundary` → client hooks |
 | **Background jobs** | Side effects after an event | `events.publish()` / `publishEvent()` → Inngest → handler → provider/DB |
+| **Realtime cache sync** | Postgres row changes while user is signed in | Edge Function write → Postgres → Supabase Realtime → `*RealtimeSync.tsx` → TanStack Query patch or invalidate |
+
+### Realtime sync (client)
+
+Supabase Realtime pushes Postgres WAL events to the browser. The browser Supabase
+client is **auth + Realtime only**; domain reads/writes still go through Edge
+Functions. Client sync follows a strict layering:
+
+```mermaid
+flowchart LR
+    EF[Edge Function read/write] --> PG[(Postgres)]
+    PF[SSR prefetch] --> TQ[TanStack Query cache]
+    EF --> PG
+    PG --> RT[Supabase Realtime]
+    RT --> Sync["*RealtimeSync.tsx"]
+    Sync --> TQ
+```
+
+1. **REST baseline** — SSR prefetch or client query seeds TanStack Query.
+2. **Incremental sync** — `useRealtimeChannel` + domain merge helpers patch or
+   invalidate the cache.
+3. **Postgres remains truth** — Realtime never replaces Edge Function reads.
+
+Full conventions: `.cursor/rules/realtime-patterns.mdc` (indexed from
+`.cursor/rules/backend-patterns.mdc`).
 
 ### Allowed Next.js route handlers (only two)
 
@@ -1039,6 +1064,8 @@ Adding "create shipment":
 | Resource | Location |
 |----------|----------|
 | Architecture rules (binding) | `AGENTS.md` + `.cursor/rules/` |
+| Backend rule index | `.cursor/rules/backend-patterns.mdc` |
+| Realtime sync conventions | `.cursor/rules/realtime-patterns.mdc` |
 | Setup instructions | `README.md` |
 | Edge Function slugs | `src/config/edge-function-slugs.ts` |
 | Env template | `.env.example` |
