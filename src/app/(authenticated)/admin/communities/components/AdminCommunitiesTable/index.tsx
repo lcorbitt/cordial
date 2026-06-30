@@ -1,7 +1,8 @@
 "use client";
 
-import { DataTable } from "@/components/DataTable";
+import { DataTable, DataTableExportButton } from "@/components/DataTable";
 import { ErrorState } from "@/components/shared/error-state";
+import { TablePagination } from "@/components/TablePagination";
 
 import {
   BACK_TO_DASHBOARD_LABEL,
@@ -11,12 +12,12 @@ import {
   LIST_ERROR_TITLE,
   LIST_LOADING_BODY,
   LOADING_TEXT_CLASS,
+  TOOLBAR_CLASS,
 } from "./constants";
 import { useAdminCommunitiesTable } from "./useAdminCommunitiesTable";
 import type { useAdminCommunities } from "../AdminCommunities/useAdminCommunities";
 
 interface AdminCommunitiesTableProps {
-  adminQuery: ReturnType<typeof useAdminCommunities>["adminQuery"];
   inviteEmails: ReturnType<typeof useAdminCommunities>["inviteEmails"];
   setInviteEmails: ReturnType<typeof useAdminCommunities>["setInviteEmails"];
   sendingInviteFor: ReturnType<typeof useAdminCommunities>["sendingInviteFor"];
@@ -24,21 +25,27 @@ interface AdminCommunitiesTableProps {
 }
 
 export function AdminCommunitiesTable({
-  adminQuery,
   inviteEmails,
   setInviteEmails,
   sendingInviteFor,
   onSendInvite,
 }: AdminCommunitiesTableProps) {
   const {
+    adminQuery,
     columns,
     rows,
+    totalCount,
     loading,
+    fetching,
+    page,
+    pageSize,
     sortColumn,
     sortDirection,
+    tableExport,
+    setPage,
+    setPageSize,
     handleSortChange,
   } = useAdminCommunitiesTable({
-    adminQuery,
     inviteEmails,
     setInviteEmails,
     sendingInviteFor,
@@ -63,6 +70,13 @@ export function AdminCommunitiesTable({
 
   return (
     <div className={CARD_CONTENT_CLASS}>
+      <div className={TOOLBAR_CLASS}>
+        <DataTableExportButton
+          columns={columns}
+          exportConfig={tableExport}
+          disabled={totalCount === 0 || fetching}
+        />
+      </div>
       <DataTable
         columns={columns}
         rows={rows}
@@ -72,6 +86,14 @@ export function AdminCommunitiesTable({
         sortDirection={sortDirection}
         onSortChange={handleSortChange}
         emptyMessage={EMPTY_MESSAGE}
+      />
+      <TablePagination
+        page={page}
+        pageSize={pageSize}
+        totalCount={totalCount}
+        onPageChange={setPage}
+        onPageSizeChange={setPageSize}
+        disabled={fetching}
       />
     </div>
   );

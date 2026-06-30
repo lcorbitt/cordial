@@ -8,6 +8,7 @@ import {
 import {
   communityQueryKeyRoot,
   communityQueryKeys,
+  type AdminCommunitiesQueryParams,
 } from "@/hooks/queries/community.keys";
 
 export { communityQueryKeyRoot, communityQueryKeys };
@@ -31,10 +32,13 @@ export function useCommunityQuery(slug: string) {
   });
 }
 
-export function useAdminCommunitiesQuery(options?: { enabled?: boolean }) {
+export function useAdminCommunitiesQuery(
+  params: AdminCommunitiesQueryParams,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
-    queryKey: communityQueryKeys.adminList(),
-    queryFn: listAdminCommunities,
+    queryKey: communityQueryKeys.adminList(params),
+    queryFn: () => listAdminCommunities(params),
     enabled: options?.enabled ?? true,
   });
 }

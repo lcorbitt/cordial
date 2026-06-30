@@ -35,7 +35,6 @@ import { useAdminCommunities } from "./useAdminCommunities";
 export function AdminCommunities() {
   const {
     form,
-    adminQuery,
     setSlugTouched,
     inviteEmails,
     setInviteEmails,
@@ -103,7 +102,6 @@ export function AdminCommunities() {
         </CardHeader>
         <CardContent className="p-0">
           <AdminCommunitiesTable
-            adminQuery={adminQuery}
             inviteEmails={inviteEmails}
             setInviteEmails={setInviteEmails}
             sendingInviteFor={sendingInviteFor}

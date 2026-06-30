@@ -5,17 +5,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { useAppRouter } from "@/hooks/use-app-router";
-import {
-  useAdminCommunitiesQuery,
-  invalidateCommunityQueries,
-} from "@/hooks/queries/useCommunity";
+import { invalidateCommunityQueries } from "@/hooks/queries/useCommunity";
 import {
   useCreateCommunityMutation,
   useSendCommunityInviteMutation,
 } from "@/hooks/mutations/useCommunity";
 import { suggestSlugFromName } from "@/lib/community/slug";
 import { runMutationWithToast } from "@/lib/toast/mutation-toast";
+import { useAppRouter } from "@/hooks/use-app-router";
 
 import {
   TOAST_CREATE_ERROR,
@@ -33,7 +30,6 @@ import { createCommunitySchema, type CreateCommunityInput } from "./types";
 export function useAdminCommunities() {
   const router = useAppRouter();
   const queryClient = useQueryClient();
-  const adminQuery = useAdminCommunitiesQuery();
   const createMutation = useCreateCommunityMutation();
   const sendInviteMutation = useSendCommunityInviteMutation();
   const [slugTouched, setSlugTouched] = useState(false);
@@ -93,7 +89,6 @@ export function useAdminCommunities() {
 
   return {
     form,
-    adminQuery,
     slugTouched,
     setSlugTouched,
     inviteEmails,

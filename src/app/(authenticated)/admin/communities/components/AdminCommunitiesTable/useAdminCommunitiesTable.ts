@@ -10,12 +10,14 @@ import {
   type SetStateAction,
 } from "react";
 
-import type { DataTableColumn, SortDirection } from "@/components/DataTable";
-import type { UseQueryResult } from "@tanstack/react-query";
 import type {
-  AdminCommunitiesResponse,
-  CommunitySummary,
-} from "@shared/dto/community.dto";
+  DataTableColumn,
+  DataTableExportConfig,
+  SortDirection,
+} from "@/components/DataTable";
+import { listAdminCommunitiesForExport } from "@/frontend/services/community.service";
+import { useAdminCommunitiesQuery } from "@/hooks/queries/useCommunity";
+import type { CommunitySummary } from "@shared/dto/community.dto";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,12 +45,10 @@ import {
 import {
   defaultSortDirectionForCommunityColumn,
   normalizeCommunitySortColumn,
-  sortCommunities,
   type CommunitySortColumn,
 } from "./utils";
 
 interface UseAdminCommunitiesTableOptions {
-  adminQuery: UseQueryResult<AdminCommunitiesResponse>;
   inviteEmails: Record<string, string>;
   setInviteEmails: Dispatch<SetStateAction<Record<string, string>>>;
   sendingInviteFor: string | null;
@@ -56,14 +56,22 @@ interface UseAdminCommunitiesTableOptions {
 }
 
 export function useAdminCommunitiesTable({
-  adminQuery,
   inviteEmails,
   setInviteEmails,
   sendingInviteFor,
   onSendInvite,
 }: UseAdminCommunitiesTableOptions) {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
   const [sortColumn, setSortColumn] = useState<CommunitySortColumn>("name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+
+  const adminQuery = useAdminCommunitiesQuery({
+    page,
+    pageSize,
+    sortColumn,
+    sortDirection,
+  });
 
   const handleSortChange = useCallback(
     (columnId: string) => {
@@ -72,8 +80,9 @@ export function useAdminCommunitiesTable({
         setSortDirection((current) => (current === "asc" ? "desc" : "asc"));
       } else {
         setSortColumn(column);
-        setSortDirection(defaultSortDirectionForCommunityColumn(column));
+        setSortDirection(defaultSortDirectionForCommunityColumn());
       }
+      setPage(1);
     },
     [sortColumn],
   );
@@ -159,20 +168,44 @@ export function useAdminCommunitiesTable({
     [inviteEmails, onSendInvite, sendingInviteFor, setInviteEmails],
   );
 
-  const rows = useMemo(() => {
-    const communities = adminQuery.data?.communities ?? [];
-    return sortCommunities(communities, sortColumn, sortDirection);
-  }, [adminQuery.data?.communities, sortColumn, sortDirection]);
+  const fetchExportRows = useCallback(async () => {
+    if ((adminQuery.data?.total ?? 0) === 0) {
+      return [];
+    }
 
+    return listAdminCommunitiesForExport({
+      sortColumn,
+      sortDirection,
+    });
+  }, [adminQuery.data?.total, sortColumn, sortDirection]);
+
+  const tableExport = useMemo<DataTableExportConfig<CommunitySummary>>(
+    () => ({
+      fileName: `communities-${new Date().toISOString().slice(0, 10)}`,
+      fetchRows: fetchExportRows,
+    }),
+    [fetchExportRows],
+  );
+
+  const rows = adminQuery.data?.items ?? [];
+  const totalCount = adminQuery.data?.total ?? 0;
+  const fetching = adminQuery.isFetching;
   const loading = adminQuery.isPending && rows.length === 0;
 
   return {
     adminQuery,
     columns,
     rows,
+    totalCount,
     loading,
+    fetching,
+    page,
+    pageSize,
     sortColumn,
     sortDirection,
+    tableExport,
+    setPage,
+    setPageSize,
     handleSortChange,
   };
 }

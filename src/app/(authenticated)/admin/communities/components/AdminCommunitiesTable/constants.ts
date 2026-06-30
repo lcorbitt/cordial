@@ -22,6 +22,8 @@ export const SENDING_INVITE_LABEL = "Sending…";
 
 export const LOADING_TEXT_CLASS = "text-muted-foreground";
 export const CARD_CONTENT_CLASS = "p-0";
+export const TOOLBAR_CLASS =
+  "flex flex-wrap items-center justify-end gap-2 border-b border-zinc-200 px-4 py-2 dark:border-zinc-700";
 export const CELL_NAME_CLASS = "font-semibold";
 export const CELL_SLUG_CLASS = "text-muted-foreground text-sm";
 export const COLUMN_HOME_CLASS = "whitespace-nowrap";

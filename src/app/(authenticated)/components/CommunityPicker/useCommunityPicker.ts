@@ -26,16 +26,24 @@ export function useCommunityPicker({
   const memberCommunitiesQuery = useCommunitiesQuery({
     enabled: !isSuperAdmin,
   });
-  const adminCommunitiesQuery = useAdminCommunitiesQuery({
-    enabled: isSuperAdmin,
-  });
+  const adminCommunitiesQuery = useAdminCommunitiesQuery(
+    {
+      page: 1,
+      pageSize: 100,
+      sortColumn: "name",
+      sortDirection: "asc",
+    },
+    { enabled: isSuperAdmin },
+  );
   const communityQuery = useCommunityQuery(activeSlug ?? "");
 
   const communitiesQuery = isSuperAdmin
     ? adminCommunitiesQuery
     : memberCommunitiesQuery;
 
-  const communities = communitiesQuery.data?.communities;
+  const communities = isSuperAdmin
+    ? adminCommunitiesQuery.data?.items
+    : memberCommunitiesQuery.data?.communities;
   const { name: displayName, slug: selectedSlug } = resolveActiveCommunity({
     pathname,
     communities,

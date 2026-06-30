@@ -3,13 +3,15 @@ import { EDGE_FUNCTION_SLUGS } from "@/config/edge-function-slugs";
 import type {
   AcceptInviteBody,
   AcceptInviteResponse,
-  AdminCommunitiesResponse,
   CommunityDetail,
+  CommunitySummary,
   CreateCommunityBody,
+  ListAdminCommunitiesResponse,
   ListCommunitiesResponse,
   SendCommunityInviteBody,
   SendCommunityInviteResponse,
 } from "@shared/dto/community.dto";
+import type { PaginatedListQuery } from "@shared/dto/pagination.dto";
 
 /**
  * Browser-side HTTP adapters for the community domain. No React here — these are
@@ -27,10 +29,37 @@ export function getCommunity(slug: string): Promise<CommunityDetail> {
   });
 }
 
-export function listAdminCommunities(): Promise<AdminCommunitiesResponse> {
-  return edgeFunctionFetch<AdminCommunitiesResponse>(
+export function listAdminCommunities(
+  query: PaginatedListQuery,
+): Promise<ListAdminCommunitiesResponse> {
+  return edgeFunctionFetch<ListAdminCommunitiesResponse>(
     EDGE_FUNCTION_SLUGS.listAdminCommunities,
+    {
+      query: {
+        page: String(query.page),
+        pageSize: String(query.pageSize),
+        sortColumn: query.sortColumn,
+        sortDirection: query.sortDirection,
+      },
+    },
   );
+}
+
+export async function listAdminCommunitiesForExport(
+  query: Pick<PaginatedListQuery, "sortColumn" | "sortDirection">,
+): Promise<CommunitySummary[]> {
+  const result = await edgeFunctionFetch<ListAdminCommunitiesResponse>(
+    EDGE_FUNCTION_SLUGS.listAdminCommunities,
+    {
+      query: {
+        export: "true",
+        sortColumn: query.sortColumn,
+        sortDirection: query.sortDirection,
+      },
+    },
+  );
+
+  return result.items;
 }
 
 export function createCommunity(

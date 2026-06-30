@@ -1,6 +1,8 @@
 /**
  * Wire contracts for community endpoints. Pure types, shared across runtimes.
  */
+import type { PaginatedListResponse } from "./pagination.dto.ts";
+
 export interface CommunitySummary {
   id: string;
   name: string;
@@ -15,9 +17,8 @@ export interface ListCommunitiesResponse {
   communities: CommunitySummary[];
 }
 
-export interface AdminCommunitiesResponse {
-  communities: CommunitySummary[];
-}
+export type ListAdminCommunitiesResponse =
+  PaginatedListResponse<CommunitySummary>;
 
 export interface CreateCommunityBody {
   name: string;

@@ -4,8 +4,11 @@ import {
   getCommunityById,
   getCommunityBySlug,
   insertCommunity,
-  listAllCommunities,
   listCommunities,
+  listCommunitiesForExport,
+  listCommunitiesPaginated,
+  normalizeCommunitySortColumn,
+  defaultSortDirectionForCommunityColumn,
   slugExists,
   type CommunityRow,
 } from "@models/communities.ts";
@@ -25,13 +28,15 @@ import { getRoleIdBySlug } from "@models/roles.ts";
 import { publishEvent } from "@services/events/publisher.ts";
 import type {
   AcceptInviteResponse,
-  AdminCommunitiesResponse,
   CommunityDetail,
   CreateCommunityBody,
+  ListAdminCommunitiesResponse,
   ListCommunitiesResponse,
   SendCommunityInviteBody,
   SendCommunityInviteResponse,
+  CommunitySummary,
 } from "@shared/dto/community.dto.ts";
+import type { PaginatedListQuery } from "@shared/dto/pagination.dto.ts";
 
 import {
   CommunityConflictError,
@@ -75,13 +80,49 @@ export async function getCommunityBySlugForUser(
   return toDetail(row);
 }
 
-export async function listAllCommunitiesAdmin(
+export async function listCommunitiesAdminPaginated(
   serviceClient: SupabaseClient,
-): Promise<AdminCommunitiesResponse> {
-  const rows = await listAllCommunities(serviceClient);
+  query: PaginatedListQuery,
+): Promise<ListAdminCommunitiesResponse> {
+  const sortColumn = normalizeCommunitySortColumn(query.sortColumn);
+  const page = Math.max(1, query.page);
+  const pageSize = Math.min(100, Math.max(1, query.pageSize));
+  const sortDirection =
+    query.sortDirection === "asc" || query.sortDirection === "desc"
+      ? query.sortDirection
+      : defaultSortDirectionForCommunityColumn(sortColumn);
+
+  const { rows, total } = await listCommunitiesPaginated(serviceClient, {
+    page,
+    pageSize,
+    sortColumn,
+    sortDirection,
+  });
+
   return {
-    communities: rows.map(toSummary),
+    items: rows.map(toSummary),
+    total,
+    page,
+    pageSize,
   };
+}
+
+export async function listCommunitiesForExportAdmin(
+  serviceClient: SupabaseClient,
+  query: Pick<PaginatedListQuery, "sortColumn" | "sortDirection">,
+): Promise<CommunitySummary[]> {
+  const sortColumn = normalizeCommunitySortColumn(query.sortColumn);
+  const sortDirection =
+    query.sortDirection === "asc" || query.sortDirection === "desc"
+      ? query.sortDirection
+      : defaultSortDirectionForCommunityColumn(sortColumn);
+
+  const rows = await listCommunitiesForExport(serviceClient, {
+    sortColumn,
+    sortDirection,
+  });
+
+  return rows.map(toSummary);
 }
 
 export async function createCommunity(
