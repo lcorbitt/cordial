@@ -190,7 +190,7 @@ function SidebarSiteNavGroup({ pathname }: { pathname: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col">
       <button
         type="button"
         aria-expanded={isExpanded}
