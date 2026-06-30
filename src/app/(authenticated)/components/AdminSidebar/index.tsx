@@ -180,13 +180,11 @@ function SidebarNavLink({
 function SidebarSiteNavGroup({ pathname }: { pathname: string }) {
   const isSiteActive = isSitePath(pathname);
   const [isExpanded, setIsExpanded] = useState(isSiteActive);
-  const [prevIsSiteActive, setPrevIsSiteActive] = useState(isSiteActive);
+  const [prevPathname, setPrevPathname] = useState(pathname);
 
-  if (isSiteActive !== prevIsSiteActive) {
-    setPrevIsSiteActive(isSiteActive);
-    if (isSiteActive) {
-      setIsExpanded(true);
-    }
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setIsExpanded(isSiteActive);
   }
 
   return (
