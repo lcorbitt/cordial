@@ -13,7 +13,7 @@ const isLocal = env.APP_ENV === "local";
 
 export const logger: Logger = pino({
   level: isLocal ? "debug" : "info",
-  base: { app: "governerds", env: env.APP_ENV },
+  base: { app: "cordial", env: env.APP_ENV },
   redact: {
     paths: [
       "password",

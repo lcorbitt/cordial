@@ -1,4 +1,6 @@
-export const TITLE = "Welcome to GoverNerds";
+import { PRODUCT_NAME } from "@/config/brand";
+
+export const TITLE = `Welcome to ${PRODUCT_NAME}`;
 
 export const DESCRIPTION =
   "A calm, welcoming community platform. The foundation is in place. The community, articles, and more are on their way.";

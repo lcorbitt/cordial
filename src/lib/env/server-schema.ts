@@ -24,7 +24,7 @@ export const serverEnvSchema = z
     // Email (EmailProvider)
     EMAIL_PROVIDER: z.enum(["resend"]).default("resend"),
     RESEND_API_KEY: z.string().min(1).optional(),
-    EMAIL_FROM: z.string().default("GoverNerds <onboarding@resend.dev>"),
+    EMAIL_FROM: z.string().default("Cordial <onboarding@resend.dev>"),
 
     // Jobs (JobProvider)
     JOB_PROVIDER: z.enum(["inngest"]).default("inngest"),

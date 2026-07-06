@@ -27,13 +27,13 @@ export function EmailLayout({
       <Body style={body}>
         <Container style={container}>
           <Section>
-            <Text style={brand}>GoverNerds</Text>
+            <Text style={brand}>Cordial</Text>
           </Section>
           {children}
           <Section>
             <Text style={footer}>
               You are receiving this email because you have an account with
-              GoverNerds. If this was not you, you can safely ignore it.
+              Cordial. If this was not you, you can safely ignore it.
             </Text>
           </Section>
         </Container>

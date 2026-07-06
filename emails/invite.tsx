@@ -10,11 +10,11 @@ export interface InviteProps {
 
 export function Invite({ inviterName, acceptUrl, communityName }: InviteProps) {
   return (
-    <EmailLayout preview="You have been invited to GoverNerds">
+    <EmailLayout preview="You have been invited to Cordial">
       <Heading style={heading}>You have an invitation</Heading>
       <Text>
         {inviterName} has invited you to join
-        {communityName ? ` ${communityName} on` : ""} GoverNerds.
+        {communityName ? ` ${communityName} on` : ""} Cordial.
       </Text>
       <Section style={{ textAlign: "center", margin: "32px 0" }}>
         <Button href={acceptUrl} style={button}>
@@ -27,7 +27,7 @@ export function Invite({ inviterName, acceptUrl, communityName }: InviteProps) {
 
 export default Invite;
 
-export const inviteSubject = "Your GoverNerds invitation";
+export const inviteSubject = "Your Cordial invitation";
 
 const heading = { fontSize: "20px", fontWeight: 600 };
 const button = {

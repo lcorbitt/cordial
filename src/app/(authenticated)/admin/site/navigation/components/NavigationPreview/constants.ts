@@ -73,7 +73,7 @@ export const EMPTY_PREVIEW_MESSAGE = "Add navigation items to see a preview.";
 
 export const EXTERNAL_ICON_CLASS = "h-3 w-3 shrink-0";
 
-export const BRAND_NAME = "GoverNerds";
+export { PRODUCT_NAME as BRAND_NAME } from "@/config/brand";
 
 export const MOBILE_MENU_LABEL = "Menu";
 

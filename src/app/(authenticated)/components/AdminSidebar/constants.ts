@@ -1,4 +1,4 @@
-export const PRODUCT_NAME = "GoverNerds";
+export { PRODUCT_NAME } from "@/config/brand";
 export const SUPER_ADMIN_SECTION_LABEL = "Super Admin";
 export const ADMIN_SECTION_LABEL = "Admin";
 export const OVERVIEW_LABEL = "Overview";

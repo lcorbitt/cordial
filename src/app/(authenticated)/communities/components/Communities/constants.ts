@@ -1,5 +1,7 @@
+import { PRODUCT_NAME } from "@/config/brand";
+
 export const TITLE = "Communities";
-export const SUBTITLE = "Spaces you belong to across GoverNerds.";
+export const SUBTITLE = `Spaces you belong to across ${PRODUCT_NAME}.`;
 export const ERROR_TITLE = "We Could Not Load Your Communities";
 export const ERROR_DESCRIPTION =
   "Please check that your local stack is running, then try again.";

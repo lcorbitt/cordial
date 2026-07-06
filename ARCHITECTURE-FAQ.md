@@ -1,4 +1,4 @@
-# GoverNerds — Architecture FAQ
+# Cordial — Architecture FAQ
 
 > **Companion to:** [`ARCHITECTURE.md`](ARCHITECTURE.md)  
 > **Audience:** Engineers onboarding to the codebase who want deeper answers to common "why?" questions.
@@ -350,7 +350,7 @@ The migration comment states the intent:
 | `user_roles.community_id` | Roles can be scoped to a specific community |
 | `roles.scope` enum (`system` \| `community`) | Distinguishes global vs community-local roles |
 | RLS policy `communities_select_member` | Members can read communities they belong to |
-| Seed row `GoverNerds HQ` | Sample community for local dev |
+| Seed row `Cordial HQ` | Sample community for local dev |
 
 ```mermaid
 erDiagram
@@ -402,7 +402,7 @@ flowchart LR
         M[community_members table]
         R[community-scoped user_roles FK]
         RS[role_scope enum]
-        S[Seed community: GoverNerds HQ]
+        S[Seed community: Cordial HQ]
         RLS[RLS policies]
         UI[List and home UI]
         NAV[Communities nav in AppShell]

@@ -6,7 +6,7 @@ alwaysApply: false
 
 # Realtime patterns (Supabase + TanStack Query)
 
-GoverNerds uses **Supabase Realtime** (managed WebSocket) for client cache sync.
+Cordial uses **Supabase Realtime** (managed WebSocket) for client cache sync.
 Do **not** build a raw `WebSocket` client, custom SUBSCRIBE frames, or hand-rolled
 exponential backoff. Transport reconnect is Supabase-managed.
 

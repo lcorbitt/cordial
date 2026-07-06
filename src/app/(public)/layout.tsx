@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { PRODUCT_NAME } from "@/config/brand";
+
 import {
   BRAND_CLASS,
   FOOTER_CLASS,
@@ -29,7 +31,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <header className={HEADER_CLASS}>
         <nav className={NAV_CLASS}>
           <Link href="/" className={BRAND_CLASS}>
-            GoverNerds
+            {PRODUCT_NAME}
           </Link>
           <div className={NAV_ACTIONS_CLASS}>
             <Link href="/login" className={LOGIN_LINK_CLASS}>
@@ -46,7 +48,9 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       </main>
       <footer className={FOOTER_CLASS}>
         <div className={FOOTER_INNER_CLASS}>
-          <span>&copy; {new Date().getFullYear()} GoverNerds</span>
+          <span>
+            &copy; {new Date().getFullYear()} {PRODUCT_NAME}
+          </span>
           <Link href="/help" className={FOOTER_LINK_CLASS}>
             {HELP_LINK_LABEL}
           </Link>

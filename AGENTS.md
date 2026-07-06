@@ -1,4 +1,4 @@
-# GoverNerds — Agent Rules
+# Cordial — Agent Rules
 
 These rules are binding for all generated code. They encode the platform
 architecture. When in doubt, prefer the most literal, boring, explicit option.

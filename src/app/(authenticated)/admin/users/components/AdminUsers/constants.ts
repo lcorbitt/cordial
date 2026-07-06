@@ -1,7 +1,8 @@
+import { PRODUCT_NAME } from "@/config/brand";
+
 export const TITLE = "Users";
 
-export const SUBTITLE =
-  "Manage platform accounts with elevated roles across GoverNerds.";
+export const SUBTITLE = `Manage platform accounts with elevated roles across ${PRODUCT_NAME}.`;
 
 export const LIST_CARD_TITLE = "Platform Users";
 

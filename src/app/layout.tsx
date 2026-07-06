@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Libre_Caslon_Text } from "next/font/google";
 
 import { BODY_CLASS, SKIP_LINK_CLASS } from "@/app/root/constants";
+import { PRODUCT_NAME } from "@/config/brand";
 import { Providers } from "@/components/providers";
 import { Hosts } from "@/hosts";
 import "./globals.css";
@@ -18,7 +19,7 @@ const libreCaslon = Libre_Caslon_Text({
 });
 
 export const metadata: Metadata = {
-  title: "GoverNerds",
+  title: PRODUCT_NAME,
   description: "A community platform for thoughtful people.",
 };
 

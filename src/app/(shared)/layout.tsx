@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { PRODUCT_NAME } from "@/config/brand";
+
 import {
   BRAND_CLASS,
   HEADER_CLASS,
@@ -19,7 +21,7 @@ export default function SharedLayout({ children }: { children: ReactNode }) {
       <header className={HEADER_CLASS}>
         <div className={HEADER_INNER_CLASS}>
           <Link href="/" className={BRAND_CLASS}>
-            GoverNerds
+            {PRODUCT_NAME}
           </Link>
         </div>
       </header>

@@ -1,6 +1,6 @@
-# GoverNerds local Supabase configuration.
+# Cordial local Supabase configuration.
 # Docs: https://supabase.com/docs/guides/cli/config
-project_id = "governerds"
+project_id = "cordial"
 
 # Ports use a dedicated 545xx range so this project can run alongside other
 # local Supabase projects. Adjust if they conflict on your machine.

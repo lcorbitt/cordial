@@ -11,7 +11,7 @@ import type { AppEvent } from "@/lib/jobs/catalog";
  * code publishes through `events.publish()` rather than calling Inngest
  * directly, so the provider stays swappable.
  */
-export const inngest = new Inngest({ id: "governerds" });
+export const inngest = new Inngest({ id: "cordial" });
 
 interface EventPublisher {
   publish(event: AppEvent): Promise<unknown>;

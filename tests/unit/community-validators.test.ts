@@ -8,11 +8,11 @@ import {
 
 describe("community validators", () => {
   it("suggests a slug from a community name", () => {
-    expect(suggestSlugFromName("GoverNerds HQ")).toBe("governerds-hq");
+    expect(suggestSlugFromName("Cordial HQ")).toBe("cordial-hq");
   });
 
   it("validates slug format", () => {
-    expect(isValidCommunitySlug("governerds-hq")).toBe(true);
+    expect(isValidCommunitySlug("cordial-hq")).toBe(true);
     expect(isValidCommunitySlug("ab")).toBe(false);
     expect(isValidCommunitySlug("Bad Slug")).toBe(false);
   });

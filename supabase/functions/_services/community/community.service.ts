@@ -277,7 +277,7 @@ export async function sendCommunityInvite(
 
   const profile = await getProfileByOwnerId(serviceClient, inviterId);
   const inviterName =
-    profile?.display_name ?? inviterEmail ?? "A GoverNerds admin";
+    profile?.display_name ?? inviterEmail ?? "A Cordial admin";
   const acceptUrl = `${siteUrl.replace(/\/$/, "")}/invite/accept?token=${encodeURIComponent(token)}`;
 
   await publishEvent({

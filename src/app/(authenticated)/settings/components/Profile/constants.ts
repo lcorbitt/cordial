@@ -1,14 +1,14 @@
+import { PRODUCT_NAME } from "@/config/brand";
+
 export const TITLE = "Settings";
-export const SUBTITLE =
-  "Update your profile and how you appear across GoverNerds.";
+export const SUBTITLE = `Update your profile and how you appear across ${PRODUCT_NAME}.`;
 export const DETAILS_TITLE = "Details";
 export const ERROR_TITLE = "We Could Not Load Your Profile";
 export const ERROR_DESCRIPTION =
   "Please check that your local stack is running, then try again.";
 export const BACK_TO_DASHBOARD_LABEL = "Back to Dashboard";
 export const DISPLAY_NAME_LABEL = "Display name";
-export const DISPLAY_NAME_HELPER =
-  "Your display name must be unique across all of GoverNerds, not just within a community.";
+export const DISPLAY_NAME_HELPER = `Your display name must be unique across all of ${PRODUCT_NAME}, not just within a community.`;
 export const DISPLAY_NAME_TAKEN_BODY =
   "That display name is already taken. Please choose another one.";
 export const BIO_LABEL = "About you";

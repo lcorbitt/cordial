@@ -81,7 +81,7 @@ on conflict (key) do nothing;
 -- Sample community (stub)
 -- ---------------------------------------------------------------------------
 insert into public.communities (name, slug)
-values ('GoverNerds HQ', 'governerds-hq')
+values ('Cordial HQ', 'cordial-hq')
 on conflict (slug) do nothing;
 
 -- ---------------------------------------------------------------------------
@@ -232,5 +232,5 @@ cross join (
     ('44444444-4444-4444-4444-444444444444'::uuid)
 ) as u(user_id)
 join public.roles r on r.slug = 'member'
-where c.slug = 'governerds-hq'
+where c.slug = 'cordial-hq'
 on conflict (community_id, user_id) do nothing;

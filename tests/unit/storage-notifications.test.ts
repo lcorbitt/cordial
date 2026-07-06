@@ -114,11 +114,11 @@ describe("notification job templates", () => {
     expect(
       buildCommunityMemberJoinedNotification({
         memberName: "Alex",
-        communityName: "GoverNerds HQ",
+        communityName: "Cordial HQ",
       }),
     ).toEqual({
       title: "New Community Member",
-      body: "Alex joined GoverNerds HQ.",
+      body: "Alex joined Cordial HQ.",
     });
   });
 
@@ -126,8 +126,8 @@ describe("notification job templates", () => {
     expect(
       buildCommunityMemberJoinedNotification({
         memberName: "  ",
-        communityName: "GoverNerds HQ",
+        communityName: "Cordial HQ",
       }).body,
-    ).toBe("Someone joined GoverNerds HQ.");
+    ).toBe("Someone joined Cordial HQ.");
   });
 });

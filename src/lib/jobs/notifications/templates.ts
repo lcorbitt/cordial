@@ -4,7 +4,7 @@
  */
 
 export const WELCOME_NOTIFICATION = {
-  title: "Welcome to GoverNerds",
+  title: "Welcome to Cordial",
   body: "Your account is ready. Explore communities and update your profile.",
   actionUrl: "/settings",
 } as const;

@@ -11,8 +11,8 @@ export function ResetPassword({ resetUrl }: ResetPasswordProps) {
     <EmailLayout preview="Reset your password">
       <Heading style={heading}>Reset your password</Heading>
       <Text>
-        We received a request to reset your GoverNerds password. Click the
-        button below to choose a new one. This link expires in one hour.
+        We received a request to reset your Cordial password. Click the button
+        below to choose a new one. This link expires in one hour.
       </Text>
       <Section style={{ textAlign: "center", margin: "32px 0" }}>
         <Button href={resetUrl} style={button}>
@@ -29,7 +29,7 @@ export function ResetPassword({ resetUrl }: ResetPasswordProps) {
 
 export default ResetPassword;
 
-export const resetPasswordSubject = "Reset your GoverNerds password";
+export const resetPasswordSubject = "Reset your Cordial password";
 
 const heading = { fontSize: "20px", fontWeight: 600 };
 const button = {

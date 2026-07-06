@@ -8,7 +8,7 @@ import { test, expect } from "@playwright/test";
 test("landing page links to login and signup", async ({ page }) => {
   await page.goto("/");
   await expect(
-    page.getByRole("heading", { name: /welcome to governerds/i }),
+    page.getByRole("heading", { name: /welcome to cordial/i }),
   ).toBeVisible();
 
   await page

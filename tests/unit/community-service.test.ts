@@ -52,13 +52,13 @@ describe("community mappers", () => {
     expect(
       toSummary({
         id: "c1",
-        name: "GoverNerds HQ",
-        slug: "governerds-hq",
+        name: "Cordial HQ",
+        slug: "cordial-hq",
       }),
     ).toEqual({
       id: "c1",
-      name: "GoverNerds HQ",
-      slug: "governerds-hq",
+      name: "Cordial HQ",
+      slug: "cordial-hq",
     });
   });
 
@@ -66,14 +66,14 @@ describe("community mappers", () => {
     expect(
       toDetail({
         id: "c1",
-        name: "GoverNerds HQ",
-        slug: "governerds-hq",
+        name: "Cordial HQ",
+        slug: "cordial-hq",
         settings: { theme: "default" },
       }),
     ).toEqual({
       id: "c1",
-      name: "GoverNerds HQ",
-      slug: "governerds-hq",
+      name: "Cordial HQ",
+      slug: "cordial-hq",
       settings: { theme: "default" },
     });
   });
@@ -82,8 +82,8 @@ describe("community mappers", () => {
     expect(
       toDetail({
         id: "c1",
-        name: "GoverNerds HQ",
-        slug: "governerds-hq",
+        name: "Cordial HQ",
+        slug: "cordial-hq",
         settings: undefined as unknown as Record<string, unknown>,
       }).settings,
     ).toEqual({});
@@ -94,32 +94,32 @@ describe("getCommunityBySlugForUser", () => {
   it("returns null when the caller is not a member", async () => {
     vi.mocked(getCommunityBySlug).mockResolvedValue({
       id: "c1",
-      name: "GoverNerds HQ",
-      slug: "governerds-hq",
+      name: "Cordial HQ",
+      slug: "cordial-hq",
       settings: {},
     });
     vi.mocked(hasCommunityMembership).mockResolvedValue(false);
 
     await expect(
-      getCommunityBySlugForUser({} as never, "user-a", "governerds-hq"),
+      getCommunityBySlugForUser({} as never, "user-a", "cordial-hq"),
     ).resolves.toBeNull();
   });
 
   it("returns community detail when the caller is a member", async () => {
     vi.mocked(getCommunityBySlug).mockResolvedValue({
       id: "c1",
-      name: "GoverNerds HQ",
-      slug: "governerds-hq",
+      name: "Cordial HQ",
+      slug: "cordial-hq",
       settings: { theme: "default" },
     });
     vi.mocked(hasCommunityMembership).mockResolvedValue(true);
 
     await expect(
-      getCommunityBySlugForUser({} as never, "user-a", "governerds-hq"),
+      getCommunityBySlugForUser({} as never, "user-a", "cordial-hq"),
     ).resolves.toEqual({
       id: "c1",
-      name: "GoverNerds HQ",
-      slug: "governerds-hq",
+      name: "Cordial HQ",
+      slug: "cordial-hq",
       settings: { theme: "default" },
     });
   });

@@ -1,6 +1,6 @@
-# GoverNerds Platform Foundation
+# Cordial Platform Foundation
 
-The production-ready foundation for the GoverNerds community platform. This phase
+The production-ready foundation for the Cordial community platform. This phase
 ships the platform every future feature sits on — authentication, authorization,
 feature flags, background jobs, email, search, logging, monitoring, and a strict,
 testable architecture — without building the product features themselves yet.

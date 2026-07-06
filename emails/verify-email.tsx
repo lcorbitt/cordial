@@ -11,8 +11,8 @@ export function VerifyEmail({ verifyUrl }: VerifyEmailProps) {
     <EmailLayout preview="Confirm your email address">
       <Heading style={heading}>Confirm your email address</Heading>
       <Text>
-        Welcome to GoverNerds! Please confirm your email address so we know it
-        is really you.
+        Welcome to Cordial! Please confirm your email address so we know it is
+        really you.
       </Text>
       <Section style={{ textAlign: "center", margin: "32px 0" }}>
         <Button href={verifyUrl} style={button}>
@@ -30,7 +30,7 @@ export function VerifyEmail({ verifyUrl }: VerifyEmailProps) {
 
 export default VerifyEmail;
 
-export const verifyEmailSubject = "Confirm your GoverNerds email";
+export const verifyEmailSubject = "Confirm your Cordial email";
 
 const heading = { fontSize: "20px", fontWeight: 600 };
 const button = {

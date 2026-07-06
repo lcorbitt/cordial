@@ -1,4 +1,4 @@
-# GoverNerds — Architecture & Onboarding Guide
+# Cordial — Architecture & Onboarding Guide
 
 > **Snapshot date:** June 2026  
 > **Phase:** Platform foundation (no product features yet)  
@@ -32,7 +32,7 @@ This document is a snapshot of where the codebase is today: what is built, how t
 
 ## 1. What this project is
 
-GoverNerds is a community platform. **This repo ships the foundation only** — the infrastructure every future feature will sit on:
+Cordial is a community platform. **This repo ships the foundation only** — the infrastructure every future feature will sit on:
 
 | Built | Not built yet |
 |-------|---------------|

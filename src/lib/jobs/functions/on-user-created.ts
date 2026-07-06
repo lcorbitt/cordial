@@ -23,7 +23,7 @@ export const onUserCreated = inngest.createFunction(
           template: "notification",
           to: data.email,
           payload: {
-            heading: "Welcome to GoverNerds",
+            heading: "Welcome to Cordial",
             body: "Your account is ready. We are glad you are here.",
           },
         },
