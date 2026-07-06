@@ -240,9 +240,10 @@ placeholders to build, and deploys read secrets from GitHub/Vercel.
 
 ## Deployment
 
-- The app deploys to Vercel (`.github/workflows/deploy.yml`): preview on PRs,
-  production on `main`.
-- Edge Functions deploy via the Supabase CLI in the same workflow.
+- The app deploys to Vercel (`.github/workflows/ci.yml`, after `verify` passes):
+  preview on PRs, production on `main`.
+- Edge Functions deploy via the Supabase CLI in the same workflow (main only).
+- `e2e` runs in parallel with `verify` and does not gate deploy.
 - Required secrets: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`,
   `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID`.
 

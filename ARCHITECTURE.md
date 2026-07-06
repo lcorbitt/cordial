@@ -939,10 +939,13 @@ hasPermission(["users:read"], "flags:manage");                   // false
 
 ```mermaid
 flowchart LR
-    PUSH[Push / PR] --> LINT[lint + typecheck]
-    LINT --> TEST[vitest]
-    TEST --> BUILD[next build]
-    BUILD --> E2E[playwright e2e]
+    PUSH[Push / PR] --> VERIFY[verify]
+    PUSH --> E2E[playwright e2e]
+    VERIFY --> DEPLOY_V[deploy-vercel]
+    VERIFY --> DEPLOY_E[deploy-edge-functions]
+    DEPLOY_V -->|"PR"| PREVIEW[Vercel Preview]
+    DEPLOY_V -->|"main"| VERCEL_PROD[Vercel Production]
+    DEPLOY_E -->|"main only"| EDGE[Supabase Edge Functions]
 ```
 
 Pre-commit hook (Husky + lint-staged): ESLint fix + Prettier on staged files.
@@ -992,16 +995,18 @@ See `.env.example`. Key groups:
 ```mermaid
 flowchart LR
     subgraph GitHub
-        PR[Pull Request] --> PREVIEW[Vercel Preview + Supabase preview]
-        MAIN[Merge to main] --> PROD[Vercel Production + Supabase deploy]
+        PR[Pull Request] --> VERIFY[verify]
+        MAIN[Merge to main] --> VERIFY
+        VERIFY --> PREVIEW[Vercel Preview]
+        VERIFY --> PROD[Vercel Production + Supabase Edge deploy]
     end
 ```
 
 | Target | Trigger | Workflow |
 |--------|---------|----------|
-| Vercel preview | PR opened | `.github/workflows/deploy.yml` |
-| Vercel production | Merge to `main` | Same workflow |
-| Edge Functions | Same deploy | Supabase CLI in workflow |
+| Vercel preview | PR to `main`, after `verify` | `.github/workflows/ci.yml` |
+| Vercel production | Merge to `main`, after `verify` | Same workflow |
+| Edge Functions | Push to `main`, after `verify` | Supabase CLI in same workflow |
 
 **Required secrets:** `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID`.
 
