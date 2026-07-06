@@ -992,23 +992,38 @@ See `.env.example`. Key groups:
 
 ## 15. Deployment
 
+### Branch model
+
+| Branch | Role |
+|--------|------|
+| `develop` | Integration. Feature work merges here via PR. |
+| `main` | Production. Updated via **Promote Develop** workflow. |
+
 ```mermaid
 flowchart LR
-    subgraph GitHub
-        PR[Pull Request] --> VERIFY[verify]
-        MAIN[Merge to main] --> VERIFY
-        VERIFY --> PREVIEW[Vercel Preview]
-        VERIFY --> PROD[Vercel Production + Supabase Edge deploy]
-    end
+    FEAT[feature branch] -->|PR| DEV[develop]
+    DEV -->|push| CI[CI verify + e2e]
+    CI -->|success| PROMOTE[Promote Develop]
+    PROMOTE --> MAIN[main]
+    MAIN -->|CI verify| PROD[Vercel + Edge production]
+    DEV -->|PR| PREVIEW[Vercel preview]
 ```
+
+### CI pipeline
+
+Push/PR to `develop` or `main` runs verify, e2e, and (for PRs) preview deploy.
+Push to `main` only triggers production deploy.
 
 | Target | Trigger | Workflow |
 |--------|---------|----------|
-| Vercel preview | PR to `main`, after `verify` | `.github/workflows/ci.yml` |
-| Vercel production | Merge to `main`, after `verify` | Same workflow |
+| Vercel preview | PR to `develop` or `main`, after `verify` | `.github/workflows/ci.yml` |
+| Vercel production | Push to `main`, after `verify` | Same |
 | Edge Functions | Push to `main`, after `verify` | Supabase CLI in same workflow |
+| Promote develop → main | Automatic after CI succeeds on push to `develop` | `.github/workflows/promote-develop.yml` |
 
-**Required secrets:** `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID`.
+**Promote Develop** runs automatically when CI completes successfully on a push to `develop`. It merges into `main` (merge commit) if `develop` is ahead; the resulting `main` push deploys to production. Configure the `production` GitHub Environment for required approvers before the merge step runs.
+
+**Required secrets:** `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID`. Optional: `PROMOTE_GITHUB_TOKEN` when `main` branch protection blocks the default `GITHUB_TOKEN`.
 
 **Environments:** `local` → `staging` → `production`, separated by env vars. No secrets committed.
 
