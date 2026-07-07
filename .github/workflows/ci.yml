@@ -6,6 +6,24 @@ on:
   pull_request:
     branches: [main, develop]
 
+permissions:
+  contents: read
+
+env:
+  # Non-secret placeholders so env validation and the build pass in CI.
+  # APP_ENV stays development so production-only runtime checks are not required.
+  APP_ENV: development
+  NEXT_PUBLIC_APP_ENV: development
+  NEXT_PUBLIC_SITE_URL: http://localhost:3000
+  NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-anon-key-placeholder
+  SUPABASE_SERVICE_ROLE_KEY: ci-service-role-placeholder
+  EMAIL_PROVIDER: resend
+  JOB_PROVIDER: inngest
+  ANALYTICS_PROVIDER: none
+  POSTHOG_HOST: https://us.i.posthog.com
+  NEXT_PUBLIC_POSTHOG_HOST: https://us.i.posthog.com
+
 jobs:
   verify:
     name: Lint, typecheck, test, build
@@ -13,19 +31,6 @@ jobs:
     concurrency:
       group: verify-${{ github.ref }}
       cancel-in-progress: true
-    env:
-      # Non-secret placeholders so env validation and the build pass in CI.
-      APP_ENV: development
-      NEXT_PUBLIC_APP_ENV: development
-      NEXT_PUBLIC_SITE_URL: http://localhost:3000
-      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-anon-key-placeholder
-      SUPABASE_SERVICE_ROLE_KEY: ci-service-role-placeholder
-      EMAIL_PROVIDER: resend
-      JOB_PROVIDER: inngest
-      ANALYTICS_PROVIDER: none
-      POSTHOG_HOST: https://us.i.posthog.com
-      NEXT_PUBLIC_POSTHOG_HOST: https://us.i.posthog.com
     steps:
       - uses: actions/checkout@v4
 
@@ -36,6 +41,14 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json', 'next.config.ts', 'postcss.config.mjs', 'src/**', 'public/**') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-
 
       - name: Lint
         run: npm run lint
@@ -52,24 +65,27 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Prepare production build artifact
+        run: |
+          rsync -a --exclude cache .next/ next-artifact/
+
+      - name: Upload production build
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: next-artifact/
+          retention-days: 1
+          if-no-files-found: error
+
   e2e:
     name: End-to-end + accessibility
+    needs: verify
     runs-on: ubuntu-latest
     concurrency:
       group: e2e-${{ github.ref }}
       cancel-in-progress: true
     env:
-      APP_ENV: development
-      NEXT_PUBLIC_APP_ENV: development
-      NEXT_PUBLIC_SITE_URL: http://localhost:3000
-      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-anon-key-placeholder
-      SUPABASE_SERVICE_ROLE_KEY: ci-service-role-placeholder
-      EMAIL_PROVIDER: resend
-      JOB_PROVIDER: inngest
-      ANALYTICS_PROVIDER: none
-      POSTHOG_HOST: https://us.i.posthog.com
-      NEXT_PUBLIC_POSTHOG_HOST: https://us.i.posthog.com
+      E2E_PREBUILT: "true"
     steps:
       - uses: actions/checkout@v4
 
@@ -81,11 +97,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Download production build
+        uses: actions/download-artifact@v4
+        with:
+          name: next-build
+          path: .next
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: npm run test:e2e
+        run: npm run test:e2e:prebuilt
 
       - name: Upload report
         if: ${{ !cancelled() }}

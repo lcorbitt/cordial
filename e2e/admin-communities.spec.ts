@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 
 /**
  * Admin community management smoke tests.
+ * CI uses placeholder keys, so local-stack describes are skipped there.
  */
 test("admin communities page requires sign-in", async ({ page }) => {
   await page.goto("/admin/communities");
@@ -18,11 +19,18 @@ test("invite accept page is reachable without sign-in", async ({ page }) => {
 });
 
 const hasLocalStack =
-  process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("127.0.0.1") &&
+  !process.env.CI &&
+  (process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("127.0.0.1") ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("localhost")) &&
   !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.includes("placeholder");
 
 test.describe("admin communities (local stack)", () => {
-  test.skip(!hasLocalStack, "Requires a running local Supabase stack");
+  test.skip(
+    !hasLocalStack,
+    process.env.CI
+      ? "Skipped in CI (no Supabase stack)"
+      : "Requires a running local Supabase stack",
+  );
 
   test("admin can create a community and see it in the list", async ({
     page,

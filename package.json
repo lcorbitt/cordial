@@ -13,6 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "test:e2e:ci": "CI=true playwright test",
+    "test:e2e:prebuilt": "CI=true E2E_PREBUILT=true playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "email:dev": "email dev --dir emails",
