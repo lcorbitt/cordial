@@ -11,6 +11,7 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   resolve: {
     alias: {
+      "@": path.resolve(root, "src"),
       "@services": path.resolve(root, "supabase/functions/_services"),
       "@models": path.resolve(root, "supabase/functions/_models"),
       "@shared": path.resolve(root, "supabase/functions/_shared"),
