@@ -46,4 +46,16 @@ describe("parseServerEnv", () => {
 
     expect(result.success).toBe(true);
   });
+
+  it("allows missing INNGEST_SIGNING_KEY in production during next build", () => {
+    const result = parseServerEnv(
+      {
+        ...baseEnv,
+        APP_ENV: "production",
+      },
+      { skipProductionRuntimeChecks: true },
+    );
+
+    expect(result.success).toBe(true);
+  });
 });
