@@ -28,12 +28,13 @@ export function useReveal({
     enabled: !immediate,
   });
   const shouldMount = immediate || inView;
-  const [canTransition, setCanTransition] = useState(false);
-  const [delayedVisible, setDelayedVisible] = useState(false);
-  const visible = shouldMount && (prefersReducedMotion || delayedVisible);
+  const [canTransition, setCanTransition] = useState(immediate);
+  const [delayedVisible, setDelayedVisible] = useState(immediate);
+  const visible =
+    shouldMount && (prefersReducedMotion || delayedVisible || immediate);
 
   useEffect(() => {
-    if (!shouldMount || prefersReducedMotion) {
+    if (!shouldMount || prefersReducedMotion || immediate) {
       return;
     }
 
@@ -55,7 +56,7 @@ export function useReveal({
       setCanTransition(false);
       setDelayedVisible(false);
     };
-  }, [shouldMount, prefersReducedMotion, delay]);
+  }, [shouldMount, prefersReducedMotion, delay, immediate]);
 
   return {
     ref,

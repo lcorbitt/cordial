@@ -2,18 +2,17 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+    branches: [main, develop]
 
 jobs:
   verify:
     name: Lint, typecheck, test, build
     runs-on: ubuntu-latest
+    concurrency:
+      group: verify-${{ github.ref }}
+      cancel-in-progress: true
     env:
       # Non-secret placeholders so env validation and the build pass in CI.
       APP_ENV: development
@@ -56,6 +55,9 @@ jobs:
   e2e:
     name: End-to-end + accessibility
     runs-on: ubuntu-latest
+    concurrency:
+      group: e2e-${{ github.ref }}
+      cancel-in-progress: true
     env:
       APP_ENV: development
       NEXT_PUBLIC_APP_ENV: development

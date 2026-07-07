@@ -36,7 +36,8 @@
   --secondary: var(--brand-light-gray);
   --secondary-foreground: var(--brand-slate);
   --muted: var(--brand-light-gray);
-  --muted-foreground: var(--brand-gray);
+  /* Slightly darker than brand gray for 4.5:1 on cream. */
+  --muted-foreground: #6e6e6e;
   --accent: color-mix(in srgb, var(--brand-gold) 18%, var(--brand-white));
   --accent-foreground: var(--brand-black);
   --destructive: oklch(0.577 0.245 27.325);

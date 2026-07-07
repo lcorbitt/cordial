@@ -1,0 +1,99 @@
+name: Promote Develop
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [develop]
+
+concurrency:
+  group: promote-develop
+  cancel-in-progress: false
+
+jobs:
+  gate:
+    name: Check Trigger
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate CI succeeded on develop
+        run: |
+          if [ "${{ github.event.workflow_run.conclusion }}" != "success" ]; then
+            echo "CI did not succeed. Skipping promotion."
+            exit 1
+          fi
+          if [ "${{ github.event.workflow_run.event }}" != "push" ]; then
+            echo "Only pushes to develop are promoted automatically."
+            exit 1
+          fi
+
+  validate-branches:
+    name: Validate Branch State
+    needs: gate
+    runs-on: ubuntu-latest
+    outputs:
+      should_promote: ${{ steps.check.outputs.should_promote }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure develop can be promoted
+        id: check
+        run: |
+          git fetch origin main develop
+
+          if ! git rev-parse --verify origin/develop >/dev/null 2>&1; then
+            echo '::error::origin/develop does not exist.'
+            exit 1
+          fi
+
+          if [ "$(git rev-parse origin/develop)" = "$(git rev-parse origin/main)" ]; then
+            echo "develop and main are in sync. Nothing to promote."
+            echo "should_promote=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if ! git merge-base --is-ancestor origin/main origin/develop; then
+            echo '::error::main has commits not in develop. Merge main into develop first.'
+            exit 1
+          fi
+
+          echo "Promoting $(git rev-parse --short origin/develop) onto main."
+          echo "should_promote=true" >> "$GITHUB_OUTPUT"
+
+  promote:
+    name: Merge Develop Into Main
+    needs: validate-branches
+    if: needs.validate-branches.outputs.should_promote == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PROMOTE_GITHUB_TOKEN || github.token }}
+
+      - name: Merge develop into main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main develop
+          git checkout main
+          git pull --ff-only origin main
+          git merge origin/develop --no-ff -m "Promote develop to main"
+          git push origin main
+
+      - name: Summary
+        run: |
+          echo "Promoted develop ($(git rev-parse --short origin/develop)) to main."
+          echo "Production deploy will run after CI succeeds on main."
+
+  report-synced:
+    name: Already In Sync
+    needs: validate-branches
+    if: needs.validate-branches.outputs.should_promote != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "develop and main already point to the same commit. No merge needed."

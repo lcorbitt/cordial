@@ -939,10 +939,13 @@ hasPermission(["users:read"], "flags:manage");                   // false
 
 ```mermaid
 flowchart LR
-    PUSH[Push / PR] --> LINT[lint + typecheck]
-    LINT --> TEST[vitest]
-    TEST --> BUILD[next build]
-    BUILD --> E2E[playwright e2e]
+    PUSH[Push / PR] --> VERIFY[verify]
+    PUSH --> E2E[playwright e2e]
+    VERIFY --> DEPLOY_V[deploy-vercel]
+    VERIFY --> DEPLOY_E[deploy-edge-functions]
+    DEPLOY_V -->|"PR"| PREVIEW[Vercel Preview]
+    DEPLOY_V -->|"main"| VERCEL_PROD[Vercel Production]
+    DEPLOY_E -->|"main only"| EDGE[Supabase Edge Functions]
 ```
 
 Pre-commit hook (Husky + lint-staged): ESLint fix + Prettier on staged files.
@@ -989,21 +992,38 @@ See `.env.example`. Key groups:
 
 ## 15. Deployment
 
+### Branch model
+
+| Branch | Role |
+|--------|------|
+| `develop` | Integration. Feature work merges here via PR. |
+| `main` | Production. Updated via **Promote Develop** workflow. |
+
 ```mermaid
 flowchart LR
-    subgraph GitHub
-        PR[Pull Request] --> PREVIEW[Vercel Preview + Supabase preview]
-        MAIN[Merge to main] --> PROD[Vercel Production + Supabase deploy]
-    end
+    FEAT[feature branch] -->|PR| DEV[develop]
+    DEV -->|push| CI[CI verify + e2e]
+    CI -->|success| PROMOTE[Promote Develop]
+    PROMOTE --> MAIN[main]
+    MAIN -->|CI verify| PROD[Vercel + Edge production]
+    DEV -->|PR| PREVIEW[Vercel preview]
 ```
+
+### CI pipeline
+
+Push/PR to `develop` or `main` runs verify, e2e, and (for PRs) preview deploy.
+Push to `main` only triggers production deploy.
 
 | Target | Trigger | Workflow |
 |--------|---------|----------|
-| Vercel preview | PR opened | `.github/workflows/deploy.yml` |
-| Vercel production | Merge to `main` | Same workflow |
-| Edge Functions | Same deploy | Supabase CLI in workflow |
+| Vercel preview | PR to `develop` or `main`, after `verify` | `.github/workflows/ci.yml` |
+| Vercel production | Push to `main`, after `verify` | Same |
+| Edge Functions | Push to `main`, after `verify` | Supabase CLI in same workflow |
+| Promote develop → main | Automatic after CI succeeds on push to `develop` | `.github/workflows/promote-develop.yml` |
 
-**Required secrets:** `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID`.
+**Promote Develop** runs automatically when CI completes successfully on a push to `develop`. It merges into `main` (merge commit) if `develop` is ahead; the resulting `main` push deploys to production. Configure the `production` GitHub Environment for required approvers before the merge step runs.
+
+**Required secrets:** `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID`. Optional: `PROMOTE_GITHUB_TOKEN` when `main` branch protection blocks the default `GITHUB_TOKEN`.
 
 **Environments:** `local` → `staging` → `production`, separated by env vars. No secrets committed.
 

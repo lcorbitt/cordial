@@ -5,8 +5,14 @@ import { parseServerEnv, type ServerEnv } from "./server-schema";
 export type { ServerEnv };
 export { parseServerEnv };
 
+function isNextBuildPhase(): boolean {
+  return process.env.NEXT_PHASE === "phase-production-build";
+}
+
 function loadServerEnv(): ServerEnv {
-  const parsed = parseServerEnv();
+  const parsed = parseServerEnv(process.env, {
+    skipProductionRuntimeChecks: isNextBuildPhase(),
+  });
 
   if (!parsed.success) {
     const issues = parsed.error.issues

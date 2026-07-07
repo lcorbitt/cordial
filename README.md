@@ -240,11 +240,47 @@ placeholders to build, and deploys read secrets from GitHub/Vercel.
 
 ## Deployment
 
-- The app deploys to Vercel (`.github/workflows/deploy.yml`): preview on PRs,
-  production on `main`.
-- Edge Functions deploy via the Supabase CLI in the same workflow.
-- Required secrets: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`,
-  `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID`.
+### Branch model
+
+| Branch | Role |
+|--------|------|
+| `develop` | Integration branch. Feature PRs merge here. CI runs on every push and PR. |
+| `main` | Production branch. Updated only via **Promote Develop** (or hotfix PR). Push triggers production deploy. |
+
+```text
+feature/* ──PR──► develop ──CI pass──► main ──CI──► production
+```
+
+### CI and deploy (`.github/workflows/ci.yml`)
+
+- **Production:** Vercel + Supabase Edge Functions deploy on push to `main`, after CI succeeds.
+- **`e2e`** runs in parallel with `verify` and does not gate deploy.
+
+### Promote Develop (`.github/workflows/promote-develop.yml`)
+
+Automatically promotes `develop` to `main` after every **successful push to `develop`** (once CI passes). For a manual rerun with a full CI gate, use **Promote Develop (Manual)**.
+
+```text
+push to develop → CI (verify + e2e) → Promote Develop → merge to main → CI on main → production deploy
+```
+
+1. Merge a PR (or push) to `develop`
+2. CI runs on the push
+3. When CI succeeds, **Promote Develop** runs automatically
+4. If `develop` is ahead of `main`, it merges `develop` → `main` (merge commit)
+5. The push to `main` triggers CI, then production deploy workflows
+
+**Manual rerun:** Actions → **Promote Develop (Manual)** → type `promote` (re-runs verify + e2e on `develop` before merge).
+
+**Preconditions:** `develop` is ahead of `main`; `main` is fully contained in `develop` (merge `main` into `develop` first after hotfixes). If branches are already in sync, the workflow reports **Already In Sync** instead of merging.
+
+**Approval gate:** The promote job uses the GitHub **`production`** environment. Add required reviewers in repo **Settings → Environments → production**.
+
+**Branch protection on `main`:** Either allow GitHub Actions to bypass push rules, or add a `PROMOTE_GITHUB_TOKEN` secret (PAT with `contents: write`) for the merge push.
+
+### Secrets
+
+`VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID`. Optional: `PROMOTE_GITHUB_TOKEN`.
 
 ## What is intentionally NOT built yet
 
