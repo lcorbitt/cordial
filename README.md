@@ -302,12 +302,12 @@ push to develop → CI (verify + e2e) → Promote Develop → merge to main → 
 1. Merge a PR (or push) to `develop`
 2. CI runs on the push
 3. When CI succeeds, **Promote Develop** runs automatically
-4. If `develop` is ahead of `main`, it merges `develop` → `main` (merge commit)
+4. If `develop` is ahead of `main`, it merges `develop` → `main` (merge commit), then fast-forwards `develop` to match `main`
 5. The push to `main` triggers CI, then production deploy workflows
 
 **Manual rerun:** Actions → **Promote Develop (Manual)** → type `promote` (re-runs verify + e2e on `develop` before merge).
 
-**Preconditions:** `develop` is ahead of `main`; `main` is fully contained in `develop` (merge `main` into `develop` first after hotfixes). If branches are already in sync, the workflow reports **Already In Sync** instead of merging.
+**Branch sync:** If `main` has promotion commits that `develop` is missing, the workflow merges `main` into `develop` automatically before promoting. After each promote, `develop` is fast-forwarded to `main` so branches stay aligned without manual git commands.
 
 **Approval gate:** The promote job uses the GitHub **`production`** environment. Add required reviewers in repo **Settings → Environments → production**.
 
