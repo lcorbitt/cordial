@@ -65,14 +65,15 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Strip build cache from artifact
-        run: rm -rf .next/cache
+      - name: Prepare production build artifact
+        run: |
+          rsync -a --exclude cache .next/ next-artifact/
 
       - name: Upload production build
         uses: actions/upload-artifact@v4
         with:
           name: next-build
-          path: .next
+          path: next-artifact/
           retention-days: 1
           if-no-files-found: error
 

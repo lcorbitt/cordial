@@ -189,7 +189,7 @@ Super admins land on `/admin/overview` with platform analytics.
   It does not reuse the verify artifact (that only happens in GitHub Actions).
 - **`npm run test:e2e:prebuilt`** matches GHA after a local build:
   `npm run build` then `npm run test:e2e:prebuilt`.
-- **CI** builds once in `verify`, strips `.next/cache` from the artifact, and e2e
+- **CI** builds once in `verify`, uploads `.next` output (excluding cache), and e2e
   downloads it before `next start`. `APP_ENV` stays `development` with placeholder
   secrets so smoke tests run without real Supabase or production-only env checks.
 - **Signed-in flows** (`communities`, `admin`) require a local Supabase stack at
