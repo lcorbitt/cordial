@@ -3,6 +3,7 @@ import { test, expect } from "@playwright/test";
 /**
  * Communities route smoke tests. Auth-gated routes redirect anonymous visitors;
  * the signed-in flow runs only when a real local Supabase stack is configured.
+ * CI uses placeholder keys, so local-stack describes are skipped there.
  */
 test("communities page requires sign-in", async ({ page }) => {
   await page.goto("/communities");
@@ -15,11 +16,18 @@ test("community detail page requires sign-in", async ({ page }) => {
 });
 
 const hasLocalStack =
-  process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("127.0.0.1") &&
+  !process.env.CI &&
+  (process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("127.0.0.1") ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL?.includes("localhost")) &&
   !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.includes("placeholder");
 
 test.describe("communities (local stack)", () => {
-  test.skip(!hasLocalStack, "Requires a running local Supabase stack");
+  test.skip(
+    !hasLocalStack,
+    process.env.CI
+      ? "Skipped in CI (no Supabase stack)"
+      : "Requires a running local Supabase stack",
+  );
 
   test("member can browse communities list and open a community home", async ({
     page,

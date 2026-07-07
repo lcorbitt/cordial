@@ -169,7 +169,9 @@ Super admins land on `/admin/overview` with platform analytics.
 | `npm run lint`         | ESLint (enforces architectural boundaries)         |
 | `npm run format`       | Prettier write                                     |
 | `npm run test`         | Vitest unit + component tests                       |
-| `npm run test:e2e`     | Playwright end-to-end + accessibility tests         |
+| `npm run test:e2e`     | Playwright e2e + a11y (dev server on port 3000)     |
+| `npm run test:e2e:ci`  | Same suite against a production build (`CI=true`)   |
+| `npm run test:e2e:prebuilt` | GHA parity: `next start` on an existing `.next` build |
 | `npm run db:fresh`     | Reset DB → migrations → seed + print test users     |
 | `npm run db:reset`     | Same as `db:fresh`                                  |
 | `npm run db:rollback`  | Apply latest rollback script(s) to local DB          |
@@ -177,6 +179,39 @@ Super admins land on `/admin/overview` with platform analytics.
 | `npm run load:smoke`   | k6 smoke load test (local, ~100 VUs)                 |
 | `npm run load:stress`  | k6 stress test (staging, 25k–50k VUs) — see `load/README.md` |
 | `npm run email:dev`    | Preview React Email templates                       |
+
+### End-to-end tests
+
+- **`npm run test:e2e`** starts `next dev` (or reuses an existing server on port 3000).
+  Stop other apps on `:3000` first, or run `npm run dev:local` intentionally. When
+  debugging flakes, use a free port or `npm run test:e2e:ci` for a fresh server.
+- **`npm run test:e2e:ci`** is CI-like: runs a full production `build && start`.
+  It does not reuse the verify artifact (that only happens in GitHub Actions).
+- **`npm run test:e2e:prebuilt`** matches GHA after a local build:
+  `npm run build` then `npm run test:e2e:prebuilt`.
+- **CI** builds once in `verify`, strips `.next/cache` from the artifact, and e2e
+  downloads it before `next start`. `APP_ENV` stays `development` with placeholder
+  secrets so smoke tests run without real Supabase or production-only env checks.
+- **Signed-in flows** (`communities`, `admin`) require a local Supabase stack at
+  `http://127.0.0.1:54321` (or `localhost`) with non-placeholder keys. They are
+  skipped in CI.
+
+Placeholder env for local CI-parity runs (override `.env.local` for that shell):
+
+```bash
+APP_ENV=development \
+NEXT_PUBLIC_APP_ENV=development \
+NEXT_PUBLIC_SITE_URL=http://localhost:3000 \
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321 \
+NEXT_PUBLIC_SUPABASE_ANON_KEY=ci-anon-key-placeholder \
+SUPABASE_SERVICE_ROLE_KEY=ci-service-role-placeholder \
+EMAIL_PROVIDER=resend \
+JOB_PROVIDER=inngest \
+ANALYTICS_PROVIDER=none \
+POSTHOG_HOST=https://us.i.posthog.com \
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com \
+npm run test:e2e:ci
+```
 
 ## Project structure
 
@@ -254,7 +289,7 @@ feature/* ──PR──► develop ──CI pass──► main ──CI──�
 ### CI and deploy (`.github/workflows/ci.yml`)
 
 - **Production:** Vercel + Supabase Edge Functions deploy on push to `main`, after CI succeeds.
-- **`e2e`** runs in parallel with `verify` and does not gate deploy.
+- **`e2e`** runs after `verify` and reuses the production build artifact.
 
 ### Promote Develop (`.github/workflows/promote-develop.yml`)
 
