@@ -160,9 +160,17 @@ jobs:
     name: Merge Develop Into Main
     needs: [validate-branches, verify-develop, e2e-develop]
     if: |
+      always() &&
+      needs.validate-branches.result == 'success' &&
       needs.validate-branches.outputs.should_promote == 'true' &&
-      (needs.verify-develop.result == 'success' || needs.verify-develop.result == 'skipped') &&
-      (needs.e2e-develop.result == 'success' || needs.e2e-develop.result == 'skipped')
+      (
+        github.event_name == 'workflow_run' ||
+        (
+          github.event_name == 'workflow_dispatch' &&
+          needs.verify-develop.result == 'success' &&
+          needs.e2e-develop.result == 'success'
+        )
+      )
     runs-on: ubuntu-latest
     environment: production
     permissions:
