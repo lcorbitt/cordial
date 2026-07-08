@@ -52,3 +52,6 @@ next-env.d.ts
 
 # stakeholder docs (maintained locally, not in repo)
 /docs/STAKEHOLDER-BRIEF.md
+
+# code review artifacts (generated locally, not in repo)
+.cursor/reviews/

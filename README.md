@@ -1,9 +1,9 @@
-# Cordial Platform Foundation
+# Cordial
 
-The production-ready foundation for the Cordial community platform. This phase
-ships the platform every future feature sits on — authentication, authorization,
-feature flags, background jobs, email, search, logging, monitoring, and a strict,
-testable architecture — without building the product features themselves yet.
+Cordial is a community platform built on a strict, testable architecture. It
+provides authentication, authorization, feature flags, background jobs, email,
+search, structured logging, and monitoring behind a consistent Supabase Edge
+Function API.
 
 Built with Next.js (App Router), TypeScript, Supabase (Postgres + Edge
 Functions + Realtime), Tailwind, shadcn/ui, TanStack Query, Jotai, Upstash
@@ -326,9 +326,3 @@ push to develop → CI (verify + e2e) → Promote Develop → merge to main → 
 ### Secrets
 
 `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_PROJECT_ID`. Optional: `PROMOTE_GITHUB_TOKEN`.
-
-## What is intentionally NOT built yet
-
-Forums, comments, voting, moderation, memberships, payments, video, CMS,
-notifications, DMs, communities UI, and product analytics. The foundation is
-designed so each of these slots in without re-architecting.
