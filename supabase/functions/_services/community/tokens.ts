@@ -19,7 +19,7 @@ export function inviteExpiresAt(): string {
   return expires.toISOString();
 }
 
-export async function hashInviteToken(token: string): Promise<string> {
+export function hashInviteToken(token: string): Promise<string> {
   return sha256Hex(token);
 }
 
