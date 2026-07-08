@@ -948,7 +948,7 @@ flowchart LR
     DEPLOY_E -->|"main only"| EDGE[Supabase Edge Functions]
 ```
 
-Pre-commit hook (Husky + lint-staged): ESLint fix + Prettier on staged files.
+Pre-commit hook (Husky + lint-staged): ESLint + Deno lint + Prettier on staged files only. CI `verify` runs the same linters over the full project before deploy.
 
 ---
 

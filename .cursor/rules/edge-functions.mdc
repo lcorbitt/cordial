@@ -19,6 +19,10 @@ alwaysApply: false
   `serveWithAccessContext`, `serveWithPermission`,
   `serveWithResourceOwnership` — use these in `index.ts`.
 
+**Linting:** Edge Functions run on Deno and are excluded from Node ESLint. Lint
+them with `npm run lint:edge` (config: `supabase/functions/deno.json`); it also
+runs inside `npm run lint` and on staged files pre-commit.
+
 ## Slug naming (`verb-kebab-noun`)
 
 Slugs describe the **resource shape**, not the HTTP method (reads are still

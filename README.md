@@ -35,6 +35,11 @@ rules. Full onboarding with diagrams and examples is in `ARCHITECTURE.md`.
 - Node.js 22+
 - Docker (for local Supabase)
 - [Supabase CLI](https://supabase.com/docs/guides/cli)
+- [Deno](https://docs.deno.com/) 2.2.5 (matches the CI pin; required for
+  `npm run lint` and pre-commit when staging `supabase/functions/**`; install via
+  the [official guide](https://docs.deno.com/runtime/getting_started/installation/),
+  `brew install deno` on macOS, or
+  `curl -fsSL https://deno.land/install.sh | sh` on Linux/macOS)
 - [k6](https://k6.io/) (optional, for load tests)
 
 ## Local setup (quick guide)
@@ -166,7 +171,8 @@ Super admins land on `/admin/overview` with platform analytics.
 | `npm run dev:all`      | Next.js + Edge Functions (no Inngest)            |
 | `npm run build`        | Production build                                    |
 | `npm run typecheck`    | `tsc --noEmit`                                      |
-| `npm run lint`         | ESLint (enforces architectural boundaries)         |
+| `npm run lint`         | ESLint (Next.js app) + Deno lint (Edge Functions)  |
+| `npm run lint:edge`    | Deno lint for `supabase/functions/**` only         |
 | `npm run format`       | Prettier write                                     |
 | `npm run test`         | Vitest unit + component tests                       |
 | `npm run test:e2e`     | Playwright e2e + a11y (dev server on port 3000)     |
@@ -179,6 +185,10 @@ Super admins land on `/admin/overview` with platform analytics.
 | `npm run load:smoke`   | k6 smoke load test (local, ~100 VUs)                 |
 | `npm run load:stress`  | k6 stress test (staging, 25k–50k VUs) — see `load/README.md` |
 | `npm run email:dev`    | Preview React Email templates                       |
+
+`npm run lint` requires Deno (see Prerequisites). Both `npm run lint:edge` and the
+pre-commit hook call `scripts/lint-edge.sh`, which prints install guidance if Deno
+is missing. CI pins Deno 2.2.5 via `denoland/setup-deno`.
 
 ### End-to-end tests
 
