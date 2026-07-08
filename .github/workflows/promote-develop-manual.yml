@@ -113,6 +113,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('package-lock.json') }}-
 
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: 2.2.5
+
       - name: Lint
         run: npm run lint
 

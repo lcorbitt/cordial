@@ -41,7 +41,7 @@ class InngestEventPublisher implements EventPublisher {
 }
 
 class ConsoleEventPublisher implements EventPublisher {
-  async publish(event: EdgeEvent): Promise<void> {
+  publish(event: EdgeEvent): Promise<void> {
     console.info(
       JSON.stringify({
         level: "info",
@@ -50,6 +50,7 @@ class ConsoleEventPublisher implements EventPublisher {
         data: event.data,
       }),
     );
+    return Promise.resolve();
   }
 }
 

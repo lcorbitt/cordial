@@ -60,6 +60,7 @@ const eslintConfig = defineConfig([
     },
   },
 
+  // Edge Functions are linted by `deno lint` (`npm run lint:edge`), not Node ESLint.
   globalIgnores([
     ".next/**",
     "out/**",

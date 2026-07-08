@@ -8,7 +8,8 @@
     "dev:all": "concurrently -n next,functions \"next dev\" \"supabase functions serve --env-file .env.local\"",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint && npm run lint:edge",
+    "lint:edge": "bash scripts/lint-edge.sh",
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.test.json",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -30,6 +31,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
+    "supabase/functions/**/*.ts": "bash scripts/lint-edge.sh",
     "*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
